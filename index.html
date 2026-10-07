@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Web dari Nol</title>
+    <meta name="description" content="Belajar HTML, CSS, JavaScript, studi kasus logika, dan Git & GitHub secara interaktif.">
+    <style>
+        :root {
+            --bg: #f4f6fb; --card: #ffffff; --ink: #1e293b; --muted: #64748b; --line: #e2e8f0;
+            --brand: #2563eb; --brand2: #1e40af; --ok: #16a34a; --warn: #f59e0b;
+            --hero1: #1e3a8a; --hero2: #7c3aed;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root { --bg: #0b1120; --card: #131c31; --ink: #e2e8f0; --muted: #94a3b8; --line: #243049; --brand: #60a5fa; --brand2: #93c5fd; --hero1: #1e1b4b; --hero2: #4c1d95; }
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+        a { color: var(--brand); }
+        .wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px 60px; }
+
+        header.hero { background: linear-gradient(135deg, var(--hero1), var(--hero2)); color: #fff; padding: 48px 16px 90px; }
+        .hero .wrap { padding-bottom: 0; }
+        .hero h1 { font-size: clamp(30px, 6vw, 52px); margin: 0 0 8px; letter-spacing: -1px; }
+        .hero p { font-size: clamp(16px, 2.4vw, 20px); max-width: 720px; margin: 0; color: #dbeafe; }
+        .hero .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+        .btn { display: inline-block; padding: 11px 22px; border-radius: 10px; border: 0; font: inherit; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .btn.main { background: #fbbf24; color: #1e293b; } .btn.main:hover { background: #fcd34d; }
+        .btn.ghost { background: rgba(255, 255, 255, 0.15); color: #fff; } .btn.ghost:hover { background: rgba(255, 255, 255, 0.28); }
+
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: -54px; }
+        .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12); }
+        .stat b { display: block; font-size: 28px; line-height: 1.1; color: var(--brand); } .stat span { font-size: 13px; color: var(--muted); }
+        .overall { margin-top: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; }
+        .bar { height: 10px; background: var(--line); border-radius: 6px; overflow: hidden; margin-top: 6px; } .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #22c55e, #16a34a); transition: width 0.5s; }
+
+        .search { margin: 28px 0 8px; display: flex; gap: 8px; }
+        .search input { flex: 1; padding: 12px 16px; font: inherit; border: 2px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); }
+        .search input:focus { outline: none; border-color: var(--brand); }
+        #hasil { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 8px 14px; margin-bottom: 8px; }
+        #hasil a { display: block; padding: 6px 0; text-decoration: none; border-bottom: 1px solid var(--line); } #hasil a:last-child { border: 0; }
+        #hasil small { color: var(--muted); }
+
+        h2.sec { margin: 38px 0 6px; font-size: 26px; } .sub { color: var(--muted); margin: 0 0 14px; }
+
+        .stages { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+        .stage { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; transition: transform 0.15s, box-shadow 0.15s; }
+        .stage:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(37, 99, 235, 0.15); }
+        .stage .top { display: flex; align-items: center; gap: 12px; }
+        .stage .ic { font-size: 34px; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 14px; background: var(--c, #e0e7ff); }
+        .stage h3 { margin: 0; font-size: 20px; } .stage .tag { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .stage p { margin: 10px 0; color: var(--muted); font-size: 15px; flex: 1; }
+        .stage .prog { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; }
+        .stage .row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+        .stage .row a { flex: 1; text-align: center; padding: 9px 12px; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 14px; }
+        .stage .go { background: var(--brand); color: #fff; } .stage .go:hover { filter: brightness(1.15); }
+        .stage .all { border: 1px solid var(--line); color: var(--ink); } .stage .all:hover { border-color: var(--brand); }
+        details.les { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; } details.les summary { cursor: pointer; font-size: 14px; font-weight: 600; color: var(--brand); }
+        .les ul { list-style: none; padding: 0; margin: 8px 0 0; } .les li { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: 14px; }
+        .les li a { text-decoration: none; color: var(--ink); flex: 1; } .les li a:hover { color: var(--brand); text-decoration: underline; }
+        .les input { accent-color: var(--ok); width: 16px; height: 16px; cursor: pointer; }
+        .les li.done a { color: var(--muted); text-decoration: line-through; }
+
+        table { border-collapse: collapse; width: 100%; background: var(--card); border-radius: 12px; overflow: hidden; font-size: 15px; }
+        th, td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; } th { background: color-mix(in srgb, var(--brand) 12%, var(--card)); }
+        .tips { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+        .tip { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--ok); border-radius: 10px; padding: 12px 14px; font-size: 15px; } .tip b { display: block; margin-bottom: 2px; }
+        footer { text-align: center; color: var(--muted); font-size: 14px; padding: 24px 16px; }
+        button.link { background: none; border: 0; color: var(--brand); cursor: pointer; font: inherit; text-decoration: underline; padding: 0; }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="wrap">
+            <h1>Belajar Web dari Nol 🚀</h1>
+            <p>Dari <b>HTML</b>, <b>CSS</b>, dan <b>JavaScript</b> sampai <b>Git &amp; GitHub</b>. Semua dengan lab interaktif: ketik kode, lihat hasilnya langsung, dan dapatkan umpan balik otomatis.</p>
+            <div class="cta">
+                <a class="btn main" id="mulai" href="html-interaktif/index.html">▶ Mulai belajar</a>
+                <a class="btn ghost" href="#jalur">Lihat jalur belajar</a>
+                <a class="btn ghost" href="studi-kasus/index.html">🧩 Langsung ke studi kasus</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="wrap">
+        <section class="stats" aria-label="Ringkasan">
+            <div class="stat"><b id="sMateri">0</b><span>materi interaktif</span></div>
+            <div class="stat"><b>5</b><span>kursus: HTML, CSS, JS, Studi Kasus, Git</span></div>
+            <div class="stat"><b id="sSelesai">0</b><span>materi sudah selesai</span></div>
+            <div class="stat"><b id="sPersen">0%</b><span>kemajuan keseluruhan</span></div>
+        </section>
+        <div class="overall"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Kemajuan belajarmu</span><span><button class="link" id="reset">hapus penanda selesai</button></span></div><div class="bar"><i id="bar"></i></div></div>
+
+        <div class="search">
+            <input id="q" type="search" placeholder="🔎 Cari materi… (mis. flexbox, array, commit, form)" aria-label="Cari materi">
+        </div>
+        <div id="hasil" role="region" aria-live="polite"></div>
+
+        <h2 class="sec" id="jalur">Jalur belajar</h2>
+        <p class="sub">Ikuti urutan 1 → 5 bila kamu pemula. Setiap materi punya pemeriksa otomatis, dan kamu bisa menandai yang sudah selesai (✓) agar kemajuan tersimpan di browser ini.</p>
+        <div class="stages" id="stages"></div>
+
+        <h2 class="sec">Saran jadwal 8 minggu</h2>
+        <table>
+            <thead><tr><th style="width:110px">Minggu</th><th>Fokus</th><th>Target</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>HTML (materi 1–8)</td><td>Bisa menulis halaman semantik dengan list, tabel, dan form</td></tr>
+                <tr><td>2</td><td>CSS dasar (materi 1–5)</td><td>Box model, flexbox, warna, grid, animasi</td></tr>
+                <tr><td>3</td><td>CSS lanjutan (6–13)</td><td>Posisi, responsif, transform, selector, variabel</td></tr>
+                <tr><td>4–5</td><td>JavaScript (1–10)</td><td>Variabel sampai DOM, event, dan proyek To-do</td></tr>
+                <tr><td>6</td><td>Studi kasus 1–6</td><td>Menggabungkan HTML + CSS + JS pada masalah nyata</td></tr>
+                <tr><td>7</td><td>Studi kasus 7–11</td><td>Logika, algoritma, dan proyek akhir</td></tr>
+                <tr><td>8</td><td>Git &amp; GitHub (1–6)</td><td>Unggah semua proyekmu ke GitHub dengan commit profesional</td></tr>
+            </tbody>
+        </table>
+
+        <h2 class="sec">Tips belajar efektif</h2>
+        <div class="tips">
+            <div class="tip"><b>✍ Ketik sendiri</b>Jangan salin-tempel. Tangan yang mengetik membantu otak mengingat.</div>
+            <div class="tip"><b>🔁 Ulangi dengan variasi</b>Setelah centang hijau, ubah soalnya sedikit lalu kerjakan lagi.</div>
+            <div class="tip"><b>🐞 Rayakan error</b>Pesan error adalah petunjuk, bukan kegagalan. Baca baris yang disebutkan.</div>
+            <div class="tip"><b>💡 Solusi terakhir</b>Buka "Lihat solusi" hanya setelah mencoba 15 menit, lalu tulis ulang tanpa melihat.</div>
+            <div class="tip"><b>📦 Komit kecil</b>Simpan proyek latihanmu di GitHub sejak dini. Riwayat komit adalah portofolio belajarmu.</div>
+        </div>
+    </main>
+    <footer>Semua latihan berjalan di browser tanpa server: kodemu aman dan tidak dikirim ke mana pun.</footer>
+
+    <script>
+        // ===== data semua materi (hanya yang ada di folder proyek)
+        const COURSES = [
+            { id: 'html', ic: '🌐', c: '#fee2e2', tag: 'Langkah 1', title: 'HTML Interaktif', dir: 'html-interaktif/',
+              desc: 'Kerangka setiap halaman: struktur dokumen, teks, tautan, list, tabel, form, dan HTML semantik, dengan pemeriksa otomatis.',
+              items: [['01-dokumen', 'Struktur Dokumen'], ['02-teks', 'Teks & Heading'], ['03-link-media', 'Link & Media'], ['04-list-tabel', 'List & Tabel'], ['05-form', 'Form'], ['06-semantik', 'Semantik & Aksesibilitas'], ['07-elemen-modern', 'Elemen Modern'], ['08-temukan-bug', 'Temukan Bug']] },
+            { id: 'css', ic: '🎨', c: '#dbeafe', tag: 'Langkah 2', title: 'CSS Interaktif', dir: 'css-interaktif/',
+              desc: 'Mengubah tampilan: box model, flexbox, grid, animasi, transform, responsif. Geser kontrol dan lihat kode CSS berubah langsung.',
+              items: [['01-box-model', 'Box Model'], ['02-flexbox', 'Flexbox'], ['03-warna-teks', 'Warna & Teks'], ['04-grid', 'Grid'], ['05-animasi', 'Animasi'], ['06-posisi', 'Posisi & Z-index'], ['07-responsif', 'Responsif'], ['08-transform', 'Transform'], ['09-selector', 'Selector & Spesifisitas'], ['10-efek-visual', 'Bayangan & Filter'], ['11-satuan-variabel', 'Satuan & Variabel'], ['12-pseudo', 'Pseudo-class & Pseudo-element'], ['13-playground', 'Playground CSS']] },
+            { id: 'js', ic: '⚡', c: '#fef3c7', tag: 'Langkah 3', title: 'JavaScript Interaktif', dir: 'js-interaktif/',
+              desc: 'Logika dan interaksi: variabel, kondisi, perulangan, fungsi, array/object, DOM, event, sampai proyek To-do. Ada console dan inspektur variabel.',
+              items: [['01-pengenalan', 'Pengenalan'], ['02-variabel-tipe', 'Variabel & Tipe Data'], ['03-operator-kondisi', 'Operator & Kondisi'], ['04-perulangan', 'Perulangan'], ['05-fungsi', 'Fungsi'], ['06-array-object', 'Array & Object'], ['07-dom-pilih', 'DOM: Memilih & Mengubah'], ['08-dom-buat', 'DOM: Membuat & Menghapus'], ['09-event', 'Event'], ['10-proyek', 'Proyek To-do']] },
+            { id: 'sk', ic: '🧩', c: '#dcfce7', tag: 'Langkah 4', title: 'Studi Kasus & Logika', dir: 'studi-kasus/',
+              desc: 'Cerita dan syarat nyata yang menggabungkan HTML, CSS, JavaScript, lengkap dengan petunjuk bertahap dan 4 tingkat kesulitan.',
+              items: [['01-cv', 'Halaman CV Online'], ['02-menu-restoran', 'Menu Restoran'], ['03-navbar-responsif', 'Navbar Responsif'], ['04-kartu-harga', 'Kartu Harga'], ['05-kalkulator-tip', 'Kalkulator Tip'], ['06-validator-password', 'Validator Password'], ['07-tebak-angka', 'Game Tebak Angka'], ['08-filter-pencarian', 'Filter Pencarian Live'], ['09-keranjang', 'Logika Keranjang Belanja'], ['10-logika-algoritma', 'Latihan Logika Algoritma'], ['11-landing-page', 'Proyek Akhir: Landing Page']] },
+            { id: 'git', ic: '🌿', c: '#ede9fe', tag: 'Langkah 5', title: 'Git & GitHub', dir: 'git-interaktif/',
+              desc: 'Simulator Git di browser: commit, branch, merge, remote, pull request, pesan komit profesional, dan menyelesaikan konflik.',
+              items: [['01-konsep', 'Konsep & Setup'], ['02-perintah-dasar', 'Perintah Dasar'], ['03-branch-merge', 'Branch & Merge'], ['04-github', 'GitHub & Pull Request'], ['05-commit-profesional', 'Commit Profesional'], ['06-undo-konflik', 'Undo & Konflik']] }
+        ];
+
+        // ===== penyimpanan kemajuan (aman bila localStorage diblokir)
+        const KEY = 'belajar-web-selesai';
+        let done = new Set();
+        try { done = new Set(JSON.parse(localStorage.getItem(KEY) || '[]')); } catch (e) { }
+        const save = () => { try { localStorage.setItem(KEY, JSON.stringify([...done])); } catch (e) { } };
+        const href = (c, it) => c.dir + it[0] + '.html';
+        const all = COURSES.flatMap(c => c.items.map(it => ({ c, it, href: href(c, it), title: it[1] })));
+
+        function render() {
+            document.getElementById('stages').innerHTML = COURSES.map(c => {
+                const n = c.items.filter(it => done.has(href(c, it))).length, total = c.items.length;
+                const next = c.items.find(it => !done.has(href(c, it)));
+                return `<article class="stage" style="--c:${c.c}">
+                    <div class="top"><div class="ic">${c.ic}</div><div><div class="tag">${c.tag}</div><h3>${c.title}</h3></div></div>
+                    <p>${c.desc}</p>
+                    <div class="prog"><span>${n} / ${total} selesai</span><span>${Math.round(n / total * 100)}%</span></div>
+                    <div class="bar"><i style="width:${n / total * 100}%"></i></div>
+                    <div class="row"><a class="go" href="${next ? href(c, next) : c.dir + 'index.html'}">${n === 0 ? 'Mulai' : n === total ? 'Ulangi' : 'Lanjutkan'} →</a><a class="all" href="${c.dir}index.html">Beranda kursus</a></div>
+                    <details class="les"><summary>Daftar materi (${total})</summary><ul>${c.items.map(it => `<li class="${done.has(href(c, it)) ? 'done' : ''}"><input type="checkbox" data-h="${href(c, it)}" ${done.has(href(c, it)) ? 'checked' : ''} aria-label="Tandai selesai: ${it[1]}"><a href="${href(c, it)}">${it[1]}</a></li>`).join('')}</ul></details>
+                </article>`;
+            }).join('');
+            const d = all.filter(x => done.has(x.href)).length, p = Math.round(d / all.length * 100);
+            document.getElementById('sMateri').textContent = all.length;
+            document.getElementById('sSelesai').textContent = d;
+            document.getElementById('sPersen').textContent = p + '%';
+            document.getElementById('bar').style.width = p + '%';
+            const firstNext = all.find(x => !done.has(x.href));
+            document.getElementById('mulai').href = firstNext ? firstNext.href : 'index.html';
+            document.getElementById('mulai').textContent = d === 0 ? '▶ Mulai belajar' : d === all.length ? '🎉 Semua selesai' : '▶ Lanjutkan belajar';
+        }
+        document.getElementById('stages').addEventListener('change', e => {
+            const cb = e.target.closest('input[data-h]'); if (!cb) return;
+            cb.checked ? done.add(cb.dataset.h) : done.delete(cb.dataset.h); save();
+            const open = [...document.querySelectorAll('details.les')].map(x => x.open);
+            render(); document.querySelectorAll('details.les').forEach((x, i) => x.open = open[i]);
+        });
+        document.getElementById('reset').addEventListener('click', () => { if (confirm('Hapus semua penanda selesai?')) { done.clear(); save(); render(); } });
+
+        // ===== pencarian
+        const hasil = document.getElementById('hasil');
+        document.getElementById('q').addEventListener('input', e => {
+            const q = e.target.value.trim().toLowerCase();
+            if (!q) { hasil.style.display = 'none'; return; }
+            const r = all.filter(x => (x.title + ' ' + x.c.title + ' ' + x.it[0]).toLowerCase().includes(q)).slice(0, 12);
+            hasil.style.display = 'block';
+            hasil.innerHTML = r.length ? r.map(x => `<a href="${x.href}">${x.c.ic} <b>${x.title}</b> <small>· ${x.c.title}</small></a>`).join('') : '<small>Tidak ada materi yang cocok.</small>';
+        });
+        render();
+    </script>
+</body>
+</html>

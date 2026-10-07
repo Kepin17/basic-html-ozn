@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 · Operator &amp; Kondisi - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>3 · Operator &amp; Kondisi</h1>
+        <p class="lead">Operator menghitung dan membandingkan. Kondisi membuat program <b>memilih jalan</b>: kalau begini lakukan itu, kalau tidak lakukan yang lain.</p>
+
+        <div class="materi">
+            <h3>Operator</h3>
+            <table>
+                <thead><tr><th>Jenis</th><th>Operator</th><th>Catatan</th></tr></thead>
+                <tbody>
+                    <tr><td>Aritmetika</td><td><code>+ - * / % **</code></td><td><code>%</code> = sisa bagi, <code>**</code> = pangkat</td></tr>
+                    <tr><td>Penugasan</td><td><code>= += -= *= ++ --</code></td><td><code>x += 5</code> sama dengan <code>x = x + 5</code></td></tr>
+                    <tr><td>Perbandingan</td><td><code>&lt; &gt; &lt;= &gt;= === !==</code></td><td>Hasilnya <code>true</code> / <code>false</code></td></tr>
+                    <tr><td>Logika</td><td><code>&amp;&amp; || !</code></td><td>DAN, ATAU, BUKAN</td></tr>
+                    <tr><td>Nullish</td><td><code>??</code></td><td>Nilai cadangan hanya bila <code>null</code>/<code>undefined</code></td></tr>
+                </tbody>
+            </table>
+            <div class="warn"><b><code>==</code> vs <code>===</code>:</b> <code>==</code> membandingkan setelah mengubah tipe (<code>5 == "5"</code> → true). <code>===</code> membandingkan nilai <b>dan</b> tipe (<code>5 === "5"</code> → false). <b>Selalu pakai <code>===</code>.</b></div>
+        </div>
+
+        <h2>Lab A · Operator</h2>
+        <p>Tebak hasil sebelum menjalankan. Perhatikan baris <code>0 || "cadangan"</code> vs <code>0 ?? "cadangan"</code>.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Percabangan</h3>
+<pre><code>if (kondisi) { ... }
+else if (kondisiLain) { ... }
+else { ... }
+
+switch (nilai) { case 1: ...; break; default: ... }
+
+const hasil = kondisi ? "ya" : "tidak";   // ternary: if/else satu baris</code></pre>
+            <div class="tip">Ubah <code>nilai</code> di lab lalu jalankan lagi. Uji nilai di <b>batas</b> seperti 85, 84, 70, 69. Di batas itulah bug biasanya bersembunyi.</div>
+        </div>
+
+        <h2>Lab B · if / else / switch</h2>
+        <div id="labB"></div>
+
+        <h2>Lab C · Tantangan</h2>
+        <div class="materi">
+            <ol>
+                <li><code>hitungGrade(nilai)</code>: kembalikan <b>"A"</b> bila ≥ 85, <b>"B"</b> bila ≥ 70, <b>"C"</b> bila ≥ 55, selain itu <b>"D"</b>.</li>
+                <li><code>apakahGenap(n)</code>: kembalikan <code>true</code> bila genap. (Petunjuk: <code>%</code>)</li>
+                <li><code>tahunKabisat(tahun)</code>: kabisat bila habis dibagi 4, <i>kecuali</i> habis dibagi 100, <i>kecuali</i> habis dibagi 400. Contoh: 2000 ✅, 1900 ❌, 2024 ✅.</li>
+            </ol>
+        </div>
+        <div id="labC"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', vars: true, rows: 17,
+            code: `const a = 10, b = 3;
+console.log(a + b, a - b, a * b, a / b);
+console.log(a % b, a ** b);        // sisa bagi, pangkat
+console.log(5 == "5", 5 === "5");  // longgar vs ketat
+console.log(a > b && b > 0);       // DAN
+console.log(!true, false || "cadangan");
+console.log(0 || "cadangan", 0 ?? "cadangan");
+let skor = 10;
+skor += 5;
+skor++;
+console.log("skor:", skor);`
+        });
+        initJS({
+            root: 'labB', vars: true, rows: 22,
+            code: `const nilai = 78;
+if (nilai >= 85) {
+  console.log("Grade A");
+} else if (nilai >= 70) {
+  console.log("Grade B");
+} else {
+  console.log("Grade C");
+}
+
+const hari = 3;
+switch (hari) {
+  case 1: console.log("Senin"); break;
+  case 2: console.log("Selasa"); break;
+  case 3: console.log("Rabu"); break;
+  default: console.log("Hari lain");
+}
+
+const umur = 16;
+const status = umur >= 17 ? "boleh buat KTP" : "belum boleh";
+console.log(status);`
+        });
+        initJS({
+            root: 'labC', rows: 16,
+            code: `function hitungGrade(nilai) {
+  // TODO
+}
+
+function apakahGenap(n) {
+  // TODO
+}
+
+function tahunKabisat(tahun) {
+  // TODO
+}
+
+console.log(hitungGrade(90), apakahGenap(4), tahunKabisat(2024));`,
+            solution: `function hitungGrade(nilai) {
+  if (nilai >= 85) return "A";
+  if (nilai >= 70) return "B";
+  if (nilai >= 55) return "C";
+  return "D";
+}
+
+function apakahGenap(n) {
+  return n % 2 === 0;
+}
+
+function tahunKabisat(tahun) {
+  return (tahun % 4 === 0 && tahun % 100 !== 0) || tahun % 400 === 0;
+}
+
+console.log(hitungGrade(90), apakahGenap(4), tahunKabisat(2024));`,
+            checks: [
+                { text: 'hitungGrade(90) = "A" dan hitungGrade(85) = "A"', test: "hitungGrade(90) === 'A' && hitungGrade(85) === 'A'" },
+                { text: 'hitungGrade(84) = "B", (70) = "B", (69) = "C"', test: "hitungGrade(84) === 'B' && hitungGrade(70) === 'B' && hitungGrade(69) === 'C'" },
+                { text: 'hitungGrade(54) = "D"', test: "hitungGrade(54) === 'D'" },
+                { text: 'apakahGenap benar untuk 4, 7, 0', test: "apakahGenap(4) === true && apakahGenap(7) === false && apakahGenap(0) === true" },
+                { text: 'tahunKabisat: 2024 ✅ 2000 ✅ 1900 ❌ 2023 ❌', test: "tahunKabisat(2024) === true && tahunKabisat(2000) === true && tahunKabisat(1900) === false && tahunKabisat(2023) === false" }
+            ]
+        });
+    </script>
+</body>
+</html>

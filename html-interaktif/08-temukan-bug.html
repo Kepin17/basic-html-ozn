@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 · Temukan Bug - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>8 · Temukan Bug</h1>
+        <p class="lead">Membaca dan memperbaiki kode orang lain adalah keahlian utama programmer. Kode di bawah <b>terlihat jalan</b>, tetapi penuh masalah tersembunyi.</p>
+        <div class="materi">
+            <h3>Daftar periksa detektif</h3>
+            <table>
+                <thead><tr><th>Cek</th><th>Gejala</th></tr></thead>
+                <tbody>
+                    <tr><td>Tag tertutup?</td><td>Isi halaman "tumpah" ke elemen lain. Lihat Pohon DOM!</td></tr>
+                    <tr><td>Heading melompat?</td><td>h1 langsung h3</td></tr>
+                    <tr><td><code>alt</code> pada gambar?</td><td>Pembaca layar membaca nama file</td></tr>
+                    <tr><td><code>id</code> unik?</td><td>Dua elemen ber-id sama: label dan skrip bingung</td></tr>
+                    <tr><td>Label terhubung?</td><td>Isian tanpa <code>label</code></td></tr>
+                    <tr><td><code>li</code> di dalam <code>ul</code>/<code>ol</code>?</td><td>Item list yatim</td></tr>
+                    <tr><td>Tabel punya judul kolom?</td><td><code>td</code> dipakai sebagai judul, bukan <code>th</code></td></tr>
+                    <tr><td>Bold hanya gaya?</td><td><code>b</code> padahal maksudnya penting → <code>strong</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <h2>Tantangan: perbaiki semuanya</h2>
+        <div class="materi"><p>Temukan dan perbaiki bug di kode awal. Amati <b>Pohon DOM</b> untuk melihat bagaimana browser salah memahami kodenya, dan ikuti centang di kanan.</p></div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, dom: true, noConsole: true, auto: true, height: 320, rows: 24,
+            html: "<h1>Toko Buku</h1>\n<h3>Buku terlaris</h3>\n<img src=\"buku.jpg\">\n<p>Harga mulai <b>Rp 50.000\n<li>Belajar HTML</li>\n<li>Belajar CSS</li>\n\n<form>\n  Nama: <input type=\"text\" id=\"nama\">\n  <br>\n  Email: <input type=\"email\" id=\"nama\">\n  <button>Kirim</button>\n</form>\n\n<table>\n  <tr><td>Judul</td><td>Harga</td></tr>\n  <tr><td>HTML</td><td>50.000</td></tr>\n</table>\n",
+            solution: { html: "<h1>Toko Buku</h1>\n<h2>Buku terlaris</h2>\n<img src=\"buku.jpg\" alt=\"Sampul buku Belajar HTML\">\n<p>Harga mulai <strong>Rp 50.000</strong></p>\n<ul>\n  <li>Belajar HTML</li>\n  <li>Belajar CSS</li>\n</ul>\n\n<form>\n  <label for=\"nama\">Nama:</label> <input type=\"text\" id=\"nama\">\n  <br>\n  <label for=\"email\">Email:</label> <input type=\"email\" id=\"email\">\n  <button type=\"submit\">Kirim</button>\n</form>\n\n<table>\n  <thead><tr><th scope=\"col\">Judul</th><th scope=\"col\">Harga</th></tr></thead>\n  <tbody><tr><td>HTML</td><td>50.000</td></tr></tbody>\n</table>\n" },
+            checks: [
+                { text: 'Heading berurutan (tidak melompat)', test: "(function(){ var l = 0, ok = true; Array.prototype.forEach.call(document.querySelectorAll('h1,h2,h3,h4'), function(h){ var n = +h.tagName[1]; if (n > l + 1) ok = false; l = n; }); return ok; })()" },
+                { text: 'Gambar punya <code>alt</code> yang terisi', test: "Array.prototype.every.call(document.querySelectorAll('img'), function(i){ return (i.getAttribute('alt') || '').trim().length > 0 })" },
+                { text: 'Paragraf harga tertutup, <code>b</code> diganti <code>strong</code>', test: "!document.querySelector('b') && !!document.querySelector('p > strong') && !document.querySelector('p li')" },
+                { text: 'Semua <code>li</code> berada di dalam <code>ul</code>/<code>ol</code>', test: "document.querySelectorAll('li').length > 0 && Array.prototype.every.call(document.querySelectorAll('li'), function(l){ return l.parentElement.tagName === 'UL' || l.parentElement.tagName === 'OL' })" },
+                { text: '<code>id</code> unik', test: "(function(){ var ids = Array.prototype.map.call(document.querySelectorAll('[id]'), function(e){ return e.id }); return ids.length === new Set(ids).size })()" },
+                { text: 'Setiap <code>input</code> punya <code>label for</code>', test: "(function(){ var f = document.querySelectorAll('input'); return f.length >= 2 && Array.prototype.every.call(f, function(i){ return !!i.id && !!document.querySelector('label[for=\"' + i.id + '\"]') }) })()" },
+                { text: 'Tombol kirim eksplisit <code>type="submit"</code>', test: "!!document.querySelector('button[type=submit]')" },
+                { text: 'Tabel: judul kolom memakai <code>th</code> di dalam <code>thead</code>', test: "document.querySelectorAll('thead th').length >= 2 && !document.querySelector('table > tr')" }
+            ]
+        });
+    </script>
+</body>
+</html>

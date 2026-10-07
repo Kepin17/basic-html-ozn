@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13 · Playground - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>13 · Playground</h1>
+        <p class="lead">Tidak ada kontrol di sini. Kamu yang menulis CSS. Pemeriksa otomatis di sebelah kanan mencentang tantangan yang sudah terpenuhi.</p>
+
+        <div class="materi">
+            <h3>Misi</h3>
+            <p>Ubah kartu polos di bawah menjadi kartu yang bagus. Ketik di tab <b>CSS</b> dan hasilnya langsung terlihat. Kamu juga bisa mengubah HTML-nya di tab <b>HTML</b>.</p>
+            <div class="tip">Tekan <b>Tab</b> di kotak kode untuk indentasi. Contoh awal: <code>.kartu { background: white; }</code></div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Petunjuk bila macet</h3>
+            <details>
+                <summary>Lihat contoh jawaban</summary>
+<pre><code>.kartu {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 14px;
+  max-width: 360px;
+  margin: 20px auto;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+h1 { color: #1d4ed8; }
+
+.tombol {
+  background: #2563eb;
+  color: #fff;
+  border: 0;
+  padding: 10px 24px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.tombol:hover { background: #1e40af; }</code></pre>
+            </details>
+            <h3>Setelah selesai</h3>
+            <p>Coba bawa kodenya ke halaman HTML-mu sendiri dengan tombol <b>📋 Salin</b>. Itu langkah pertama membuat website sungguhan.</p>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const tr = c => c === 'rgba(0, 0, 0, 0)' || c === 'transparent';
+        initLab({
+            height: 400,
+            base: `body { background: #e5e9f2; }`,
+            html: `<div class="kartu">
+  <h1>Halo CSS!</h1>
+  <p>Edit CSS di sebelah kiri untuk mempercantik kartu ini.</p>
+  <button class="tombol">Klik saya</button>
+</div>`,
+            initialCss: `/* Tulis CSS-mu di sini */
+.kartu {
+
+}
+`,
+            checks: [
+                { text: 'Kartu punya warna latar (background)', test: (d, gcs) => !tr(gcs(d.querySelector('.kartu')).backgroundColor) },
+                { text: 'Kartu punya padding minimal 16px', test: (d, gcs) => parseFloat(gcs(d.querySelector('.kartu')).paddingTop) >= 16 },
+                { text: 'Sudut kartu membulat (border-radius ≥ 8px)', test: (d, gcs) => parseFloat(gcs(d.querySelector('.kartu')).borderTopLeftRadius) >= 8 },
+                { text: 'Kartu dibatasi lebarnya (max-width ≤ 400px)', test: (d, gcs) => { const m = parseFloat(gcs(d.querySelector('.kartu')).maxWidth); return m > 0 && m <= 400; } },
+                { text: 'Kartu berada di tengah (margin kiri = kanan > 0)', test: (d, gcs) => { const s = gcs(d.querySelector('.kartu')); return parseFloat(s.marginLeft) > 0 && s.marginLeft === s.marginRight; } },
+                { text: 'Judul h1 berwarna selain hitam', test: (d, gcs) => gcs(d.querySelector('h1')).color !== 'rgb(0, 0, 0)' },
+                { text: 'Tombol punya warna latar sendiri', test: (d, gcs) => { const c = gcs(d.querySelector('.tombol')).backgroundColor; return c !== 'rgb(239, 239, 239)' && c !== 'buttonface' && !tr(c); } },
+                { text: 'Tombol membulat penuh (border-radius ≥ 20px)', test: (d, gcs) => parseFloat(gcs(d.querySelector('.tombol')).borderTopLeftRadius) >= 20 },
+                { text: 'Ada efek :hover pada suatu elemen', test: d => [...d.styleSheets].some(s => { try { return [...s.cssRules].some(r => r.selectorText && r.selectorText.includes(':hover')); } catch (e) { return false; } }) },
+                { text: 'Kartu punya bayangan (box-shadow)', test: (d, gcs) => gcs(d.querySelector('.kartu')).boxShadow !== 'none' }
+            ]
+        });
+    </script>
+</body>
+</html>

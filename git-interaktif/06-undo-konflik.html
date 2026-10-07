@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 · Undo & Konflik - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>6 · Undo &amp; Konflik</h1>
+        <p class="lead">Kesalahan itu pasti terjadi. Yang membedakan pemula dan profesional adalah <b>tahu cara membatalkannya dengan aman</b>.</p>
+        <div class="materi">
+            <h3>Peta penyelamat</h3>
+            <table>
+                <thead><tr><th>Situasi</th><th>Perintah</th><th>Aman?</th></tr></thead>
+                <tbody>
+                    <tr><td>Batalkan edit di berkas (belum add)</td><td><code>git restore index.html</code></td><td>⚠ perubahan hilang permanen</td></tr>
+                    <tr><td>Salah add, keluarkan dari staging</td><td><code>git restore --staged index.html</code></td><td>✅ isi berkas tetap</td></tr>
+                    <tr><td>Batalkan komit terakhir, simpan perubahannya</td><td><code>git reset --soft HEAD~1</code></td><td>✅ (lokal saja)</td></tr>
+                    <tr><td>Batalkan komit terakhir <b>dan</b> perubahannya</td><td><code>git reset --hard HEAD~1</code></td><td>⚠ perubahan hilang</td></tr>
+                    <tr><td>Batalkan komit yang <b>sudah di-push</b></td><td><code>git revert HEAD</code></td><td>✅ membuat komit pembatal baru</td></tr>
+                    <tr><td>Perlu pindah branch tapi pekerjaan belum selesai</td><td><code>git stash</code> → <code>git stash pop</code></td><td>✅</td></tr>
+                    <tr><td>Salah ketik pesan komit terakhir</td><td><code>git commit --amend</code></td><td>✅ (jika belum di-push)</td></tr>
+                </tbody>
+            </table>
+            <div class="warn"><b>Aturan:</b> komit yang sudah dibagikan (di-push) <b>jangan</b> ditulis ulang dengan <code>reset</code>/<code>amend</code>. Gunakan <code>revert</code> yang tidak mengubah riwayat.</div>
+        </div>
+        <h2>Lab A · Membatalkan kesalahan</h2>
+        <p>Repositori punya 3 komit. Selesaikan misi satu per satu dan amati ketiga area serta grafik.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Konflik merge</h3>
+            <p>Konflik terjadi bila <b>dua branch mengubah baris yang sama</b> di berkas yang sama. Git tidak mau menebak, jadi ia meminta kamu memilih. Berkas diberi penanda:</p>
+<pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+&lt;h1&gt;Judul Utama&lt;/h1&gt;          ← versi branch kamu saat ini (main)
+=======
+&lt;h1&gt;Judul Fitur&lt;/h1&gt;          ← versi branch yang digabung
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; fitur-judul</code></pre>
+            <ol>
+                <li><code>git merge fitur-judul</code> → muncul <b>CONFLICT</b>.</li>
+                <li>Buka berkas, <b>putuskan</b> isi akhirnya (salah satu, atau gabungan), lalu <b>hapus ketiga penanda</b>.</li>
+                <li><code>git add index.html</code> menandai konflik beres.</li>
+                <li><code>git commit</code> menyelesaikan merge.</li>
+            </ol>
+            <div class="tip">Tips mencegah konflik: tarik perubahan terbaru sering-sering (<code>git pull</code>), buat branch yang pendek umurnya, dan komunikasikan siapa mengerjakan berkas apa.</div>
+        </div>
+        <h2>Lab B · Selesaikan konflik</h2>
+        <p>Dua branch mengubah <code>index.html</code> dengan cara berbeda. Gabungkan lalu selesaikan konfliknya (edit berkas di panel kanan).</p>
+        <div id="labB"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script>
+        initGit({
+            root: 'labA',
+            pre: ['git init', 'echo "versi 1" > catatan.txt', 'git add .', 'git commit -m "feat: catatan awal"', 'echo "versi 2" > catatan.txt', 'git add .', 'git commit -m "feat: perbarui catatan"', 'echo "versi 3 (salah)" > catatan.txt', 'git add .', 'git commit -m "fix: perubahan yang keliru"'],
+            files: { 'catatan.txt': '' },
+            quick: ['git log --oneline', 'echo "coba-coba" > catatan.txt', 'git restore catatan.txt', 'git add .', 'git restore --staged catatan.txt', 'git reset --soft HEAD~1', 'git revert HEAD', 'git stash', 'git stash pop', 'git status'],
+            tasks: [
+                { text: 'Ubah <code>catatan.txt</code> (ketik di panel kanan atau pakai <code>echo</code>) lalu batalkan dengan <code>git restore catatan.txt</code>', test: S => S.cmds.some(c => /^git restore catatan.txt/.test(c)) },
+                { text: 'Stage perubahan, lalu keluarkan lagi dengan <code>git restore --staged</code>', test: S => S.cmds.some(c => /^git restore --staged/.test(c)) },
+                { text: 'Simpan pekerjaan sementara: ubah berkas, <code>git stash</code>, lalu <code>git stash pop</code>', test: S => S.cmds.some(c => /^git stash$/.test(c)) && S.cmds.some(c => /^git stash pop/.test(c)) },
+                { text: 'Batalkan komit keliru secara <b>aman</b> memakai <code>git revert HEAD</code>', test: S => Object.values(S.commits).some(c => /^Revert /.test(c.msg)) },
+                { text: 'Batalkan komit revert tadi dengan <code>git reset --hard HEAD~1</code> (latihan menghapus riwayat lokal)', test: S => S.cmds.some(c => /^git reset --hard/.test(c)) }
+            ]
+        });
+        initGit({
+            root: 'labB',
+            pre: ['git init', 'echo "<h1>Judul</h1>" > index.html', 'git add .', 'git commit -m "feat: halaman awal"', 'git switch -c fitur-judul', 'echo "<h1>Judul Fitur</h1>" > index.html', 'git add .', 'git commit -m "feat: ubah judul untuk fitur"', 'git switch main', 'echo "<h1>Judul Utama</h1>" > index.html', 'git add .', 'git commit -m "feat: ubah judul utama"'],
+            files: { 'index.html': '' },
+            quick: ['git log --oneline --graph', 'git merge fitur-judul', 'git status', 'git add index.html', 'git commit -m "merge: gabungkan judul fitur"'],
+            tasks: [
+                { text: 'Jalankan <code>git merge fitur-judul</code> dan perhatikan pesan <b>CONFLICT</b>', test: S => S.cmds.some(c => /^git merge fitur-judul/.test(c)) && (!!S.merging || Object.values(S.commits).some(c => c.parents.length === 2)) },
+                { text: 'Buka <code>index.html</code> di panel kanan: hapus penanda dan tulis judul akhir yang kamu inginkan', test: S => (S.merging && S.files['index.html'] && !/<<<<<<<|=======|>>>>>>>/.test(S.files['index.html'])) || Object.values(S.commits).some(c => c.parents.length === 2) },
+                { text: '<code>git add index.html</code> lalu <code>git commit</code> untuk menyelesaikan merge (commit dengan dua induk)', test: S => Object.values(S.commits).some(c => c.parents.length === 2) && !S.merging },
+                { text: 'Pastikan berkas akhir tidak mengandung penanda konflik', test: S => !/<<<<<<<|>>>>>>>/.test(S.files['index.html'] || '') && Object.values(S.commits).some(c => c.parents.length === 2) }
+            ]
+        });
+    </script>
+</body>
+</html>

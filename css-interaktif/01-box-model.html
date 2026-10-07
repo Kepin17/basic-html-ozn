@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 · Box Model - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>1 · Box Model</h1>
+        <p class="lead">Setiap elemen HTML adalah kotak. Memahami lapisannya menjawab 80% pertanyaan "kenapa elemen ini ukurannya begini?".</p>
+
+        <div class="materi">
+            <h3>Empat lapisan kotak</h3>
+            <table>
+                <thead><tr><th>Lapisan</th><th>Properti</th><th>Warna di lab</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td>Content</td><td><code>width</code>, <code>height</code></td><td>🟦 biru</td><td>Isi elemen (teks, gambar)</td></tr>
+                    <tr><td>Padding</td><td><code>padding</code></td><td>🟩 hijau</td><td>Jarak isi ke garis tepi (di dalam)</td></tr>
+                    <tr><td>Border</td><td><code>border</code></td><td>garis</td><td>Garis tepi</td></tr>
+                    <tr><td>Margin</td><td><code>margin</code></td><td>🟧 oranye</td><td>Jarak ke elemen lain (di luar)</td></tr>
+                </tbody>
+            </table>
+            <div class="warn"><b>Jebakan klasik:</b> dengan <code>box-sizing: content-box</code> (bawaan), lebar total = width + padding + border. Ubah ke <code>border-box</code> dan lihat angka "lebar elemen" di bawah hasil: <code>width</code> jadi lebar total sebenarnya.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat elemen selebar tepat <b>300px</b> termasuk padding dan border. (Petunjuk: <code>border-box</code>.)</li>
+                <li>Buat kotak berbentuk <b>lingkaran</b>: width sama dengan tinggi lalu <code>border-radius: 50%</code>. Di lab ini tinggi mengikuti isi, coba tambahkan baris <code>height: 160px;</code> di kode secara manual.</li>
+                <li>Isi margin dengan nilai <code>auto</code> di kode: <code>margin: 20px auto;</code>. Apa yang terjadi pada posisi horizontal?</li>
+            </ol>
+            <h3>Rangkuman</h3>
+            <pre><code>padding: 10px 20px;          /* atas-bawah 10, kiri-kanan 20 */
+padding: 5px 10px 15px 20px; /* atas, kanan, bawah, kiri (searah jarum jam) */
+margin: 0 auto;              /* kotak berlebar tetap berada di tengah */
+box-sizing: border-box;      /* width sudah termasuk padding + border */</code></pre>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        initLab({
+            height: 380,
+            base: `
+                .margin-area { display: flow-root; background: repeating-linear-gradient(45deg, #fde7c8, #fde7c8 6px, #fbd8a5 6px, #fbd8a5 12px); }
+                .content { background: #9ec9ff; padding: 14px 10px; text-align: center; font-weight: 700; color: #123; }`,
+            html: `<div class="margin-area">
+  <div class="box">
+    <div class="content">Konten</div>
+  </div>
+</div>`,
+            controls: [
+                { id: 'w', label: 'width', type: 'range', min: 100, max: 400, value: 220, unit: 'px' },
+                { id: 'p', label: 'padding', type: 'range', min: 0, max: 60, value: 20, unit: 'px' },
+                { id: 'bw', label: 'border-width', type: 'range', min: 0, max: 20, value: 4, unit: 'px' },
+                { id: 'bs', label: 'border-style', type: 'select', options: ['solid', 'dashed', 'dotted', 'double'], value: 'solid' },
+                { id: 'bc', label: 'border-color', type: 'color', value: '#1d4ed8' },
+                { id: 'm', label: 'margin', type: 'range', min: 0, max: 60, value: 24, unit: 'px' },
+                { id: 'r', label: 'border-radius', type: 'range', min: 0, max: 100, value: 12, unit: 'px' },
+                { id: 'bz', label: 'box-sizing', type: 'select', options: ['content-box', 'border-box'], value: 'content-box' }
+            ],
+            css: v => `.box {
+  width: ${v.w}px;
+  padding: ${v.p}px;
+  border: ${v.bw}px ${v.bs} ${v.bc};
+  margin: ${v.m}px;
+  border-radius: ${v.r}px;
+  box-sizing: ${v.bz};
+  background: #a6e3a1;
+}`,
+            info(d) {
+                const b = d.querySelector('.box'); if (!b) return '';
+                const s = d.defaultView.getComputedStyle(b), r = b.getBoundingClientRect();
+                const mx = parseFloat(s.marginLeft) + parseFloat(s.marginRight);
+                return `📐 Lebar elemen (padding + border ikut): <b>${Math.round(r.width)}px</b> · tinggi: <b>${Math.round(r.height)}px</b><br>
+                        ↔ Ruang yang dipakai termasuk margin: <b>${Math.round(r.width + mx)}px</b>`;
+            }
+        });
+    </script>
+</body>
+</html>

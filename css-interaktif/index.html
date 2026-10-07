@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>CSS Interaktif</h1>
+        <p class="lead">Belajar CSS sambil melihat hasilnya langsung. Geser kontrol, atau ketik kode sendiri, dan lihat perubahan di layar saat itu juga.</p>
+
+        <div class="materi">
+            <h3>Cara memakai</h3>
+            <ol>
+                <li><strong>Baca</strong> penjelasan singkat di tiap materi.</li>
+                <li><strong>Geser kontrol</strong> di panel kiri. Kode CSS ikut berubah dan hasilnya langsung tampil di kanan.</li>
+                <li><strong>Edit kode</strong> langsung di kotak CSS atau HTML. Hasilnya diperbarui saat kamu mengetik.</li>
+                <li><strong>Kerjakan tantangan</strong> di bawah tiap lab. Materi 13 punya pemeriksa otomatis.</li>
+            </ol>
+            <div class="tip">Salin kode dengan tombol <b>📋 Salin</b>, lalu tempel ke file <code>.css</code> milikmu sendiri.</div>
+        </div>
+
+        <div class="cards" id="cards"></div>
+        <div class="materi" style="margin-top:28px">
+            <h3>Setelah CSS: JavaScript</h3>
+            <p>Lanjut ke <a href="../js-interaktif/index.html"><b>JavaScript Interaktif</b></a>: variabel, logika, fungsi, array, DOM, event, dan proyek To-do.</p>
+        </div>
+        <div class="materi" style="margin-top:28px">
+            <h3>Prasyarat</h3>
+            <p>Sudah paham HTML dasar (heading, paragraf, list, tabel, form). Kalau belum, mulai dari <a href="../html-interaktif/index.html">HTML Interaktif</a>.</p>
+        </div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const info = {
+            '01-box-model.html': 'Padding, border, margin, dan cara browser menghitung ukuran kotak.',
+            '02-flexbox.html': 'Menata elemen sebaris atau sekolom: arah, rata, jarak, dan pembagian ruang.',
+            '03-warna-teks.html': 'Warna, huruf, bayangan, gradasi, dan kontras agar teks mudah dibaca.',
+            '04-grid.html': 'Tata letak dua dimensi: kolom, baris, span, dan kolom otomatis.',
+            '05-animasi.html': 'Transition untuk hover dan keyframes untuk animasi yang berjalan terus.',
+            '06-posisi.html': 'static, relative, absolute, fixed, sticky, dan urutan tumpukan z-index.',
+            '07-responsif.html': 'Media query: ubah lebar layar dan lihat tata letak menyesuaikan.',
+            '08-transform.html': 'translate, rotate, scale, skew, transform-origin, dan 3D dengan perspective.',
+            '09-selector.html': 'Memilih elemen dengan tepat dan memahami siapa yang menang saat aturan bertabrakan.',
+            '10-efek-visual.html': 'box-shadow, text-shadow, filter, dan efek kaca (backdrop-filter).',
+            '11-satuan-variabel.html': 'px, %, em, rem, vw, serta variabel CSS dan tema gelap.',
+            '12-pseudo.html': ':nth-child, :hover, :focus, ::before, ::after, ::first-letter, ::selection.',
+            '13-playground.html': 'Ketik CSS bebas dan selesaikan tantangan dengan pemeriksa otomatis.'
+        };
+        document.getElementById('cards').innerHTML = LESSONS.slice(1).map(([h, t], i) =>
+            `<a class="card" href="${h}"><span class="no">${i + 1}</span><h3>${t.replace(/^\d+ · /, '')}</h3><p>${info[h]}</p></a>`).join('');
+    </script>
+</body>
+</html>

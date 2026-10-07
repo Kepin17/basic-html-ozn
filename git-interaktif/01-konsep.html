@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 · Konsep & Setup - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>1 · Konsep &amp; Setup</h1>
+        <p class="lead">Pernah punya file <code>laporan_final_revisi3_FIX_beneran.docx</code>? Itulah masalah yang diselesaikan <b>version control</b>.</p>
+        <div class="materi">
+            <h3>Git vs GitHub</h3>
+            <table>
+                <thead><tr><th></th><th>Git</th><th>GitHub</th></tr></thead>
+                <tbody>
+                    <tr><td>Apa itu</td><td>Program pelacak riwayat perubahan (berjalan di komputermu)</td><td>Layanan web untuk menyimpan repositori Git dan berkolaborasi</td></tr>
+                    <tr><td>Perlu internet?</td><td>Tidak</td><td>Ya</td></tr>
+                    <tr><td>Fitur khas</td><td>commit, branch, merge</td><td>Pull Request, Issues, Actions, Pages</td></tr>
+                    <tr><td>Alternatif</td><td>(Mercurial, SVN)</td><td>GitLab, Bitbucket</td></tr>
+                </tbody>
+            </table>
+            <h3>Istilah penting</h3>
+            <table>
+                <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+                <tbody>
+                    <tr><td>Repository (repo)</td><td>Folder proyek beserta seluruh riwayatnya (folder tersembunyi <code>.git</code>)</td></tr>
+                    <tr><td>Commit</td><td>"Foto" proyek pada satu momen, lengkap dengan pesan dan penulisnya</td></tr>
+                    <tr><td>Branch</td><td>Jalur pengembangan terpisah (penunjuk bergerak ke sebuah commit)</td></tr>
+                    <tr><td>Merge</td><td>Menggabungkan dua branch</td></tr>
+                    <tr><td>Remote / origin</td><td>Salinan repo di server (GitHub). <code>origin</code> adalah nama bawaannya</td></tr>
+                    <tr><td>Clone / Fork</td><td>Menyalin repo ke komputer / ke akunmu di GitHub</td></tr>
+                    <tr><td>Pull Request (PR)</td><td>Usulan menggabungkan perubahanmu, untuk ditinjau tim</td></tr>
+                    <tr><td>HEAD</td><td>"Kamu sedang berada di sini": penunjuk ke commit/branch aktif</td></tr>
+                </tbody>
+            </table>
+            <h3>Tiga area Git &amp; perjalanan perubahan</h3>
+            <div class="flow"><span class="st">Working Directory<br><small>berkas yang kamu edit</small></span><span class="ar">git add →</span><span class="st">Staging Area<br><small>antrean komit berikutnya</small></span><span class="ar">git commit →</span><span class="st">Repository lokal<br><small>riwayat permanen</small></span><span class="ar">git push →</span><span class="st">GitHub (remote)</span></div>
+            <p>Staging area membuatmu bisa <b>memilih</b> perubahan mana yang masuk komit berikutnya, sehingga setiap komit bisa fokus pada satu hal.</p>
+        </div>
+        <div class="materi">
+            <h3>Instalasi &amp; konfigurasi awal (sekali saja)</h3>
+            <pre><code># 1. Pasang Git: https://git-scm.com/downloads  (Linux: sudo apt install git)
+git --version
+
+# 2. Perkenalkan dirimu (dipakai di setiap komit)
+git config --global user.name  "Nama Kamu"
+git config --global user.email "kamu@contoh.com"
+
+# 3. Disarankan
+git config --global init.defaultBranch main
+git config --global core.editor "code --wait"     # editor pesan komit (VS Code)
+
+# 4. Periksa
+git config --list</code></pre>
+            <div class="warn">Pakai email yang sama dengan akun GitHub-mu agar komit tercatat atas namamu. Jika ingin menyembunyikan email asli, GitHub menyediakan alamat <code>noreply</code> khusus di Settings → Emails.</div>
+        </div>
+        <h2>Cek pemahaman</h2>
+        <div id="quiz"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script>
+        initQuiz({ items: [
+            { q: 'Apa fungsi <i>staging area</i>?', o: ['Menyimpan cadangan di GitHub', 'Memilih perubahan mana yang masuk komit berikutnya', 'Menghapus berkas yang tak dipakai'], a: 1, e: 'Staging adalah antrean sebelum commit.' },
+            { q: 'Mana pernyataan yang benar?', o: ['Git dan GitHub adalah hal yang sama', 'Git bisa dipakai tanpa internet; GitHub adalah layanan online', 'GitHub dibutuhkan agar bisa membuat commit'], a: 1, e: 'Git berjalan lokal; GitHub hanya salah satu tempat remote.' },
+            { q: 'Setelah <code>git commit</code>, perubahanmu ada di…', o: ['Repository lokal, belum di GitHub', 'GitHub', 'Hanya di staging area'], a: 0, e: 'Perlu git push agar sampai ke GitHub.' }
+        ] });
+    </script>
+</body>
+</html>

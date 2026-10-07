@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 4 · Kartu Harga - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 4 · Kartu Harga</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐ Sedang · <b>Melatih:</b> CSS Grid, responsif, hover, hierarki visual</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Halaman harga yang bagus menonjolkan paket andalan. Kamu merancang tiga kartu: tiga kolom di laptop, satu kolom di HP, dan paket "Pro" harus paling menarik.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><code>.daftar</code> memakai <code>display: grid</code> dengan <b>3 kolom</b> di layar 800px dan <code>gap</code> > 0.</li><li>Di layar 500px menjadi <b>1 kolom</b> (media query).</li><li><code>.paket</code>: <code>padding</code> ≥ 16px, <code>border-radius</code> ≥ 8px, <code>box-shadow</code>, teks rata tengah.</li><li><code>.populer</code> tampil <b>berbeda</b>: warna latar atau border atau transform berbeda dari paket biasa.</li><li><code>.btn</code> berlatar warna, teks kontras, tanpa garis bawah.</li><li>Kartu punya efek <code>:hover</code>.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li><code>grid-template-columns: repeat(3, 1fr)</code>.</li><li>Bedakan paket populer: <code>.populer { border: 2px solid #2563eb; transform: scale(1.04); }</code>.</li><li>Satu kolom di HP: <code>@media (max-width: 600px) { .daftar { grid-template-columns: 1fr; } }</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, noConsole: true, auto: true, height: 380, rows: 22, htmlFirst: true,
+            html: "<h2 style=\"text-align:center\">Pilih Paketmu</h2>\n<div class=\"daftar\">\n  <article class=\"paket\">\n    <h3>Dasar</h3>\n    <p class=\"harga\">Rp 0</p>\n    <ul><li>1 proyek</li><li>Dukungan komunitas</li></ul>\n    <a class=\"btn\" href=\"#\">Mulai</a>\n  </article>\n  <article class=\"paket populer\">\n    <h3>Pro</h3>\n    <p class=\"harga\">Rp 49.000</p>\n    <ul><li>10 proyek</li><li>Dukungan email</li><li>Tanpa iklan</li></ul>\n    <a class=\"btn\" href=\"#\">Pilih Pro</a>\n  </article>\n  <article class=\"paket\">\n    <h3>Bisnis</h3>\n    <p class=\"harga\">Rp 149.000</p>\n    <ul><li>Proyek tak terbatas</li><li>Dukungan prioritas</li></ul>\n    <a class=\"btn\" href=\"#\">Hubungi kami</a>\n  </article>\n</div>\n",
+            css: "/* Rancang kartu harga di sini */\n.daftar {\n\n}\n",
+            solution: { css: ".daftar {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n  align-items: center;\n}\n.paket {\n  padding: 24px;\n  border: 2px solid #e5e7eb;\n  border-radius: 14px;\n  background: #fff;\n  text-align: center;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);\n  transition: transform 0.2s, box-shadow 0.2s;\n}\n.paket:hover {\n  transform: translateY(-4px);\n  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);\n}\n.paket ul { list-style: none; padding: 0; color: #475569; }\n.harga { font-size: 28px; font-weight: 800; margin: 4px 0; }\n.populer {\n  border-color: #2563eb;\n  background: #eff6ff;\n  transform: scale(1.04);\n}\n.btn {\n  display: inline-block;\n  padding: 10px 20px;\n  background: #2563eb;\n  color: #fff;\n  text-decoration: none;\n  border-radius: 8px;\n}\n@media (max-width: 600px) {\n  .daftar { grid-template-columns: 1fr; }\n}\n" },
+            checks: [
+                { text: '800px: grid 3 kolom dengan gap', test: "(function(){ var s=getComputedStyle(document.querySelector('.daftar')); return s.display==='grid' && s.gridTemplateColumns.split(' ').length===3 && parseFloat(s.columnGap)>0; })()" },
+                { width: 500, text: '500px: menjadi 1 kolom', test: "getComputedStyle(document.querySelector('.daftar')).gridTemplateColumns.split(' ').length===1" },
+                { text: '<code>.paket</code>: padding ≥ 16px, radius ≥ 8px, bayangan, rata tengah', test: "(function(){ var s=getComputedStyle(document.querySelector('.paket')); return parseFloat(s.paddingTop)>=16 && parseFloat(s.borderTopLeftRadius)>=8 && s.boxShadow!=='none' && s.textAlign==='center'; })()" },
+                { text: '<code>.populer</code> tampil berbeda dari paket biasa', test: "(function(){ var a=getComputedStyle(document.querySelector('.populer')), b=getComputedStyle(document.querySelectorAll('.paket')[0]); return a.backgroundColor!==b.backgroundColor || a.borderTopColor!==b.borderTopColor || a.transform!==b.transform || a.borderTopWidth!==b.borderTopWidth; })()" },
+                { text: '<code>.btn</code> berlatar warna dan tanpa garis bawah', test: "(function(){ var s=getComputedStyle(document.querySelector('.btn')); return s.backgroundColor!=='rgba(0, 0, 0, 0)' && s.textDecorationLine==='none'; })()" },
+                { text: 'Ada aturan <code>:hover</code>', test: "function(){ var f=false; Array.prototype.forEach.call(document.styleSheets,function(s){ try{ Array.prototype.forEach.call(s.cssRules,function(r){ if(r.selectorText && r.selectorText.indexOf(':hover')>-1) f=true; }); }catch(e){} }); return f; }()" }
+            ]
+        });
+    </script>
+</body>
+</html>

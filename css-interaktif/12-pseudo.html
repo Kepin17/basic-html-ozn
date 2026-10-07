@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12 · Pseudo-class &amp; Pseudo-element - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>12 · Pseudo-class &amp; Pseudo-element</h1>
+        <p class="lead">Dua "selector khusus": <b>pseudo-class</b> (satu titik dua <code>:</code>) memilih elemen berdasarkan <em>keadaan atau posisi</em>; <b>pseudo-element</b> (dua titik dua <code>::</code>) memilih <em>bagian</em> dari elemen atau menambah elemen virtual.</p>
+
+        <div class="materi">
+            <table>
+                <thead><tr><th>Pseudo-class</th><th>Aktif ketika</th></tr></thead>
+                <tbody>
+                    <tr><td><code>:hover</code></td><td>Kursor di atas elemen</td></tr>
+                    <tr><td><code>:focus</code> / <code>:focus-visible</code></td><td>Elemen sedang difokus (klik / tombol Tab)</td></tr>
+                    <tr><td><code>:active</code></td><td>Sedang ditekan</td></tr>
+                    <tr><td><code>:checked</code>, <code>:disabled</code>, <code>:required</code></td><td>Keadaan form</td></tr>
+                    <tr><td><code>:first-child</code>, <code>:last-child</code></td><td>Anak pertama / terakhir</td></tr>
+                    <tr><td><code>:nth-child(n)</code></td><td>Anak ke-n, pola: <code>odd</code>, <code>even</code>, <code>3n</code>, <code>3n+1</code>, <code>-n+3</code></td></tr>
+                    <tr><td><code>:not(...)</code></td><td>Semua kecuali yang cocok dengan isinya</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Lab A · Pseudo-class</h2>
+        <p>Pilih pola <code>:nth-child</code> dan lihat item yang kena. Lalu coba <code>:hover</code>, <code>:active</code>, dan <code>:focus</code> pada tombol dan kolom isian di hasil.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Pseudo-element</h3>
+            <table>
+                <thead><tr><th>Pseudo-element</th><th>Memilih</th></tr></thead>
+                <tbody>
+                    <tr><td><code>::before</code> / <code>::after</code></td><td>Elemen virtual sebelum / sesudah isi. <b>Wajib</b> ada properti <code>content</code></td></tr>
+                    <tr><td><code>::first-letter</code></td><td>Huruf pertama (huruf kapital besar / <i>drop cap</i>)</td></tr>
+                    <tr><td><code>::first-line</code></td><td>Baris pertama paragraf</td></tr>
+                    <tr><td><code>::selection</code></td><td>Teks yang sedang diblok pengguna</td></tr>
+                    <tr><td><code>::placeholder</code></td><td>Teks petunjuk di dalam input</td></tr>
+                </tbody>
+            </table>
+            <div class="tip"><code>::before</code> dan <code>::after</code> sering dipakai untuk ikon kecil, tanda kutip, dan dekorasi tanpa menambah elemen HTML.</div>
+        </div>
+
+        <h2>Lab B · Pseudo-element</h2>
+        <p>Blok sebagian teks dengan mouse di hasil untuk melihat <code>::selection</code>.</p>
+        <div id="labB"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat baris <b>zebra</b> pada list: <code>li:nth-child(even)</code>.</li>
+                <li>Pilih <b>3 item pertama</b> dengan <code>:nth-child(-n+3)</code>, lalu <b>semua kecuali 3 pertama</b> dengan <code>:nth-child(n+4)</code>.</li>
+                <li>Tambahkan garis pemisah ke setiap item kecuali yang terakhir memakai <code>li:not(:last-child)</code>.</li>
+                <li>Di Lab B, ganti <code>::before</code> dengan tanda kutip dan <code>::after</code> dengan penutupnya untuk membuat blok kutipan.</li>
+                <li>Buat <b>drop cap</b>: <code>::first-letter</code> dua-tiga kali lebih besar.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const ARTI = {
+            'first-child': 'item pertama', 'last-child': 'item terakhir', 'nth-child(3)': 'item ke-3',
+            'nth-child(odd)': 'item ganjil (1, 3, 5, …)', 'nth-child(even)': 'item genap (2, 4, 6, …)',
+            'nth-child(3n)': 'setiap kelipatan 3 (3, 6, 9)', 'nth-child(3n+1)': '1, 4, 7, 10 …', 'nth-child(n+4)': 'item ke-4 dan seterusnya',
+            'nth-child(-n+3)': '3 item pertama saja', 'not(:last-child)': 'semua kecuali yang terakhir'
+        };
+        initLab({
+            root: 'labA', height: 400,
+            base: `ul { list-style: none; padding: 0; margin: 0 0 14px; } li { padding: 7px 12px; border: 1px solid #e2e8f0; margin-bottom: 3px; border-radius: 6px; background: #fff; }
+                   .in, .bt { padding: 9px 14px; font: inherit; border-radius: 8px; border: 2px solid #cbd5e1; } .bt { background: #4f46e5; color: #fff; border-color: #4f46e5; cursor: pointer; transition: all .2s; }`,
+            html: `<ul>
+  <li>Item 1</li><li>Item 2</li><li>Item 3</li><li>Item 4</li><li>Item 5</li>
+  <li>Item 6</li><li>Item 7</li><li>Item 8</li><li>Item 9</li><li>Item 10</li>
+</ul>
+<input class="in" placeholder="Klik untuk fokus">
+<button class="bt">Tombol</button>`,
+            controls: [
+                { id: 'pt', label: 'li:...', type: 'select', options: Object.keys(ARTI), value: 'nth-child(3n+1)' },
+                { id: 'st', label: 'Keadaan tombol', type: 'select', options: ['hover', 'active', 'focus-visible'], value: 'hover' }
+            ],
+            css: v => `li:${v.pt} {
+  background: #34d399;
+  color: #064e3b;
+  font-weight: 700;
+}
+
+.bt:${v.st} {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  transform: translateY(-3px);
+}
+
+.in:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.25);
+}`,
+            info(d, v) {
+                let n = 0; try { n = d.querySelectorAll('li:' + v.pt).length; } catch (e) { }
+                return `🎯 <code>li:${v.pt}</code> → <b>${n}</b> item: ${ARTI[v.pt]}<br>👆 Tombol bereaksi pada <b>:${v.st}</b>${v.st === 'focus-visible' ? ' (tekan Tab sampai tombol terfokus)' : ''}`;
+            }
+        });
+
+        initLab({
+            root: 'labB', height: 340,
+            base: `body { background: #fafaf9; } p { margin: 0 0 14px; max-width: 420px; }`,
+            html: `<p class="kutip">Belajar CSS paling cepat dengan mencoba langsung. Setiap perubahan kecil memberi umpan balik yang jelas, sehingga konsep sulit pun pelan-pelan terasa mudah.</p>
+<p><a class="link" href="#">Baca selengkapnya</a></p>
+<p><label class="wajib">Nama lengkap</label></p>`,
+            controls: [
+                { id: 'bf', label: '::before content', type: 'select', options: ['"“"', '"★ "', '"→ "', '""'], value: '"“"' },
+                { id: 'af', label: '::after content', type: 'select', options: ['"”"', '" ↗"', '" *"', '""'], value: '"”"' },
+                { id: 'wr', label: 'Warna hiasan', type: 'color', value: '#e11d48' },
+                { id: 'dc', label: '::first-letter (drop cap)', type: 'check', value: true },
+                { id: 'fs', label: 'Ukuran huruf pertama', type: 'range', min: 1, max: 4, step: 0.25, value: 2.5, unit: 'em' },
+                { id: 'fl', label: '::first-line KAPITAL', type: 'check', value: false },
+                { id: 'sc', label: 'Warna ::selection', type: 'color', value: '#fde047' }
+            ],
+            css: v => `.kutip::before {
+  content: ${v.bf};
+  color: ${v.wr};
+  font-size: 1.4em;
+}
+
+.kutip::after {
+  content: ${v.af};
+  color: ${v.wr};
+  font-size: 1.4em;
+}${v.dc ? `
+
+.kutip::first-letter {
+  font-size: ${v.fs}em;
+  font-weight: 800;
+  color: ${v.wr};
+}` : ''}${v.fl ? `
+
+.kutip::first-line {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}` : ''}
+
+.link::after {
+  content: " →";
+  transition: margin-left 0.2s;
+}
+.link:hover::after { margin-left: 6px; }
+
+.wajib::after {
+  content: " *";
+  color: #dc2626;
+}
+
+::selection {
+  background: ${v.sc};
+  color: #000;
+}`,
+            info: () => '✍ Blok teks dengan mouse untuk melihat <b>::selection</b>. Arahkan mouse ke "Baca selengkapnya" untuk melihat panah <b>::after</b> bergeser.'
+        });
+    </script>
+</body>
+</html>

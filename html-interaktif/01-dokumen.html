@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 · Struktur Dokumen - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>1 · Struktur Dokumen HTML</h1>
+        <p class="lead">Setiap halaman web punya kerangka yang sama. Tanpa kerangka yang benar, halaman bisa tampil rusak di HP atau salah menampilkan karakter.</p>
+        <div class="materi">
+            <h3>Kerangka standar</h3>
+<pre><code>&lt;!DOCTYPE html&gt;               &lt;!-- memberi tahu browser: ini HTML5 --&gt;
+&lt;html lang="id"&gt;              &lt;!-- elemen akar + bahasa halaman --&gt;
+&lt;head&gt;                        &lt;!-- informasi TENTANG halaman (tidak tampil) --&gt;
+  &lt;meta charset="UTF-8"&gt;      &lt;!-- pengodean karakter --&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Judul di tab browser&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;                        &lt;!-- isi yang tampil --&gt;
+  &lt;h1&gt;Halo&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            <table>
+                <thead><tr><th>Bagian</th><th>Fungsi</th><th>Kalau dilupakan</th></tr></thead>
+                <tbody>
+                    <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Mengaktifkan mode standar</td><td>Browser masuk <i>quirks mode</i>, tampilan tak konsisten</td></tr>
+                    <tr><td><code>lang="id"</code></td><td>Bahasa halaman</td><td>Pembaca layar salah melafalkan, terjemah otomatis keliru</td></tr>
+                    <tr><td><code>meta charset</code></td><td>Karakter Unicode (é, ñ, 日本)</td><td>Karakter berubah jadi simbol aneh</td></tr>
+                    <tr><td><code>meta viewport</code></td><td>Skala di layar HP</td><td>HP menampilkan versi desktop yang mengecil</td></tr>
+                    <tr><td><code>&lt;title&gt;</code></td><td>Judul tab, hasil pencarian, bookmark</td><td>Tab tertulis nama file</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <h2>Tantangan: bangun kerangka lengkap</h2>
+        <div class="materi"><p>Kode awal hanya berisi satu <code>&lt;h1&gt;</code>. Lengkapi menjadi dokumen utuh. Perhatikan <b>Pohon DOM</b> di kanan: kamu bisa melihat <code>head</code> dan <code>body</code> yang dibuat browser.</p></div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            fullDoc: true, preview: true, dom: true, noConsole: true, auto: true, height: 150, rows: 16, htmlFirst: true,
+            html: "<h1>Halo</h1>\n",
+            solution: { html: "<!DOCTYPE html>\n<html lang=\"id\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Halaman Pertamaku</title>\n</head>\n<body>\n  <h1>Halo</h1>\n</body>\n</html>\n" },
+            checks: [
+                { text: 'Ada <code>&lt;!DOCTYPE html&gt;</code>', test: "!!document.doctype && document.doctype.name === 'html'" },
+                { text: '<code>&lt;html lang="id"&gt;</code> (atau bahasa lain yang terisi)', test: "document.documentElement.lang.length >= 2" },
+                { text: 'Ada <code>&lt;meta charset&gt;</code>', test: "!!document.querySelector('meta[charset]')" },
+                { text: 'Ada <code>&lt;meta name="viewport"&gt;</code>', test: "!!document.querySelector('meta[name=viewport]')" },
+                { text: '<code>&lt;title&gt;</code> tidak kosong', test: "document.title.trim().length > 0" },
+                { text: 'Tepat satu <code>&lt;h1&gt;</code> di dalam <code>&lt;body&gt;</code>', test: "document.querySelectorAll('body h1').length === 1" }
+            ]
+        });
+    </script>
+</body>
+</html>

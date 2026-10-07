@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 · Animasi - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>5 · Animasi</h1>
+        <p class="lead">Dua cara bergerak: <b>transition</b> (berubah halus saat ada kejadian, misalnya hover) dan <b>animation</b> (berjalan sendiri lewat <code>@keyframes</code>).</p>
+
+        <div class="materi">
+            <table>
+                <thead><tr><th></th><th>transition</th><th>animation</th></tr></thead>
+                <tbody>
+                    <tr><td>Pemicu</td><td>Perubahan keadaan (<code>:hover</code>, <code>:focus</code>)</td><td>Otomatis berjalan</td></tr>
+                    <tr><td>Langkah</td><td>Dari awal ke akhir</td><td>Banyak tahap lewat <code>@keyframes</code></td></tr>
+                    <tr><td>Contoh</td><td>Tombol berubah warna halus</td><td>Loading spinner, denyut</td></tr>
+                </tbody>
+            </table>
+            <div class="tip"><b>Arahkan mouse ke kotak kiri</b> di hasil untuk melihat transition. Kotak kanan memakai animation.</div>
+            <div class="warn">Animasikan <code>transform</code> dan <code>opacity</code> bila bisa. Keduanya paling ringan bagi browser.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Fungsi easing (timing-function)</h3>
+            <table>
+                <thead><tr><th>Nilai</th><th>Rasa gerakan</th></tr></thead>
+                <tbody>
+                    <tr><td><code>linear</code></td><td>Kecepatan tetap, terasa mekanis</td></tr>
+                    <tr><td><code>ease</code></td><td>Pelan–cepat–pelan (bawaan)</td></tr>
+                    <tr><td><code>ease-in</code></td><td>Mulai pelan, akhir cepat</td></tr>
+                    <tr><td><code>ease-out</code></td><td>Mulai cepat, berhenti halus (bagus untuk muncul)</td></tr>
+                    <tr><td><code>cubic-bezier(.68,-.55,.27,1.55)</code></td><td>Kurva sendiri, di sini memantul</td></tr>
+                </tbody>
+            </table>
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat tombol yang membesar 10% (<code>scale 1.1</code>) dalam 0,2 detik saat di-hover.</li>
+                <li>Buat <b>loading spinner</b>: animasi <code>spin</code>, durasi 1 detik, <code>infinite</code>, easing <code>linear</code>.</li>
+                <li>Gunakan easing <code>cubic-bezier</code> dan bandingkan dengan <code>linear</code>.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const FRAMES = {
+            none: '',
+            bounce: '0%, 100% { transform: translateY(0); }\n  50% { transform: translateY(-50px); }',
+            pulse: '0%, 100% { transform: scale(1); }\n  50% { transform: scale(1.3); }',
+            spin: 'from { transform: rotate(0deg); }\n  to { transform: rotate(360deg); }',
+            shake: '0%, 100% { transform: translateX(0); }\n  25% { transform: translateX(-14px); }\n  75% { transform: translateX(14px); }',
+            glow: '0%, 100% { box-shadow: 0 0 0 rgba(34, 197, 94, 0); }\n  50% { box-shadow: 0 0 30px 8px rgba(34, 197, 94, 0.8); }'
+        };
+        initLab({
+            height: 330,
+            base: `.stage-row { display: flex; gap: 40px; justify-content: center; align-items: center; height: 260px; }
+                   .hover-box, .anim-box { width: 100px; height: 100px; border-radius: 14px; color: #fff; font-weight: 700; display: grid; place-items: center; text-align: center; font-size: 13px; }
+                   .hover-box { background: #3b82f6; cursor: pointer; } .anim-box { background: #22c55e; }`,
+            html: `<div class="stage-row">
+  <div class="hover-box">Hover aku</div>
+  <div class="anim-box">Animasi</div>
+</div>`,
+            actions: [{ label: '↻ Ulangi animasi', run: api => api.reload() }],
+            controls: [
+                { id: 'td', label: 'transition-duration', type: 'range', min: 0, max: 2, step: 0.1, value: 0.4, unit: 's' },
+                { id: 'te', label: 'timing-function', type: 'select', options: ['ease', 'linear', 'ease-in', 'ease-out', 'ease-in-out', 'cubic-bezier(.68,-.55,.27,1.55)'], value: 'ease' },
+                { id: 'hx', label: 'Hover: translateX', type: 'range', min: -60, max: 60, value: 0, unit: 'px' },
+                { id: 'hr', label: 'Hover: rotate', type: 'range', min: -180, max: 180, step: 5, value: 15, unit: '°' },
+                { id: 'hs', label: 'Hover: scale', type: 'range', min: 0.5, max: 1.8, step: 0.05, value: 1.2 },
+                { id: 'hc', label: 'Hover: warna', type: 'color', value: '#f97316' },
+                { id: 'an', label: 'animation', type: 'select', options: Object.keys(FRAMES), value: 'bounce' },
+                { id: 'ad', label: 'animation-duration', type: 'range', min: 0.2, max: 4, step: 0.1, value: 1, unit: 's' },
+                { id: 'ai', label: 'iteration-count', type: 'select', options: ['1', '3', 'infinite'], value: 'infinite' },
+                { id: 'adir', label: 'direction', type: 'select', options: ['normal', 'alternate', 'reverse'], value: 'normal' }
+            ],
+            css: v => `.hover-box {
+  transition: all ${v.td}s ${v.te};
+}
+
+.hover-box:hover {
+  transform: translateX(${v.hx}px) rotate(${v.hr}deg) scale(${v.hs});
+  background: ${v.hc};
+}` + (v.an !== 'none' ? `
+
+.anim-box {
+  animation: ${v.an} ${v.ad}s ${v.te} ${v.ai} ${v.adir};
+}
+
+@keyframes ${v.an} {
+  ${FRAMES[v.an]}
+}` : ''),
+            info: () => '👉 Arahkan mouse ke kotak biru untuk melihat <b>transition</b>. Klik "↻ Ulangi animasi" untuk memutar ulang animasi hijau.'
+        });
+    </script>
+</body>
+</html>

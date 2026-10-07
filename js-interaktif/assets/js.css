@@ -1,0 +1,22 @@
+/* Tambahan untuk lab JavaScript (dipakai bersama ../css-interaktif/assets/lab.css) */
+.mini.run { background: #16a34a; color: #fff; border-color: #16a34a; font-weight: 600; }
+.mini.run:hover { background: #15803d; color: #fff; }
+textarea { color: #fde68a; }
+kbd { background: #e5e7eb; border: 1px solid #cbd5e1; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; font-size: 12px; }
+.small { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 4px; }
+.console { background: #0b1220; color: #d1fae5; border-radius: 8px; padding: 8px 10px; font-family: ui-monospace, monospace; font-size: 13.5px; min-height: 80px; max-height: 280px; overflow: auto; }
+.console .ln { padding: 2px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); white-space: pre-wrap; word-break: break-word; }
+.console .ln::before { content: "› "; color: #64748b; }
+.console .ln.warn { color: #fcd34d; } .console .ln.error { color: #fca5a5; } .console .ln.info { color: #93c5fd; }
+.console .empty, .vars .empty { color: #64748b; font-style: italic; }
+.vars table { margin: 0; font-size: 13px; } .vars th, .vars td { padding: 4px 8px; }
+.tp { font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; background: #e5e7eb; }
+.tp.string { background: #dcfce7; color: #166534; } .tp.number { background: #dbeafe; color: #1e40af; } .tp.boolean { background: #fef3c7; color: #92400e; }
+.tp.array { background: #ede9fe; color: #5b21b6; } .tp.object { background: #fce7f3; color: #9d174d; } .tp.function { background: #ccfbf1; color: #115e59; }
+.tp.undefined, .tp.null { background: #f3f4f6; color: #6b7280; }
+.domtree { background: #f8fafc; border: 1px solid var(--line); color: #334155; max-height: 220px; overflow: auto; margin: 0; font-size: 13px; }
+.explorer { margin: 10px 0 0; font-size: 14px; } .explorer input { padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; font: 14px ui-monospace, monospace; width: 220px; max-width: 100%; }
+#nav a.extra { color: #fbbf24; } #nav a.extra.first { margin-left: auto; }
+.hero-js { background: linear-gradient(135deg, #1e293b, #0f172a); color: #fde68a; border-radius: 14px; padding: 18px 22px; margin: 14px 0; }
+.hero-js code { background: rgba(255, 255, 255, 0.1); color: #fde68a; }
+details { margin-top: 6px; } details summary { cursor: pointer; }

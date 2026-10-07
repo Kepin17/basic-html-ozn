@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 · Perintah Dasar - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>2 · Perintah Dasar</h1>
+        <p class="lead">Lima perintah ini kamu pakai setiap hari: <code>status</code>, <code>add</code>, <code>commit</code>, <code>diff</code>, dan <code>log</code>.</p>
+        <div class="materi">
+            <table>
+                <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>git init</code></td><td>Menjadikan folder sebagai repositori Git</td></tr>
+                    <tr><td><code>git status</code></td><td>Apa yang berubah? Apa yang sudah di-stage? <b>Jalankan sesering mungkin.</b></td></tr>
+                    <tr><td><code>git add &lt;file&gt;</code> / <code>git add .</code></td><td>Memasukkan perubahan ke staging area</td></tr>
+                    <tr><td><code>git commit -m "pesan"</code></td><td>Menyimpan staging menjadi komit permanen</td></tr>
+                    <tr><td><code>git diff</code> / <code>git diff --staged</code></td><td>Melihat isi perubahan (belum di-stage / sudah di-stage)</td></tr>
+                    <tr><td><code>git log --oneline --graph</code></td><td>Riwayat ringkas dengan grafik</td></tr>
+                </tbody>
+            </table>
+            <h3>Siklus hidup sebuah berkas</h3>
+            <div class="flow"><span class="st">Untracked<br><small>baru, belum dilacak</small></span><span class="ar">add →</span><span class="st">Staged</span><span class="ar">commit →</span><span class="st">Committed (clean)</span><span class="ar">edit →</span><span class="st">Modified</span><span class="ar">add →</span><span class="st">Staged</span></div>
+            <div class="tip">Cara pakai simulator: ketik perintah di terminal (atau klik chip perintah untuk mengisi), <b>edit isi berkas</b> di panel kanan, dan perhatikan berkas berpindah antar area. Panah ↑ mengulang perintah sebelumnya.</div>
+        </div>
+        <h2>Praktik: komit pertamamu</h2>
+        <div id="lab"></div>
+        <div class="materi">
+            <h3>Kapan sebaiknya commit?</h3>
+            <ul>
+                <li>Setelah <b>satu perubahan logis selesai</b> dan berjalan (satu fitur kecil, satu perbaikan bug).</li>
+                <li>Sebelum memulai sesuatu yang berisiko (refactor besar).</li>
+                <li>Bukan "sekali sehari di akhir hari": komit kecil dan sering lebih mudah ditinjau dan dibatalkan.</li>
+            </ul>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script>
+        initGit({
+            quick: ['git init', 'git status', 'git add .', 'git commit -m "feat: tambah halaman awal"', 'git diff', 'git add index.html', 'git log --oneline'],
+            tasks: [
+                { text: 'Buat repositori: <code>git init</code>', test: S => S.init },
+                { text: 'Lihat keadaan dengan <code>git status</code>', test: S => S.cmds.some(function(c){ return /^git status/.test(c); }) },
+                { text: 'Stage semua berkas dan buat komit pertama (<code>git add .</code> lalu <code>git commit -m "..."</code>)', test: S => Object.keys(S.commits).length >= 1 },
+                { text: 'Ubah isi salah satu berkas (edit di panel kanan), lalu lihat perubahannya dengan <code>git diff</code>', test: S => S.cmds.some(function(c){ return /^git diff/.test(c); }) },
+                { text: 'Stage perubahan itu dan buat komit kedua dengan pesan berformat <code>tipe: deskripsi</code> (mis. <code>fix: ...</code>)', test: S => Object.keys(S.commits).length >= 2 && Object.values(S.commits).some(c => /^(feat|fix|docs|style|refactor|chore)(\(.+\))?: .+/.test(c.msg) && c.parents.length === 1) },
+                { text: 'Lihat riwayat dengan <code>git log --oneline</code>', test: S => S.cmds.some(function(c){ return /^git log/.test(c); }) }
+            ]
+        });
+    </script>
+</body>
+</html>

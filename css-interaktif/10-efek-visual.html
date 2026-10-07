@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 · Bayangan &amp; Filter - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>10 · Bayangan &amp; Filter</h1>
+        <p class="lead">Memberi kedalaman dan suasana: bayangan kotak, bayangan teks, filter gambar, dan efek kaca buram.</p>
+
+        <div class="materi">
+            <h3>Anatomi <code>box-shadow</code></h3>
+<pre><code>box-shadow: [inset] x  y  blur  spread  warna;
+box-shadow: 0 8px 24px 0 rgba(0,0,0,.2);</code></pre>
+            <table>
+                <thead><tr><th>Nilai</th><th>Arti</th></tr></thead>
+                <tbody>
+                    <tr><td><code>x</code>, <code>y</code></td><td>Geser bayangan ke kanan / bawah (boleh negatif)</td></tr>
+                    <tr><td><code>blur</code></td><td>Seberapa kabur tepinya (0 = tajam)</td></tr>
+                    <tr><td><code>spread</code></td><td>Memperbesar / memperkecil bayangan</td></tr>
+                    <tr><td><code>inset</code></td><td>Bayangan di dalam kotak (efek tertekan)</td></tr>
+                    <tr><td>koma <code>,</code></td><td>Beberapa lapis bayangan sekaligus (mis. bayangan + cahaya)</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Bayangan natural: <b>offset-y kecil</b>, blur besar, dan alpha rendah (0,1–0,25). Bayangan hitam pekat terlihat murahan.</div>
+        </div>
+
+        <h2>Lab A · Bayangan</h2>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Filter &amp; backdrop-filter</h3>
+            <table>
+                <thead><tr><th>Fungsi</th><th>Efek</th></tr></thead>
+                <tbody>
+                    <tr><td><code>blur(px)</code></td><td>Mengaburkan</td></tr>
+                    <tr><td><code>brightness(n)</code> / <code>contrast(n)</code></td><td>Terang / kontras (1 = asli)</td></tr>
+                    <tr><td><code>grayscale(n)</code> / <code>sepia(n)</code></td><td>Hitam-putih / nuansa foto tua (0–1)</td></tr>
+                    <tr><td><code>hue-rotate(deg)</code></td><td>Memutar warna pada roda warna</td></tr>
+                    <tr><td><code>saturate(n)</code></td><td>Kepekatan warna</td></tr>
+                    <tr><td><code>backdrop-filter</code></td><td>Filter untuk <b>apa yang ada di belakang</b> elemen. Dasar efek <i>glassmorphism</i></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Lab B · Filter &amp; efek kaca</h2>
+        <div id="labB"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat kartu <b>"melayang"</b>: <code>0 12px 30px</code> alpha 0,18. Lalu hapus lalu bandingkan dengan bayangan <code>0 0 0 4px</code> (spread saja, tanpa blur: terlihat seperti border).</li>
+                <li>Buat tombol <b>neon</b>: aktifkan lapis cahaya (glow) dan beri warna hijau.</li>
+                <li>Buat efek <b>tertekan</b>: aktifkan <code>inset</code>.</li>
+                <li>Buat gambar tampak <b>foto lama</b>: sepia 0,8, contrast 1,2, brightness 0,9.</li>
+                <li>Buat panel <b>kaca</b>: blur 8–12px dengan latar putih alpha 0,25.</li>
+            </ol>
+            <div class="warn">Filter berat pada banyak elemen bisa membuat halaman lambat, terutama <code>blur</code> besar dan <code>backdrop-filter</code>.</div>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const rgb = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16)).join(', ');
+
+        initLab({
+            root: 'labA', height: 330,
+            base: `.stage { height: 280px; display: grid; place-items: center; background: #e9edf5; }
+                   .kartu { width: 200px; padding: 28px 16px; border-radius: 16px; background: #fff; text-align: center; font-weight: 800; font-size: 22px; color: #334155; }`,
+            html: `<div class="stage">
+  <div class="kartu">Kartu</div>
+</div>`,
+            controls: [
+                { id: 'x', label: 'x (offset)', type: 'range', min: -40, max: 40, value: 0, unit: 'px' },
+                { id: 'y', label: 'y (offset)', type: 'range', min: -40, max: 40, value: 10, unit: 'px' },
+                { id: 'bl', label: 'blur', type: 'range', min: 0, max: 80, value: 28, unit: 'px' },
+                { id: 'sp', label: 'spread', type: 'range', min: -30, max: 40, value: 0, unit: 'px' },
+                { id: 'co', label: 'Warna bayangan', type: 'color', value: '#0f172a' },
+                { id: 'al', label: 'Alpha (transparansi)', type: 'range', min: 0, max: 1, step: 0.05, value: 0.2 },
+                { id: 'in', label: 'inset (di dalam)', type: 'check', value: false },
+                { id: 'gl', label: 'Tambah lapis cahaya (glow)', type: 'check', value: false },
+                { id: 'gc', label: 'Warna glow', type: 'color', value: '#22c55e' },
+                { id: 'ts', label: 'text-shadow', type: 'check', value: false },
+                { id: 'tb', label: 'text-shadow blur', type: 'range', min: 0, max: 20, value: 6, unit: 'px' }
+            ],
+            css: v => `.kartu {
+  box-shadow: ${v.in ? 'inset ' : ''}${v.x}px ${v.y}px ${v.bl}px ${v.sp}px rgba(${rgb(v.co)}, ${v.al})${v.gl ? `,\n              0 0 30px 6px ${v.gc}` : ''};${v.ts ? `\n  text-shadow: 2px 3px ${v.tb}px rgba(${rgb(v.co)}, 0.45);` : ''}
+}`,
+            info: () => '💡 Bayangan alami: offset-y kecil, blur besar, alpha rendah.'
+        });
+
+        initLab({
+            root: 'labB', height: 340,
+            base: `.foto { position: relative; width: 100%; height: 300px; overflow: hidden; }
+                   .bg { position: absolute; inset: 0; background:
+                        radial-gradient(circle at 20% 30%, #fde047 0 60px, transparent 61px),
+                        radial-gradient(circle at 75% 25%, #f43f5e 0 80px, transparent 81px),
+                        radial-gradient(circle at 60% 80%, #22c55e 0 90px, transparent 91px),
+                        linear-gradient(135deg, #3b82f6, #8b5cf6); }
+                   .glass { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 22px 34px; border-radius: 16px;
+                        color: #fff; font-weight: 800; font-size: 20px; border: 1px solid rgba(255,255,255,.4); text-align: center; }`,
+            html: `<div class="foto">
+  <div class="bg"></div>
+  <div class="glass">Panel kaca</div>
+</div>`,
+            controls: [
+                { id: 'bl', label: 'blur (gambar)', type: 'range', min: 0, max: 12, step: 0.5, value: 0, unit: 'px' },
+                { id: 'br', label: 'brightness', type: 'range', min: 0.2, max: 2, step: 0.05, value: 1 },
+                { id: 'ct', label: 'contrast', type: 'range', min: 0.2, max: 2.5, step: 0.05, value: 1 },
+                { id: 'gs', label: 'grayscale', type: 'range', min: 0, max: 1, step: 0.05, value: 0 },
+                { id: 'se', label: 'sepia', type: 'range', min: 0, max: 1, step: 0.05, value: 0 },
+                { id: 'hu', label: 'hue-rotate', type: 'range', min: 0, max: 360, step: 5, value: 0, unit: '°' },
+                { id: 'sa', label: 'saturate', type: 'range', min: 0, max: 3, step: 0.1, value: 1 },
+                { id: 'bf', label: 'backdrop-filter blur (panel)', type: 'range', min: 0, max: 24, value: 10, unit: 'px' },
+                { id: 'pa', label: 'Alpha latar panel', type: 'range', min: 0, max: 0.8, step: 0.05, value: 0.2 }
+            ],
+            css: v => {
+                const f = [];
+                if (v.bl) f.push(`blur(${v.bl}px)`); if (v.br != 1) f.push(`brightness(${v.br})`); if (v.ct != 1) f.push(`contrast(${v.ct})`);
+                if (v.gs) f.push(`grayscale(${v.gs})`); if (v.se) f.push(`sepia(${v.se})`); if (v.hu) f.push(`hue-rotate(${v.hu}deg)`); if (v.sa != 1) f.push(`saturate(${v.sa})`);
+                return `.bg {\n  filter: ${f.length ? f.join('\n          ') : 'none'};\n}\n\n.glass {\n  background: rgba(255, 255, 255, ${v.pa});\n  backdrop-filter: blur(${v.bf}px);\n}`;
+            },
+            info: () => '💡 Filter diterapkan ke gambar (<code>.bg</code>), sedangkan <code>backdrop-filter</code> mengaburkan apa yang ada <b>di belakang</b> panel kaca.'
+        });
+    </script>
+</body>
+</html>

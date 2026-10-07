@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 5 · Kalkulator Tip - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 5 · Kalkulator Tip</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐ Sedang · <b>Melatih:</b> Memisahkan logika dari tampilan, validasi, pembulatan</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Kamu dan teman makan bersama dan ingin membagi tagihan plus tip. Prinsip penting: tulis <b>fungsi murni</b> <code>hitungTip</code> (mudah diuji), lalu sambungkan ke tampilan.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><code>hitungTip(tagihan, persen, orang)</code> mengembalikan <code>{ tip, total, perOrang }</code>, semuanya dibulatkan ke bilangan bulat (<code>Math.round</code>).</li><li>Input tidak valid (tagihan ≤ 0, orang &lt; 1, atau bukan angka) → mengembalikan <code>null</code>.</li><li>Tombol <b>Hitung</b> membaca <code>#tagihan</code>, <code>#persen</code>, <code>#orang</code> lalu mengisi <code>#tip</code>, <code>#total</code>, <code>#perorang</code>.</li><li>Bila input tidak valid, ketiga hasil kembali menjadi <code>-</code>.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Hitung dulu di kertas: 250.000 + tip 20% = ? dibagi 5 orang = ?</li><li>Pecah masalah: (1) validasi, (2) hitung tip, (3) hitung total, (4) bagi per orang.</li><li>Mengambil nilai input selalu berupa <b>string</b>; ubah dengan <code>Number()</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true,
+            dom: true,
+            noConsole: true,
+            auto: true,
+            height: 300,
+            rows: 22,
+            htmlFirst: false,
+            html: "<h2>Kalkulator Tip</h2>\n<label>Tagihan (Rp) <input id=\"tagihan\" type=\"number\" min=\"0\"></label><br>\n<label>Tip <select id=\"persen\">\n  <option value=\"10\">10%</option><option value=\"15\" selected>15%</option><option value=\"20\">20%</option>\n</select></label><br>\n<label>Jumlah orang <input id=\"orang\" type=\"number\" min=\"1\" value=\"1\"></label><br>\n<button id=\"hitung\">Hitung</button>\n<p>Tip: <b id=\"tip\">-</b></p>\n<p>Total: <b id=\"total\">-</b></p>\n<p>Per orang: <b id=\"perorang\">-</b></p>\n",
+            code: "function hitungTip(tagihan, persen, orang) {\n  // TODO: kembalikan { tip, total, perOrang } atau null\n}\n\n// TODO: sambungkan tombol #hitung ke fungsi di atas\n",
+            solution: {"js": "function hitungTip(tagihan, persen, orang) {\n  if (!(tagihan > 0) || !(orang >= 1)) return null;\n  const tip = Math.round(tagihan * persen / 100);\n  const total = tagihan + tip;\n  return { tip, total, perOrang: Math.round(total / orang) };\n}\n\nconst el = (id) => document.querySelector(\"#\" + id);\nconst rp = (n) => \"Rp \" + n.toLocaleString(\"id-ID\");\n\nel(\"hitung\").addEventListener(\"click\", () => {\n  const h = hitungTip(Number(el(\"tagihan\").value), Number(el(\"persen\").value), Number(el(\"orang\").value));\n  if (!h) {\n    el(\"tip\").textContent = el(\"total\").textContent = el(\"perorang\").textContent = \"-\";\n    return;\n  }\n  el(\"tip\").textContent = rp(h.tip);\n  el(\"total\").textContent = rp(h.total);\n  el(\"perorang\").textContent = rp(h.perOrang);\n});"},
+            checks: [
+                {"text": "hitungTip(100000, 10, 1) → tip 10.000, total 110.000, perOrang 110.000", "test": "(function(){ var h=hitungTip(100000,10,1); return h.tip===10000 && h.total===110000 && h.perOrang===110000; })()"},
+                {"text": "hitungTip(250000, 20, 5) → 50.000 / 300.000 / 60.000", "test": "(function(){ var h=hitungTip(250000,20,5); return h.tip===50000 && h.total===300000 && h.perOrang===60000; })()"},
+                {"text": "Pembulatan: hitungTip(33333, 15, 3)", "test": "(function(){ var h=hitungTip(33333,15,3); return h.tip===5000 && h.total===38333 && h.perOrang===12778; })()"},
+                {"text": "Tidak valid → <code>null</code> (0, negatif, orang 0)", "test": "hitungTip(0,10,1)===null && hitungTip(-5,10,1)===null && hitungTip(1000,10,0)===null && hitungTip(NaN,10,1)===null"},
+                {"text": "Klik Hitung: 100000, 10%, 1 orang → #total menampilkan 110000", "test": "(function(){ function set(sel,v,ev){ var e=document.querySelector(sel); e.value=v; e.dispatchEvent(new Event(ev||'input',{bubbles:true})); } set('#tagihan','100000'); set('#persen','10','change'); set('#orang','1'); document.querySelector('#hitung').click(); return document.querySelector('#total').textContent.replace(/\\D/g,'')==='110000'; })()"},
+                {"text": "Input kosong → hasil kembali \"-\"", "test": "(function(){ function set(sel,v,ev){ var e=document.querySelector(sel); e.value=v; e.dispatchEvent(new Event(ev||'input',{bubbles:true})); } set('#tagihan',''); document.querySelector('#hitung').click(); return document.querySelector('#total').textContent.replace(/\\D/g,'')==='' && document.querySelector('#tip').textContent.indexOf('-')>-1; })()"}
+            ]
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 · Form - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>5 · Form</h1>
+        <p class="lead">Form adalah cara pengguna memberi data. Form yang baik <b>mudah diisi</b>, <b>mudah dibaca layar</b>, dan <b>menolak data salah</b> sebelum dikirim.</p>
+        <div class="materi">
+            <table>
+                <thead><tr><th>Elemen / atribut</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>&lt;label for="x"&gt;</code> + <code>&lt;input id="x"&gt;</code></td><td>Menghubungkan label dan isian; klik label memfokuskan input</td></tr>
+                    <tr><td><code>type</code></td><td><code>text</code>, <code>email</code>, <code>password</code>, <code>number</code>, <code>date</code>, <code>tel</code>, <code>url</code>, <code>checkbox</code>, <code>radio</code>, <code>range</code>, <code>color</code></td></tr>
+                    <tr><td><code>name</code></td><td>Nama data yang dikirim. <b>Radio sejenis harus ber-<code>name</code> sama</b></td></tr>
+                    <tr><td><code>required</code>, <code>min</code>, <code>max</code>, <code>minlength</code>, <code>pattern</code></td><td>Validasi bawaan browser</td></tr>
+                    <tr><td><code>select</code> + <code>option</code>, <code>textarea</code></td><td>Pilihan dropdown, teks panjang</td></tr>
+                    <tr><td><code>fieldset</code> + <code>legend</code></td><td>Mengelompokkan isian terkait (radio, checkbox)</td></tr>
+                    <tr><td><code>button type="submit"</code></td><td>Mengirim form</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Ketik data yang salah di pratinjau lalu tekan <b>Daftar</b>: browser menampilkan pesan validasi sendiri berkat atribut <code>required</code>, <code>type="email"</code>, dan <code>min</code>/<code>max</code>.</div>
+        </div>
+        <h2>Tantangan: formulir pendaftaran</h2>
+        <div class="materi"><ol>
+            <li>Isian <b>nama</b> (text, required) dan <b>email</b> (type email, required), masing-masing punya <code>label</code> yang terhubung (<code>for</code> = <code>id</code>).</li>
+            <li>Isian <b>umur</b> bertipe <code>number</code> dengan <code>min</code> dan <code>max</code>.</li>
+            <li>Satu <code>select</code> dengan ≥ 3 <code>option</code>.</li>
+            <li>Dua <b>radio</b> ber-<code>name</code> sama di dalam <code>fieldset</code> + <code>legend</code>.</li>
+            <li>Satu <b>checkbox</b> persetujuan (required) dengan label, satu <code>textarea</code> berlabel, dan tombol <code>type="submit"</code>.</li>
+            <li>Semua <code>input</code>/<code>select</code>/<code>textarea</code> (kecuali submit) harus punya label.</li>
+        </ol></div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, dom: true, noConsole: true, auto: true, height: 380, rows: 24, base: 'label{display:block;margin-top:8px} fieldset{margin-top:8px}',
+            html: "<form>\n  <label>Nama <input type=\"text\"></label>\n</form>\n",
+            solution: { html: "<form>\n  <label for=\"nama\">Nama</label>\n  <input id=\"nama\" name=\"nama\" type=\"text\" required>\n\n  <label for=\"email\">Email</label>\n  <input id=\"email\" name=\"email\" type=\"email\" required>\n\n  <label for=\"umur\">Umur</label>\n  <input id=\"umur\" name=\"umur\" type=\"number\" min=\"10\" max=\"100\">\n\n  <label for=\"kota\">Kota</label>\n  <select id=\"kota\" name=\"kota\">\n    <option>Jakarta</option>\n    <option>Bandung</option>\n    <option>Surabaya</option>\n  </select>\n\n  <fieldset>\n    <legend>Level</legend>\n    <label><input type=\"radio\" name=\"level\" value=\"pemula\"> Pemula</label>\n    <label><input type=\"radio\" name=\"level\" value=\"mahir\"> Mahir</label>\n  </fieldset>\n\n  <label for=\"pesan\">Pesan</label>\n  <textarea id=\"pesan\" name=\"pesan\"></textarea>\n\n  <label><input type=\"checkbox\" required> Saya setuju</label>\n  <button type=\"submit\">Daftar</button>\n</form>\n" },
+            checks: [
+                { text: 'Nama: <code>input[type=text][required]</code> berlabel', test: "(function(){ var i = document.querySelector('input[type=text][required]'); return !!i && !!i.id && !!document.querySelector('label[for=\"' + i.id + '\"]'); })()" },
+                { text: 'Email: <code>input[type=email][required]</code> berlabel', test: "(function(){ var i = document.querySelector('input[type=email][required]'); return !!i && !!i.id && !!document.querySelector('label[for=\"' + i.id + '\"]'); })()" },
+                { text: 'Umur: <code>input[type=number]</code> dengan <code>min</code> dan <code>max</code>', test: "!!document.querySelector('input[type=number][min][max]')" },
+                { text: '<code>select</code> dengan ≥ 3 <code>option</code>', test: "!!document.querySelector('select') && document.querySelectorAll('select option').length >= 3" },
+                { text: 'Radio ber-<code>name</code> sama (≥ 2) di <code>fieldset</code> dengan <code>legend</code>', test: "(function(){ var r = document.querySelectorAll('fieldset input[type=radio]'); return r.length >= 2 && r[0].name !== '' && r[0].name === r[1].name && !!document.querySelector('fieldset legend'); })()" },
+                { text: 'Checkbox required dan <code>textarea</code> ada', test: "!!document.querySelector('input[type=checkbox][required]') && !!document.querySelector('textarea')" },
+                { text: 'Ada tombol <code>type="submit"</code>', test: "!!document.querySelector('button[type=submit], input[type=submit]')" },
+                { text: 'Setiap isian punya label yang terhubung', test: "(function(){ var f = document.querySelectorAll('input:not([type=submit]):not([type=radio]), select, textarea'); return f.length > 0 && Array.prototype.every.call(f, function(i){ return !!(i.id && document.querySelector('label[for=\"' + i.id + '\"]')) || !!i.closest('label'); }); })()" }
+            ]
+        });
+    </script>
+</body>
+</html>

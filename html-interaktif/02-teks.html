@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 · Teks & Heading - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>2 · Teks &amp; Heading</h1>
+        <p class="lead">Pilih tag berdasarkan <b>arti</b>, bukan tampilan. Ukuran dan warna urusan CSS; HTML menjelaskan <i>apa</i> isi itu.</p>
+        <div class="materi">
+            <table>
+                <thead><tr><th>Tag</th><th>Arti</th><th>Catatan</th></tr></thead>
+                <tbody>
+                    <tr><td><code>h1</code>–<code>h6</code></td><td>Judul bertingkat</td><td>Satu <code>h1</code> per halaman; jangan melompat (h2 → h4)</td></tr>
+                    <tr><td><code>p</code></td><td>Paragraf</td><td>Blok teks utuh, bukan sekadar jarak</td></tr>
+                    <tr><td><code>strong</code> / <code>em</code></td><td>Penting / penekanan</td><td>Bukan <code>b</code> / <code>i</code> (itu hanya gaya)</td></tr>
+                    <tr><td><code>br</code> / <code>hr</code></td><td>Ganti baris / garis pemisah tema</td><td>Jangan pakai <code>br</code> berulang untuk jarak</td></tr>
+                    <tr><td><code>blockquote</code>, <code>q</code></td><td>Kutipan blok / sebaris</td><td>Sumber bisa lewat <code>cite</code></td></tr>
+                    <tr><td><code>code</code>, <code>pre</code></td><td>Potongan kode / teks apa adanya</td><td><code>pre</code> menjaga spasi dan baris</td></tr>
+                    <tr><td><code>mark</code>, <code>small</code>, <code>sub</code>, <code>sup</code></td><td>Sorotan, catatan kecil, subskrip, superskrip</td><td>H<sub>2</sub>O, x<sup>2</sup></td></tr>
+                </tbody>
+            </table>
+            <div class="warn">Karakter khusus ditulis sebagai <b>entity</b>: <code>&amp;lt;</code> untuk &lt;, <code>&amp;gt;</code> untuk &gt;, <code>&amp;amp;</code> untuk &amp;, <code>&amp;copy;</code> untuk ©.</div>
+        </div>
+        <h2>Tantangan: tulis sebuah artikel</h2>
+        <div class="materi"><p>Buat artikel pendek tentang topik apa saja dengan: satu <code>h1</code>, minimal dua <code>h2</code> (berurutan, tanpa lompat), minimal dua <code>p</code>, minimal satu <code>strong</code> dan satu <code>em</code>, satu <code>blockquote</code>, satu <code>code</code>, dan satu <code>hr</code>.</p></div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, dom: true, noConsole: true, auto: true, height: 240, rows: 18,
+            html: "<h1>Judul Artikel</h1>\n<p>Tulis paragraf pertamamu di sini.</p>\n",
+            solution: { html: "<h1>Belajar HTML</h1>\n<p>HTML adalah <strong>kerangka</strong> setiap halaman web, dan ia <em>mudah</em> dipelajari.</p>\n\n<h2>Mengapa HTML?</h2>\n<p>Tanpa HTML, browser tidak tahu mana judul dan mana paragraf.</p>\n<blockquote>Web dimulai dari satu tag sederhana.</blockquote>\n<hr>\n\n<h2>Contoh kode</h2>\n<p>Judul terbesar dibuat dengan <code>&lt;h1&gt;</code>.</p>\n" },
+            checks: [
+                { text: 'Tepat satu <code>h1</code>', test: "document.querySelectorAll('h1').length === 1" },
+                { text: 'Minimal dua <code>h2</code>', test: "document.querySelectorAll('h2').length >= 2" },
+                { text: 'Minimal dua paragraf <code>p</code> berisi teks', test: "Array.prototype.filter.call(document.querySelectorAll('p'), function(p){ return p.textContent.trim().length > 10 }).length >= 2" },
+                { text: 'Ada <code>strong</code> dan <code>em</code>', test: "!!document.querySelector('strong') && !!document.querySelector('em')" },
+                { text: 'Ada <code>blockquote</code>', test: "!!document.querySelector('blockquote')" },
+                { text: 'Ada <code>code</code> dan <code>hr</code>', test: "!!document.querySelector('code') && !!document.querySelector('hr')" },
+                { text: 'Urutan heading tidak melompat', test: "(function(){ var l = 0, ok = true; Array.prototype.forEach.call(document.querySelectorAll('h1,h2,h3,h4,h5,h6'), function(h){ var n = +h.tagName[1]; if (n > l + 1) ok = false; l = n; }); return ok; })()" }
+            ]
+        });
+    </script>
+</body>
+</html>

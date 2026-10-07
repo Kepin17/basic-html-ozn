@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 · Fungsi - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>5 · Fungsi</h1>
+        <p class="lead">Fungsi adalah blok kode yang diberi nama supaya bisa dipakai ulang. Prinsip DRY: <i>Don't Repeat Yourself</i>.</p>
+
+        <div class="materi">
+            <h3>Tiga cara menulis fungsi</h3>
+<pre><code>function tambah(a, b) { return a + b; }          // deklarasi
+const kurang = function (a, b) { return a - b; }; // ekspresi
+const kali = (a, b) =&gt; a * b;                    // arrow function (ringkas)</code></pre>
+            <table>
+                <thead><tr><th>Istilah</th><th>Arti</th></tr></thead>
+                <tbody>
+                    <tr><td>Parameter</td><td>Variabel di definisi: <code>function f(<b>a</b>, <b>b</b>)</code></td></tr>
+                    <tr><td>Argumen</td><td>Nilai saat memanggil: <code>f(<b>2</b>, <b>3</b>)</code></td></tr>
+                    <tr><td><code>return</code></td><td>Mengeluarkan hasil dan <b>menghentikan</b> fungsi. Tanpa return → <code>undefined</code></td></tr>
+                    <tr><td>Default parameter</td><td><code>function sapa(nama = "Tamu")</code></td></tr>
+                    <tr><td>Rest parameter</td><td><code>function f(...angka)</code> mengumpulkan sisa argumen jadi array</td></tr>
+                </tbody>
+            </table>
+            <h3>Scope (jangkauan variabel)</h3>
+            <p>Variabel yang dibuat di dalam fungsi (<code>let</code>/<code>const</code>) <b>hanya hidup di dalam fungsi itu</b>. Variabel di luar bisa dibaca dari dalam, tidak sebaliknya.</p>
+        </div>
+
+        <h2>Lab A · Bentuk fungsi dan scope</h2>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Fungsi sebagai nilai</h3>
+            <p>Di JavaScript fungsi adalah nilai biasa: bisa disimpan di variabel, dikirim sebagai argumen (<b>callback</b>), atau dikembalikan dari fungsi lain (<b>closure</b>: fungsi yang "mengingat" variabel tempat ia dibuat).</p>
+        </div>
+
+        <h2>Lab B · Callback dan closure</h2>
+        <div id="labB"></div>
+
+        <h2>Lab C · Tantangan</h2>
+        <div class="materi">
+            <ol>
+                <li><code>luasLingkaran(r)</code> sebagai <b>arrow function</b>: π × r² (<code>Math.PI</code>).</li>
+                <li><code>sapa(nama)</code> dengan default "Tamu": mengembalikan <code>Halo, Tamu!</code> / <code>Halo, Ani!</code>.</li>
+                <li><code>maks(...angka)</code>: bilangan terbesar dari sejumlah argumen (jangan pakai <code>Math.max</code>, hitung sendiri dengan perulangan).</li>
+                <li><code>adalahPrima(n)</code>: true bila n bilangan prima (2, 3, 5, 7, 11…). 1 bukan prima.</li>
+            </ol>
+        </div>
+        <div id="labC"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', vars: true, rows: 22,
+            code: `function tambah(a, b) {
+  return a + b;
+}
+const kali = (a, b) => a * b;
+const sapa = (nama = "Tamu") => \`Halo, \${nama}!\`;
+
+console.log(tambah(2, 3), kali(4, 5));
+console.log(sapa(), sapa("Ani"));
+
+// scope
+const global1 = "dari luar";
+function uji() {
+  const lokal = "dari dalam";
+  console.log(global1, "|", lokal);
+}
+uji();
+console.log(typeof lokal);   // 'lokal' tidak terlihat dari luar`
+        });
+        initJS({
+            root: 'labB', vars: true, rows: 20,
+            code: `// closure: fungsi yang mengingat variabelnya
+function buatPenghitung() {
+  let n = 0;
+  return () => ++n;
+}
+const hitung = buatPenghitung();
+console.log(hitung(), hitung(), hitung());
+
+// callback: fungsi dikirim sebagai argumen
+[1, 2, 3].forEach((x) => console.log("x2 =", x * 2));
+
+function ulang(kali, aksi) {
+  for (let i = 1; i <= kali; i++) aksi(i);
+}
+ulang(3, (i) => console.log("aksi ke", i));
+
+setTimeout(() => console.log("jalan belakangan (500ms)"), 500);
+console.log("baris ini muncul lebih dulu!");`
+        });
+        initJS({
+            root: 'labC', rows: 22,
+            code: `const luasLingkaran = (r) => {
+  // TODO
+};
+
+function sapa(nama) {
+  // TODO
+}
+
+function maks(...angka) {
+  // TODO
+}
+
+function adalahPrima(n) {
+  // TODO
+}`,
+            solution: `const luasLingkaran = (r) => Math.PI * r * r;
+
+function sapa(nama = "Tamu") {
+  return \`Halo, \${nama}!\`;
+}
+
+function maks(...angka) {
+  let terbesar = angka[0];
+  for (const a of angka) {
+    if (a > terbesar) terbesar = a;
+  }
+  return terbesar;
+}
+
+function adalahPrima(n) {
+  if (n < 2) return false;
+  for (let i = 2; i * i <= n; i++) {
+    if (n % i === 0) return false;
+  }
+  return true;
+}`,
+            checks: [
+                { text: 'luasLingkaran(10) ≈ 314.16', test: "Math.abs(luasLingkaran(10) - 314.159) < 0.01" },
+                { text: 'sapa() = "Halo, Tamu!" dan sapa("Ani") = "Halo, Ani!"', test: "sapa() === 'Halo, Tamu!' && sapa('Ani') === 'Halo, Ani!'" },
+                { text: 'maks(3, 9, 2) = 9 dan maks(-5, -2) = -2', test: "maks(3, 9, 2) === 9 && maks(-5, -2) === -2" },
+                { text: 'adalahPrima: 2, 13, 97 ✅; 1, 15, 100 ❌', test: "adalahPrima(2) && adalahPrima(13) && adalahPrima(97) && !adalahPrima(1) && !adalahPrima(15) && !adalahPrima(100)" }
+            ]
+        });
+    </script>
+</body>
+</html>

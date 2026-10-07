@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 · Pengenalan - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>1 · Pengenalan JavaScript</h1>
+        <p class="lead">HTML = struktur, CSS = tampilan, <b>JavaScript = perilaku</b>. Dengan JS, halaman bisa bereaksi: menghitung, memeriksa isian, menampilkan data, dan berubah saat diklik.</p>
+
+        <div class="materi">
+            <h3>Tiga cara memasang JavaScript</h3>
+<pre><code>&lt;!-- 1. Inline (hindari, sulit dirawat) --&gt;
+&lt;button onclick="alert('Halo')"&gt;Klik&lt;/button&gt;
+
+&lt;!-- 2. Internal: di dalam tag script --&gt;
+&lt;script&gt;
+  console.log("Halo dari internal");
+&lt;/script&gt;
+
+&lt;!-- 3. Eksternal (paling rapi): file terpisah --&gt;
+&lt;script src="app.js" defer&gt;&lt;/script&gt;</code></pre>
+            <div class="tip">Atribut <code>defer</code> membuat skrip baru jalan <b>setelah HTML selesai dimuat</b>, sehingga elemen sudah ada saat kodenya mencarinya.</div>
+            <h3>Alat paling penting: <code>console.log()</code></h3>
+            <p>Mencetak nilai ke <b>console</b> untuk melihat apa yang terjadi di dalam kodemu. Di browser sungguhan, buka dengan <kbd>F12</kbd> → tab Console.</p>
+            <table>
+                <thead><tr><th>Aturan dasar</th><th>Contoh</th></tr></thead>
+                <tbody>
+                    <tr><td>Komentar satu baris</td><td><code>// catatan</code></td></tr>
+                    <tr><td>Komentar banyak baris</td><td><code>/* catatan panjang */</code></td></tr>
+                    <tr><td>Titik koma di akhir pernyataan</td><td><code>console.log("a");</code> (disarankan konsisten)</td></tr>
+                    <tr><td>Huruf besar-kecil dibedakan</td><td><code>nama</code> ≠ <code>Nama</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Lab A · Console pertamamu</h2>
+        <p>Jalankan, lalu ubah teksnya. Tambahkan <code>console.log</code> baru. Coba juga sengaja membuat salah ketik (misalnya <code>consol.log</code>) dan baca pesan errornya.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Pesan error yang akan sering kamu temui</h3>
+            <table>
+                <thead><tr><th>Error</th><th>Artinya</th><th>Contoh penyebab</th></tr></thead>
+                <tbody>
+                    <tr><td><code>SyntaxError</code></td><td>Penulisan salah, kode tak bisa dibaca</td><td>Tanda kurung / kutip tidak ditutup</td></tr>
+                    <tr><td><code>ReferenceError</code></td><td>Memakai sesuatu yang belum dibuat</td><td>Salah ketik nama variabel</td></tr>
+                    <tr><td><code>TypeError</code></td><td>Operasi pada tipe yang salah</td><td>Memanggil sesuatu yang bukan fungsi, atau mengakses properti dari <code>null</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Lab B · Menyentuh halaman untuk pertama kali</h2>
+        <p>Di sini JavaScript mengubah isi halaman (hasil di atas console). Kotak "Pohon DOM" menunjukkan strukturnya.</p>
+        <div id="labB"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Di Lab A, cetak 3 baris: namamu, umurmu, dan hasil <code>7 * 8</code>.</li>
+                <li>Di Lab B, ubah <code>textContent</code> judul menjadi namamu dan beri warna lain.</li>
+                <li>Lab B: ubah ukuran huruf judul lewat <code>judul.style.fontSize = "40px"</code>.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', rows: 9,
+            code: `// Ini komentar: diabaikan oleh JavaScript
+console.log("Halo, dunia!");
+console.log(2 + 3 * 4);
+console.log("Nama:", "Budi", "Umur:", 17);
+console.warn("Ini peringatan");
+console.error("Ini error buatan");`
+        });
+        initJS({
+            root: 'labB', preview: true, dom: true, auto: true, height: 170, rows: 9,
+            html: `<h1 id="judul">Judul Awal</h1>
+<button id="tombol">Tombol</button>`,
+            code: `const judul = document.querySelector("#judul");
+judul.textContent = "Halo dari JavaScript!";
+judul.style.color = "crimson";`,
+            checks: [
+                { text: 'Teks judul sudah berubah', test: "document.querySelector('#judul').textContent !== 'Judul Awal'" },
+                { text: 'Warna judul sudah diatur lewat style', test: "document.querySelector('#judul').style.color !== ''" },
+                { text: 'Ukuran huruf judul diubah (fontSize)', test: "document.querySelector('#judul').style.fontSize !== ''" }
+            ]
+        });
+    </script>
+</body>
+</html>

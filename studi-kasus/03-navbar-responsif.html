@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 3 · Navbar Responsif - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 3 · Navbar Responsif</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐ Sedang · <b>Melatih:</b> Flexbox, media query, hover</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Toko online memerlukan menu atas yang rapi di laptop dan menumpuk ke bawah di HP. HTML sudah ada, kamu menulis CSS-nya.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li>Layar lebar (800px): <code>.bar</code> berupa flex, logo di kiri dan menu di kanan (<code>justify-content: space-between</code>), sejajar tengah vertikal.</li><li><code>.menu</code> tanpa bullet (<code>list-style: none</code>), berjajar menyamping (flex row), dan link tanpa garis bawah dengan <code>padding</code> ≥ 8px.</li><li><code>.bar</code> berlatar warna (bukan transparan); logo tebal (<code>font-weight</code> ≥ 600).</li><li>Link berubah saat <code>:hover</code>.</li><li>Layar sempit (400px): menu menumpuk ke bawah (<code>flex-direction: column</code> pada <code>.menu</code> <i>atau</i> <code>.bar</code>) lewat <code>@media</code>.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Mulai dari <code>.bar { display: flex; ... }</code> lalu <code>.menu { display: flex; list-style: none; }</code>.</li><li>Reset <code>margin</code> dan <code>padding</code> pada <code>ul</code>.</li><li>Tambahkan <code>@media (max-width: 600px) { .menu { flex-direction: column; } }</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, noConsole: true, auto: true, height: 240, rows: 18, htmlFirst: true,
+            html: "<header class=\"bar\">\n  <a class=\"logo\" href=\"#\">TokoKu</a>\n  <nav>\n    <ul class=\"menu\">\n      <li><a href=\"#\">Beranda</a></li>\n      <li><a href=\"#\">Produk</a></li>\n      <li><a href=\"#\">Promo</a></li>\n      <li><a href=\"#\">Kontak</a></li>\n    </ul>\n  </nav>\n</header>\n<p style=\"padding:12px\">Perkecil lebar hasil dengan menyeret tepi jendela, atau lihat centang untuk layar 400px.</p>\n",
+            css: "/* Tulis CSS navbar di sini */\n.bar {\n\n}\n",
+            solution: { css: ".bar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  background: #1e293b;\n  padding: 0 16px;\n}\n.logo {\n  color: #fff;\n  font-weight: 700;\n  text-decoration: none;\n  font-size: 20px;\n}\n.menu {\n  display: flex;\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.menu a {\n  display: block;\n  padding: 14px 12px;\n  color: #cbd5e1;\n  text-decoration: none;\n}\n.menu a:hover {\n  background: #334155;\n  color: #fff;\n}\n@media (max-width: 600px) {\n  .bar { flex-direction: column; align-items: flex-start; padding: 8px 16px; }\n  .menu { flex-direction: column; width: 100%; }\n}\n" },
+            checks: [
+                { text: '800px: <code>.bar</code> flex, <code>space-between</code>, <code>align-items: center</code>', test: "(function(){ var s=getComputedStyle(document.querySelector('.bar')); return s.display==='flex' && s.justifyContent==='space-between' && s.alignItems==='center'; })()" },
+                { text: '800px: <code>.menu</code> flex baris tanpa bullet', test: "(function(){ var s=getComputedStyle(document.querySelector('.menu')); return s.display==='flex' && s.flexDirection==='row' && s.listStyleType==='none'; })()" },
+                { text: 'Link: tanpa garis bawah dan padding ≥ 8px', test: "(function(){ var s=getComputedStyle(document.querySelector('.menu a')); return s.textDecorationLine==='none' && parseFloat(s.paddingLeft)>=8; })()" },
+                { text: '<code>.bar</code> berlatar warna dan logo tebal', test: "getComputedStyle(document.querySelector('.bar')).backgroundColor !== 'rgba(0, 0, 0, 0)' && parseInt(getComputedStyle(document.querySelector('.logo')).fontWeight) >= 600" },
+                { text: 'Ada aturan <code>:hover</code> untuk link', test: "function(){ var f=false; Array.prototype.forEach.call(document.styleSheets,function(s){ try{ Array.prototype.forEach.call(s.cssRules,function(r){ if(r.selectorText && r.selectorText.indexOf(':hover')>-1) f=true; }); }catch(e){} }); return f; }()" },
+                { width: 400, text: '400px: menu menumpuk (kolom)', test: "getComputedStyle(document.querySelector('.menu')).flexDirection==='column' || getComputedStyle(document.querySelector('.bar')).flexDirection==='column'" }
+            ]
+        });
+    </script>
+</body>
+</html>

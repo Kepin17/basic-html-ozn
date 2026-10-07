@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 2 · Menu Restoran - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 2 · Menu Restoran</h1>
+        <p class="lead"><b>Level:</b> ⭐ Mudah · <b>Melatih:</b> CSS tabel, selector, pseudo-class</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Pemilik warung memberimu HTML menu yang sudah jadi, tetapi tampilannya polos. Tugasmu: mendandani tabel dengan CSS saja, tanpa menyentuh HTML.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><code>border-collapse: collapse</code> dan tabel melebar penuh (<code>width: 100%</code>).</li><li>Sel (<code>th</code>, <code>td</code>) punya <code>padding</code> ≥ 8px.</li><li>Baris <code>tbody</code> selang-seling berwarna berbeda (zebra) memakai <code>:nth-child</code>.</li><li>Judul kolom (<code>th</code>) punya warna latar sendiri.</li><li>Kolom harga (sel terakhir) rata <b>kanan</b>.</li><li>Ada efek <code>:hover</code> pada baris.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Zebra: <code>tbody tr:nth-child(even) { background: ... }</code>.</li><li>Kolom terakhir: <code>td:last-child { text-align: right; }</code>.</li><li>Hover: <code>tbody tr:hover { ... }</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, noConsole: true, auto: true, height: 330, rows: 18, htmlFirst: true,
+            html: "<h2>Menu Warung Senja</h2>\n<table>\n  <caption>Daftar menu</caption>\n  <thead><tr><th scope=\"col\">Menu</th><th scope=\"col\">Deskripsi</th><th scope=\"col\">Harga</th></tr></thead>\n  <tbody>\n    <tr><td>Nasi Goreng</td><td>Telur, ayam, kerupuk</td><td>Rp 22.000</td></tr>\n    <tr><td>Mie Ayam</td><td>Mie, ayam, bakso</td><td>Rp 18.000</td></tr>\n    <tr><td>Es Teh</td><td>Teh manis dingin</td><td>Rp 5.000</td></tr>\n    <tr><td>Jus Alpukat</td><td>Alpukat segar, susu cokelat</td><td>Rp 14.000</td></tr>\n  </tbody>\n</table>\n",
+            css: "/* Dandani tabel menu di sini */\ntable {\n\n}\n",
+            solution: { css: "table {\n  border-collapse: collapse;\n  width: 100%;\n}\nth, td {\n  padding: 10px 12px;\n  border-bottom: 1px solid #e5e7eb;\n  text-align: left;\n}\nth {\n  background: #1f2937;\n  color: #fff;\n}\ntbody tr:nth-child(even) {\n  background: #f3f4f6;\n}\ntbody tr:hover {\n  background: #fde68a;\n}\ntd:last-child, th:last-child {\n  text-align: right;\n}\n" },
+            checks: [
+                { text: '<code>border-collapse: collapse</code>', test: "getComputedStyle(document.querySelector('table')).borderCollapse === 'collapse'" },
+                { text: 'Tabel melebar penuh (&gt; 500px)', test: "document.querySelector('table').getBoundingClientRect().width > 500" },
+                { text: 'Padding sel ≥ 8px', test: "parseFloat(getComputedStyle(document.querySelector('td')).paddingTop) >= 8" },
+                { text: 'Baris zebra: baris 1 dan 2 berbeda warna', test: "(function(){ var r=document.querySelectorAll('tbody tr'); return getComputedStyle(r[0]).backgroundColor !== getComputedStyle(r[1]).backgroundColor; })()" },
+                { text: '<code>th</code> punya warna latar', test: "getComputedStyle(document.querySelector('th')).backgroundColor !== 'rgba(0, 0, 0, 0)'" },
+                { text: 'Kolom harga rata kanan', test: "getComputedStyle(document.querySelector('tbody tr td:last-child')).textAlign === 'right'" },
+                { text: 'Ada aturan <code>:hover</code>', test: "function(){ var f=false; Array.prototype.forEach.call(document.styleSheets,function(s){ try{ Array.prototype.forEach.call(s.cssRules,function(r){ if(r.selectorText && r.selectorText.indexOf(':hover')>-1) f=true; }); }catch(e){} }); return f; }()" }
+            ]
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 7 · Game Tebak Angka - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 7 · Game Tebak Angka</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐⭐ Menantang · <b>Melatih:</b> State, closure, kasus tepi, urutan aturan</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Komputer memilih angka rahasia 1–100; pemain punya 5 kesempatan. Logika game disimpan di dalam <b>closure</b> (<code>buatGame</code>) sehingga <code>sisa</code> dan <code>selesai</code> tak bisa dicurangi dari luar.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><code>buatGame(rahasia, maks = 5)</code> mengembalikan objek dengan properti <code>rahasia</code> dan method <code>tebak(n)</code>.</li><li><code>tebak(n)</code> mengembalikan <code>{ hasil, sisa }</code>. <code>hasil</code> ∈ <code>"terlalu kecil"</code>, <code>"terlalu besar"</code>, <code>"benar"</code>, <code>"kalah"</code>, <code>"tidak valid"</code>, <code>"selesai"</code>.</li><li>Tebakan tidak valid (bukan bilangan bulat, di luar 1–100) <b>tidak mengurangi</b> kesempatan.</li><li>Kesempatan habis tanpa benar → <code>"kalah"</code>. Setelah menang/kalah, semua tebakan → <code>"selesai"</code>.</li><li>UI: variabel <code>game</code> dibuat dengan angka acak; tombol <b>Tebak</b> memperbarui <code>#pesan</code> (menang berisi kata "Benar") dan <code>#sisa</code>.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Gambar diagram status: <i>bermain</i> → <i>menang</i> / <i>kalah</i>. Aturan mana yang diperiksa lebih dulu?</li><li>Urutan penting: periksa <b>selesai</b> dulu, lalu <b>valid</b>, baru kurangi <code>sisa</code>.</li><li>Periksa "benar" <b>sebelum</b> "kalah": menebak benar di kesempatan terakhir tetap menang.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true,
+            dom: true,
+            noConsole: true,
+            auto: true,
+            height: 240,
+            rows: 22,
+            html: "<h2>Tebak Angka 1–100</h2>\n<input id=\"tebakan\" type=\"number\" min=\"1\" max=\"100\" placeholder=\"Tebakanmu\">\n<button id=\"kirim\">Tebak</button>\n<p id=\"pesan\">Silakan menebak.</p>\n<p>Sisa kesempatan: <b id=\"sisa\">5</b></p>\n",
+            code: "function buatGame(rahasia, maks = 5) {\n  // TODO: simpan sisa & selesai di sini (closure)\n}\n\n// TODO: const game = buatGame(...) lalu sambungkan tombol #kirim\n",
+            solution: {"js": "function buatGame(rahasia, maks = 5) {\n  let sisa = maks;\n  let selesai = false;\n  return {\n    rahasia,\n    tebak(n) {\n      if (selesai) return { hasil: \"selesai\", sisa };\n      if (!Number.isInteger(n) || n < 1 || n > 100) return { hasil: \"tidak valid\", sisa };\n      sisa--;\n      if (n === rahasia) { selesai = true; return { hasil: \"benar\", sisa }; }\n      if (sisa === 0) { selesai = true; return { hasil: \"kalah\", sisa }; }\n      return { hasil: n < rahasia ? \"terlalu kecil\" : \"terlalu besar\", sisa };\n    },\n  };\n}\n\nconst game = buatGame(Math.floor(Math.random() * 100) + 1);\nconst tebakan = document.querySelector(\"#tebakan\");\nconst pesan = document.querySelector(\"#pesan\");\nconst sisaEl = document.querySelector(\"#sisa\");\n\ndocument.querySelector(\"#kirim\").addEventListener(\"click\", () => {\n  const r = game.tebak(Number(tebakan.value));\n  if (r.hasil === \"benar\") pesan.textContent = \"Benar! 🎉\";\n  else if (r.hasil === \"kalah\") pesan.textContent = \"Kalah. Angkanya \" + game.rahasia;\n  else pesan.textContent = r.hasil;\n  sisaEl.textContent = r.sisa;\n});"},
+            checks: [
+                {"text": "Petunjuk arah: 30 → terlalu kecil, 70 → terlalu besar, 50 → benar (sisa 2)", "test": "(function(){ var g=buatGame(50),a=g.tebak(30),b=g.tebak(70),c=g.tebak(50); return a.hasil==='terlalu kecil' && b.hasil==='terlalu besar' && c.hasil==='benar' && c.sisa===2; })()"},
+                {"text": "Kesempatan habis → \"kalah\"", "test": "(function(){ var g=buatGame(50,2); g.tebak(1); return g.tebak(2).hasil==='kalah'; })()"},
+                {"text": "Menebak benar di kesempatan terakhir = \"benar\" (bukan kalah)", "test": "buatGame(50,1).tebak(50).hasil==='benar'"},
+                {"text": "Tidak valid (0, 101, 2.5) tidak mengurangi kesempatan", "test": "(function(){ var g=buatGame(50,3); var a=g.tebak(0),b=g.tebak(101),c=g.tebak(2.5); return a.hasil==='tidak valid' && b.hasil==='tidak valid' && c.hasil==='tidak valid' && g.tebak(10).sisa===2; })()"},
+                {"text": "Setelah selesai → \"selesai\"", "test": "(function(){ var g=buatGame(5); g.tebak(5); return g.tebak(6).hasil==='selesai'; })()"},
+                {"text": "UI: tebakan salah mengurangi <code>#sisa</code> menjadi 4", "test": "(function(){ function set(sel,v,ev){ var e=document.querySelector(sel); e.value=v; e.dispatchEvent(new Event(ev||'input',{bubbles:true})); } var v=game.rahasia===1?2:1; set('#tebakan',String(v)); document.querySelector('#kirim').click(); return document.querySelector('#sisa').textContent.trim()==='4'; })()"},
+                {"text": "UI: tebakan benar → #pesan memuat \"Benar\"", "test": "(function(){ function set(sel,v,ev){ var e=document.querySelector(sel); e.value=v; e.dispatchEvent(new Event(ev||'input',{bubbles:true})); } set('#tebakan',String(game.rahasia)); document.querySelector('#kirim').click(); return /benar/i.test(document.querySelector('#pesan').textContent); })()"}
+            ]
+        });
+    </script>
+</body>
+</html>

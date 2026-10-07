@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 · Grid - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>4 · Grid</h1>
+        <p class="lead">Flexbox menata satu arah. Grid menata <b>dua arah sekaligus</b>: baris dan kolom, ideal untuk galeri dan tata letak halaman.</p>
+
+        <div class="materi">
+            <h3>Konsep utama</h3>
+            <table>
+                <thead><tr><th>Properti</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>display: grid</code></td><td>Mengaktifkan grid pada induk</td></tr>
+                    <tr><td><code>grid-template-columns</code></td><td>Menentukan jumlah dan lebar kolom</td></tr>
+                    <tr><td><code>fr</code></td><td>Satuan "bagian dari sisa ruang". <code>1fr 2fr</code> = kolom kedua dua kali lebih lebar</td></tr>
+                    <tr><td><code>repeat(n, 1fr)</code></td><td>Ulangi pola n kali</td></tr>
+                    <tr><td><code>repeat(auto-fit, minmax(120px, 1fr))</code></td><td>Kolom otomatis: sebanyak yang muat, minimal 120px. Responsif tanpa media query</td></tr>
+                    <tr><td><code>grid-column: span 2</code></td><td>Item memakai 2 kolom</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Flexbox atau Grid?</h3>
+            <ul>
+                <li><b>Flexbox</b>: satu baris atau satu kolom (navbar, tombol berjajar, isi kartu).</li>
+                <li><b>Grid</b>: tata letak dua dimensi (galeri, dashboard, layout halaman).</li>
+            </ul>
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat <b>galeri 4 kolom</b> berjarak 12px.</li>
+                <li>Pilih <code>auto-fit minmax</code>, lalu ubah lebar jendela browser. Perhatikan jumlah kolom menyesuaikan sendiri.</li>
+                <li>Buat item pertama sebagai <b>banner</b> yang memanjang 4 kolom (span kolom = 4).</li>
+                <li>Buat tata letak <b>sidebar</b>: pilih <code>1fr 2fr 1fr</code> dan 3 item.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        initLab({
+            height: 420,
+            base: `.item { background: #14b8a6; color: #fff; padding: 18px; border-radius: 8px; font-weight: 700; text-align: center; }
+                   .item:nth-child(3n) { background: #0f766e; } .item:nth-child(5n) { background: #f59e0b; }`,
+            html: v => '<div class="grid">\n' + Array.from({ length: v.n }, (_, i) => `  <div class="item">${i + 1}</div>`).join('\n') + '\n</div>',
+            controls: [
+                { id: 'n', label: 'Jumlah item', type: 'range', min: 3, max: 14, value: 8 },
+                { id: 'tp', label: 'Pola kolom', type: 'select', options: ['repeat(n, 1fr)', 'auto-fit minmax', '1fr 2fr 1fr', '200px 1fr'], value: 'repeat(n, 1fr)' },
+                { id: 'c', label: 'Jumlah kolom (untuk repeat)', type: 'range', min: 1, max: 6, value: 3 },
+                { id: 'gap', label: 'gap', type: 'range', min: 0, max: 40, value: 12, unit: 'px' },
+                { id: 'ji', label: 'justify-items', type: 'select', options: ['stretch', 'start', 'center', 'end'], value: 'stretch' },
+                { id: 'ai', label: 'align-items', type: 'select', options: ['stretch', 'start', 'center', 'end'], value: 'stretch' },
+                { id: 'sc', label: 'Item #1: span kolom', type: 'range', min: 1, max: 4, value: 1 },
+                { id: 'sr', label: 'Item #1: span baris', type: 'range', min: 1, max: 3, value: 1 }
+            ],
+            css: v => {
+                const col = v.tp === 'repeat(n, 1fr)' ? `repeat(${v.c}, 1fr)` : v.tp === 'auto-fit minmax' ? 'repeat(auto-fit, minmax(120px, 1fr))' : v.tp;
+                return `.grid {
+  display: grid;
+  grid-template-columns: ${col};
+  gap: ${v.gap}px;
+  justify-items: ${v.ji};
+  align-items: ${v.ai};
+}` + (v.sc > 1 || v.sr > 1 ? `
+
+.item:nth-child(1) {${v.sc > 1 ? `\n  grid-column: span ${v.sc};` : ''}${v.sr > 1 ? `\n  grid-row: span ${v.sr};` : ''}
+}` : '');
+            },
+            info(d) {
+                const g = d.querySelector('.grid'); if (!g) return '';
+                const n = d.defaultView.getComputedStyle(g).gridTemplateColumns.split(' ').length;
+                return `🧱 Browser menghitung <b>${n} kolom</b> (lebar: ${d.defaultView.getComputedStyle(g).gridTemplateColumns})`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 · GitHub & Pull Request - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>4 · GitHub &amp; Pull Request</h1>
+        <p class="lead">GitHub adalah tempat repositori-mu "hidup" di internet: cadangan, portofolio, dan ruang kolaborasi dengan tim.</p>
+        <div class="materi">
+            <h3>Langkah pertama kali</h3>
+            <ol>
+                <li>Daftar di <b>github.com</b>, lalu klik <b>New repository</b>. Beri nama, pilih Public/Private. Jangan centang "Add README" bila repositori lokalmu sudah ada.</li>
+                <li>Hubungkan repositori lokal ke GitHub lalu unggah:</li>
+            </ol>
+            <pre><code>git remote add origin https://github.com/NAMAKAMU/proyek-pertama.git
+git branch -M main
+git push -u origin main        # -u: ingat pasangan main ↔ origin/main</code></pre>
+            <h3>Autentikasi</h3>
+            <table>
+                <thead><tr><th>Cara</th><th>Keterangan</th></tr></thead>
+                <tbody>
+                    <tr><td>HTTPS + Personal Access Token</td><td>Mudah dimulai. Password akun <b>tidak</b> dipakai lagi; buat token di Settings → Developer settings</td></tr>
+                    <tr><td>SSH key (disarankan)</td><td><code>ssh-keygen -t ed25519 -C "kamu@contoh.com"</code> lalu tempel kunci publik (<code>.pub</code>) di Settings → SSH keys</td></tr>
+                </tbody>
+            </table>
+            <div class="warn"><b>Jangan pernah commit rahasia</b> (password, token, file <code>.env</code>, kunci API). Begitu masuk riwayat Git ia sulit dihapus dan bisa dibaca siapa saja bila repo publik. Pakai <code>.gitignore</code>.</div>
+            <pre><code># .gitignore (contoh proyek web)
+node_modules/
+.env
+.DS_Store
+dist/
+*.log</code></pre>
+        </div>
+        <h2>Praktik: remote, push, dan pull</h2>
+        <p>Simulator memperlakukan <code>https://github.com/kamu/proyek.git</code> sebagai remote. Setelah push pertamamu, tekan <b>👥 Teman push</b> untuk mensimulasikan rekan tim yang mengunggah komit lebih dulu.</p>
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Alur kolaborasi: GitHub Flow &amp; Pull Request</h3>
+            <div class="flow"><span class="st">Fork / clone</span><span class="ar">→</span><span class="st">Branch fitur</span><span class="ar">→</span><span class="st">Commit &amp; push</span><span class="ar">→</span><span class="st">Buka Pull Request</span><span class="ar">→</span><span class="st">Review &amp; diskusi</span><span class="ar">→</span><span class="st">Merge ke main</span></div>
+            <table>
+                <thead><tr><th>Istilah</th><th>Penjelasan</th></tr></thead>
+                <tbody>
+                    <tr><td>Clone</td><td><code>git clone &lt;url&gt;</code>: salin repo ke komputermu (otomatis ada remote <code>origin</code>)</td></tr>
+                    <tr><td>Fork</td><td>Salinan repo orang lain di <b>akunmu</b>, untuk berkontribusi ke proyek yang tidak kamu miliki</td></tr>
+                    <tr><td>Pull Request</td><td>Meminta pemilik repo mengambil perubahan dari branch-mu; ada diskusi, review, dan pemeriksaan otomatis (CI)</td></tr>
+                    <tr><td>Issue</td><td>Catatan bug/ide/tugas. Tulis <code>Closes #12</code> di PR agar issue tertutup otomatis saat merge</td></tr>
+                    <tr><td>Branch protection</td><td>Aturan agar <code>main</code> hanya bisa berubah lewat PR yang lolos review</td></tr>
+                </tbody>
+            </table>
+            <h3>Pull Request yang baik</h3>
+            <ul>
+                <li><b>Kecil dan fokus</b>: satu tujuan per PR (idealnya &lt; 400 baris berubah).</li>
+                <li>Judul seperti pesan komit: <code>feat(login): tambah login dengan Google</code>.</li>
+                <li>Deskripsi: <b>apa</b> yang berubah, <b>mengapa</b>, cara mengujinya, tangkapan layar untuk perubahan UI.</li>
+                <li>Tautkan issue (<code>Closes #12</code>). Pastikan pemeriksaan otomatis hijau.</li>
+                <li>Sebagai peninjau: komentar yang sopan dan spesifik; tanyakan alasan, bukan menyalahkan orang.</li>
+            </ul>
+            <pre><code>## Ringkasan
+Menambah validasi email pada form pendaftaran.
+
+## Cara menguji
+1. Buka /daftar  2. Isi email "abc"  3. Muncul pesan galat
+
+## Terkait
+Closes #12</code></pre>
+        </div>
+        <h2>Cek pemahaman</h2>
+        <div id="quiz"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script>
+        initGit({
+            pre: ['git init', 'git add .', 'git commit -m "feat: halaman awal"'],
+            remote: true,
+            quick: ['git remote add origin https://github.com/kamu/proyek.git', 'git push -u origin main', 'git status', 'git fetch', 'git pull', 'git log --oneline --graph'],
+            tasks: [
+                { text: 'Hubungkan remote: <code>git remote add origin &lt;url&gt;</code>', test: S => !!S.remote },
+                { text: 'Unggah pertama kali: <code>git push -u origin main</code>', test: S => !!S.remoteBranches.main },
+                { text: 'Tekan <b>👥 Teman push</b>, lalu coba <code>git push</code> setelah membuat komit lokal baru → ditolak (<i>rejected</i>) karena remote lebih maju', test: S => Object.values(S.commits).some(c => c.lane === 'origin') && S.cmds.some(c => /^git push/.test(c)) && S.cmds.filter(c => /^git commit/.test(c)).length >= 1 },
+                { text: 'Ambil perubahan teman dengan <code>git pull</code> (terbentuk merge atau fast-forward)', test: S => S.cmds.some(c => /^git pull/.test(c)) && S.tracking.main && S.tracking.main === S.remoteBranches.main && Object.values(S.commits).some(c => c.lane === 'origin') && (function(){ var h = S.branches.main, seen = {}, st = [h]; while (st.length) { var x = st.pop(); if (!x || seen[x]) continue; seen[x] = 1; S.commits[x].parents.forEach(function(p){ st.push(p); }); } return !!seen[S.remoteBranches.main]; })() },
+                { text: 'Push lagi: <code>git push</code> sekarang berhasil', test: S => S.remoteBranches.main === S.branches.main && S.branches.main && Object.values(S.commits).some(c => c.lane === 'origin') }
+            ]
+        });
+        initQuiz({ items: [
+            { q: 'Kamu ingin berkontribusi ke proyek open source milik orang lain. Langkah awal yang tepat?', o: ['Langsung push ke repo mereka', 'Fork repo, clone fork-mu, buat branch, lalu buka Pull Request', 'Meminta password pemiliknya'], a: 1, e: 'Fork + PR adalah alur standar kontribusi.' },
+            { q: '<code>git push</code> ditolak dengan "fetch first". Artinya?', o: ['Internetmu putus', 'Remote punya komit yang belum kamu miliki; lakukan git pull dulu', 'Repositori rusak'], a: 1, e: 'Sinkronkan dulu (pull), lalu push.' },
+            { q: 'Berkas <code>.env</code> berisi kunci API. Apa yang harus dilakukan?', o: ['Commit saja, repo kan privat', 'Masukkan ke .gitignore sebelum pernah di-commit', 'Ganti namanya jadi .env.txt'], a: 1, e: 'Rahasia tidak boleh masuk riwayat Git.' }
+        ] });
+    </script>
+</body>
+</html>

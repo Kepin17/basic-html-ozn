@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 · Branch & Merge - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>3 · Branch &amp; Merge</h1>
+        <p class="lead">Branch memungkinkan kamu mengembangkan fitur <b>tanpa mengganggu kode utama</b>. Bayangkan jalur paralel yang nanti digabungkan kembali.</p>
+        <div class="materi">
+            <table>
+                <thead><tr><th>Perintah</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>git branch</code></td><td>Daftar branch (tanda <code>*</code> = yang aktif)</td></tr>
+                    <tr><td><code>git switch -c fitur-login</code></td><td>Buat branch baru dan langsung pindah (<code>checkout -b</code> untuk versi lama)</td></tr>
+                    <tr><td><code>git switch main</code></td><td>Pindah ke branch lain; berkas di folder ikut berubah</td></tr>
+                    <tr><td><code>git merge fitur-login</code></td><td>Gabungkan branch itu <b>ke branch tempat kamu berada</b></td></tr>
+                    <tr><td><code>git branch -d fitur-login</code></td><td>Hapus branch yang sudah digabung</td></tr>
+                </tbody>
+            </table>
+            <h3>Dua jenis merge</h3>
+            <table>
+                <thead><tr><th>Jenis</th><th>Terjadi saat</th><th>Hasil</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Fast-forward</b></td><td><code>main</code> tidak berubah sejak branch dibuat</td><td>Penunjuk <code>main</code> tinggal dimajukan, riwayat lurus</td></tr>
+                    <tr><td><b>Merge commit</b></td><td>Kedua branch punya komit baru masing-masing</td><td>Dibuat komit baru dengan <b>dua induk</b> (lingkaran putih di grafik)</td></tr>
+                </tbody>
+            </table>
+            <h3>Penamaan branch yang rapi</h3>
+            <table>
+                <thead><tr><th>Awalan</th><th>Contoh</th></tr></thead>
+                <tbody>
+                    <tr><td><code>fitur/</code> atau <code>feat/</code></td><td><code>fitur/login-google</code></td></tr>
+                    <tr><td><code>fix/</code> atau <code>bugfix/</code></td><td><code>fix/tombol-tidak-bisa-diklik</code></td></tr>
+                    <tr><td><code>docs/</code>, <code>chore/</code>, <code>refactor/</code></td><td><code>docs/panduan-instalasi</code></td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Aturan emas: <b><code>main</code> harus selalu bisa dijalankan.</b> Kerjakan di branch, gabungkan setelah selesai dan ditinjau.</div>
+        </div>
+        <h2>Praktik: dua cabang, dua jenis merge</h2>
+        <p>Repositori sudah punya satu komit di <code>main</code>. Perhatikan grafik komit berubah di setiap langkah.</p>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script>
+        initGit({
+            pre: ['git init', 'git add .', 'git commit -m "feat: halaman awal"'],
+            quick: ['git branch', 'git switch -c fitur-login', 'echo "<form>login</form>" > login.html', 'git add .', 'git commit -m "feat: tambah form login"', 'git switch main', 'git merge fitur-login', 'git branch -d fitur-login', 'git log --oneline --graph'],
+            tasks: [
+                { text: 'Buat dan pindah ke branch <code>fitur-login</code>', test: S => S.cmds.some(c => /^git (switch -c|checkout -b|branch) fitur-login/.test(c)) },
+                { text: 'Buat komit di branch itu (tambah berkas atau ubah isi lalu add + commit)', test: S => Object.values(S.commits).some(c => c.lane === 'fitur-login') },
+                { text: 'Kembali ke <code>main</code> dan <code>git merge fitur-login</code> → fast-forward (main menyusul)', test: S => S.branches.main && S.branches.main === S.branches['fitur-login'] || (S.cmds.some(c => /^git merge fitur-login/.test(c)) && S.head === 'main' && Object.values(S.commits).some(c => c.lane === 'fitur-login')) },
+                { text: 'Buat branch kedua, komit di dalamnya, lalu juga buat komit di <code>main</code> (cabang bercabang!)', test: S => Object.values(S.commits).filter(c => c.lane !== 'main' && c.lane !== 'fitur-login').length >= 1 && S.cmds.filter(c => /^git commit/.test(c)).length >= 3 },
+                { text: 'Gabungkan branch kedua ke <code>main</code> → terbentuk <b>merge commit</b> (dua induk)', test: S => Object.values(S.commits).some(c => c.parents.length === 2) },
+                { text: 'Bersihkan: hapus branch yang sudah digabung dengan <code>git branch -d</code>', test: S => S.cmds.some(c => /^git branch -d/.test(c)) }
+            ]
+        });
+    </script>
+</body>
+</html>

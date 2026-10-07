@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 · List & Tabel - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>4 · List &amp; Tabel</h1>
+        <p class="lead">List untuk rangkaian item; tabel untuk data berdimensi baris dan kolom. <b>Jangan memakai tabel untuk tata letak</b>: itu tugas CSS.</p>
+        <div class="materi">
+            <table>
+                <thead><tr><th>Tag</th><th>Dipakai untuk</th></tr></thead>
+                <tbody>
+                    <tr><td><code>ul</code> + <code>li</code></td><td>Daftar tak berurutan (bullet)</td></tr>
+                    <tr><td><code>ol</code> + <code>li</code></td><td>Daftar berurutan (langkah, peringkat). Atribut <code>start</code>, <code>reversed</code>, <code>type</code></td></tr>
+                    <tr><td><code>dl</code> + <code>dt</code> + <code>dd</code></td><td>Istilah dan penjelasannya</td></tr>
+                    <tr><td>list bersarang</td><td><code>ul</code> di dalam <code>li</code> (bukan langsung di dalam <code>ul</code>)</td></tr>
+                    <tr><td><code>table</code>, <code>caption</code></td><td>Tabel dan judulnya</td></tr>
+                    <tr><td><code>thead</code>, <code>tbody</code>, <code>tfoot</code></td><td>Kepala, isi, kaki tabel</td></tr>
+                    <tr><td><code>tr</code>, <code>th</code>, <code>td</code></td><td>Baris, sel judul, sel data</td></tr>
+                    <tr><td><code>colspan</code>, <code>rowspan</code></td><td>Sel menjangkau beberapa kolom / baris</td></tr>
+                    <tr><td><code>th scope="col"</code></td><td>Menjelaskan arah judul untuk pembaca layar</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <h2>Tantangan</h2>
+        <div class="materi"><ol>
+            <li>Satu <code>ul</code> (≥ 3 <code>li</code>) dan satu <code>ol</code> (≥ 3 <code>li</code>).</li>
+            <li>Satu <b>list bersarang</b>: <code>ul</code> di dalam <code>li</code> dari list lain.</li>
+            <li>Satu <code>dl</code> dengan minimal 2 pasang <code>dt</code>/<code>dd</code>.</li>
+            <li>Tabel dengan <code>caption</code>, <code>thead</code> (th ber-<code>scope="col"</code>), <code>tbody</code> (≥ 3 baris), dan satu sel ber-<code>colspan="2"</code> (misal baris "Total").</li>
+        </ol></div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, dom: true, noConsole: true, auto: true, height: 300, rows: 22, base: 'table{border-collapse:collapse} th,td{border:1px solid #cbd5e1;padding:4px 8px}',
+            html: "<h2>Daftar belanja</h2>\n<ul>\n  <li>Beras</li>\n</ul>\n",
+            solution: { html: "<h2>Daftar belanja</h2>\n<ul>\n  <li>Beras</li>\n  <li>Telur</li>\n  <li>Sayur\n    <ul>\n      <li>Bayam</li>\n      <li>Wortel</li>\n    </ul>\n  </li>\n</ul>\n\n<h2>Cara membuat teh</h2>\n<ol>\n  <li>Rebus air</li>\n  <li>Seduh teh</li>\n  <li>Tambah gula</li>\n</ol>\n\n<dl>\n  <dt>HTML</dt><dd>Kerangka halaman</dd>\n  <dt>CSS</dt><dd>Tampilan halaman</dd>\n</dl>\n\n<table>\n  <caption>Harga belanja</caption>\n  <thead>\n    <tr><th scope=\"col\">Barang</th><th scope=\"col\">Harga</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>Beras</td><td>12.000</td></tr>\n    <tr><td>Telur</td><td>28.000</td></tr>\n    <tr><td>Bayam</td><td>5.000</td></tr>\n    <tr><td colspan=\"2\">Total: 45.000</td></tr>\n  </tbody>\n</table>\n" },
+            checks: [
+                { text: '<code>ul</code> dengan ≥ 3 <code>li</code>', test: "Array.prototype.some.call(document.querySelectorAll('ul'), function(u){ return u.children.length >= 3 })" },
+                { text: '<code>ol</code> dengan ≥ 3 <code>li</code>', test: "Array.prototype.some.call(document.querySelectorAll('ol'), function(u){ return u.children.length >= 3 })" },
+                { text: 'List bersarang: <code>li &gt; ul</code> atau <code>li &gt; ol</code>', test: "!!document.querySelector('li > ul, li > ol')" },
+                { text: '<code>dl</code> dengan ≥ 2 <code>dt</code> dan ≥ 2 <code>dd</code>', test: "document.querySelectorAll('dl dt').length >= 2 && document.querySelectorAll('dl dd').length >= 2" },
+                { text: 'Tabel punya <code>caption</code>, <code>thead</code>, <code>tbody</code>', test: "!!document.querySelector('table caption') && !!document.querySelector('table thead') && !!document.querySelector('table tbody')" },
+                { text: 'Semua <code>th</code> di <code>thead</code> ber-<code>scope="col"</code>', test: "(function(){ var t = document.querySelectorAll('thead th'); return t.length > 0 && Array.prototype.every.call(t, function(x){ return x.getAttribute('scope') === 'col' }) })()" },
+                { text: '<code>tbody</code> punya ≥ 3 baris', test: "document.querySelectorAll('tbody tr').length >= 3" },
+                { text: 'Ada sel dengan <code>colspan="2"</code>', test: "!!document.querySelector('[colspan=\"2\"]')" }
+            ]
+        });
+    </script>
+</body>
+</html>

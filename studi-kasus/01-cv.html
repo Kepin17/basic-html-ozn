@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 1 · Halaman CV Online - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 1 · Halaman CV Online</h1>
+        <p class="lead"><b>Level:</b> ⭐ Mudah · <b>Melatih:</b> HTML semantik, struktur, tautan</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Kamu melamar kerja dan diminta membuat CV online. Rekruter memakai pembaca layar dan mesin pencari, jadi struktur HTML-nya harus rapi dan bermakna.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><code>header</code> berisi <code>h1</code> (nama), <code>img</code> ber-<code>alt</code>, dan <code>nav</code> dengan ≥ 3 tautan <code>#id</code> yang <b>benar-benar menuju</b> elemen yang ada.</li><li>Tepat satu <code>main</code> berisi ≥ 3 <code>section</code>, masing-masing ber-<code>id</code> dan punya <code>h2</code>.</li><li>Section pengalaman memuat ≥ 2 <code>article</code>, masing-masing: <code>h3</code>, <code>time[datetime]</code>, dan <code>ul</code>.</li><li>Daftar keahlian: sebuah <code>ul</code> dengan ≥ 4 <code>li</code>.</li><li>Kontak: tautan <code>mailto:</code>, tautan <code>tel:</code>, dan satu tautan luar ber-<code>target="_blank"</code> + <code>rel="noopener"</code>.</li><li><code>footer</code> dengan teks hak cipta. Urutan heading tidak melompat.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Mulai dari kerangka besar: header, main, footer. Isi detail belakangan.</li><li>Tulis dulu nav dan section ber-id, baru hubungkan tautannya.</li><li>Pakai <code>time datetime="2024-01"</code> untuk tanggal pengalaman.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, dom: true, noConsole: true, auto: true, height: 380, rows: 26,
+            html: "<!-- Tulis CV-mu di sini -->\n<h1>Nama Kamu</h1>\n",
+            solution: { html: "<header>\n  <h1>Budi Santoso</h1>\n  <p>Web Developer</p>\n  <img src=\"foto.jpg\" alt=\"Foto Budi Santoso\" width=\"100\">\n  <nav>\n    <ul>\n      <li><a href=\"#profil\">Profil</a></li>\n      <li><a href=\"#pengalaman\">Pengalaman</a></li>\n      <li><a href=\"#kontak\">Kontak</a></li>\n    </ul>\n  </nav>\n</header>\n<main>\n  <section id=\"profil\">\n    <h2>Profil</h2>\n    <p>Pengembang web yang suka membuat halaman cepat dan rapi.</p>\n    <h3>Keahlian</h3>\n    <ul><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Git</li></ul>\n  </section>\n  <section id=\"pengalaman\">\n    <h2>Pengalaman</h2>\n    <article>\n      <h3>Junior Developer, PT Maju</h3>\n      <time datetime=\"2024-01\">Januari 2024</time>\n      <ul><li>Membuat landing page</li></ul>\n    </article>\n    <article>\n      <h3>Magang, Studio Kreatif</h3>\n      <time datetime=\"2023-06\">Juni 2023</time>\n      <ul><li>Merawat situs klien</li></ul>\n    </article>\n  </section>\n  <section id=\"kontak\">\n    <h2>Kontak</h2>\n    <p><a href=\"mailto:budi@contoh.com\">Email</a> ·\n       <a href=\"tel:+628123456789\">Telepon</a> ·\n       <a href=\"https://github.com/\" target=\"_blank\" rel=\"noopener\">GitHub</a></p>\n  </section>\n</main>\n<footer><small>&copy; 2026 Budi Santoso</small></footer>\n" },
+            checks: [
+                { text: '<code>header</code> memuat <code>h1</code> dan <code>img</code> ber-alt', test: "!!document.querySelector('header h1') && !!document.querySelector('header img[alt]:not([alt=\"\"])')" },
+                { text: '<code>nav</code> punya ≥ 3 tautan <code>#id</code> dan semua targetnya ada', test: "(function(){ var a=document.querySelectorAll('nav a[href^=\"#\"]'); return a.length>=3 && Array.prototype.every.call(a,function(x){ return !!document.getElementById(x.getAttribute('href').slice(1)); }); })()" },
+                { text: 'Tepat satu <code>main</code> dengan ≥ 3 <code>section</code> ber-id dan <code>h2</code>', test: "document.querySelectorAll('main').length===1 && (function(){ var s=document.querySelectorAll('main section'); return s.length>=3 && Array.prototype.every.call(s,function(x){ return !!x.id && !!x.querySelector('h2'); }); })()" },
+                { text: '≥ 2 <code>article</code> lengkap: <code>h3</code>, <code>time[datetime]</code>, <code>ul</code>', test: "(function(){ var a=document.querySelectorAll('article'); return a.length>=2 && Array.prototype.every.call(a,function(x){ return !!x.querySelector('h3') && !!x.querySelector('time[datetime]') && !!x.querySelector('ul'); }); })()" },
+                { text: 'Ada <code>ul</code> keahlian dengan ≥ 4 <code>li</code>', test: "Array.prototype.some.call(document.querySelectorAll('main ul'),function(u){ return u.children.length>=4; })" },
+                { text: 'Tautan <code>mailto:</code> dan <code>tel:</code>', test: "!!document.querySelector('a[href^=mailto]') && !!document.querySelector('a[href^=tel]')" },
+                { text: 'Tautan luar aman: <code>target=_blank</code> + <code>rel=noopener</code>', test: "!!document.querySelector('a[href^=http][target=_blank][rel~=noopener]')" },
+                { text: '<code>footer</code> ada teks, heading tidak melompat', test: "document.querySelector('footer').textContent.trim().length>3 && (function(){ var l=0,ok=true; Array.prototype.forEach.call(document.querySelectorAll('h1,h2,h3,h4'),function(h){ var n=+h.tagName[1]; if(n>l+1) ok=false; l=n; }); return ok; })()" }
+            ]
+        });
+    </script>
+</body>
+</html>

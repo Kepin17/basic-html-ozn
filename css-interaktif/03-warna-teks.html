@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 · Warna &amp; Teks - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>3 · Warna &amp; Teks</h1>
+        <p class="lead">Tampilan yang enak dibaca dimulai dari warna, ukuran huruf, dan jarak yang tepat.</p>
+
+        <div class="materi">
+            <h3>Cara menulis warna</h3>
+            <table>
+                <thead><tr><th>Format</th><th>Contoh</th></tr></thead>
+                <tbody>
+                    <tr><td>Nama</td><td><code>tomato</code>, <code>navy</code></td></tr>
+                    <tr><td>Hex</td><td><code>#10b981</code> (merah-hijau-biru dalam heksadesimal)</td></tr>
+                    <tr><td>RGB</td><td><code>rgb(16, 185, 129)</code>, dengan transparansi: <code>rgba(0,0,0,.5)</code></td></tr>
+                    <tr><td>HSL</td><td><code>hsl(160, 84%, 39%)</code> (hue, saturasi, terang)</td></tr>
+                </tbody>
+            </table>
+            <div class="tip"><b>Kontras itu penting.</b> Rasio kontras teks terhadap latar minimal <b>4,5 : 1</b> (standar WCAG AA). Lab ini menghitungnya untukmu di bawah hasil.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Properti teks</h3>
+            <table>
+                <thead><tr><th>Properti</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>font-size</code></td><td>Ukuran huruf (<code>px</code>, <code>rem</code>)</td></tr>
+                    <tr><td><code>font-weight</code></td><td>Tebal huruf: 100–900 atau <code>bold</code></td></tr>
+                    <tr><td><code>line-height</code></td><td>Jarak antar baris; 1.5–1.7 nyaman untuk paragraf</td></tr>
+                    <tr><td><code>letter-spacing</code></td><td>Jarak antar huruf</td></tr>
+                    <tr><td><code>text-shadow</code></td><td>Bayangan teks: x y blur warna</td></tr>
+                    <tr><td><code>linear-gradient()</code></td><td>Latar gradasi: sudut, warna awal, warna akhir</td></tr>
+                </tbody>
+            </table>
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat kartu <b>mode gelap</b> (latar gelap, teks terang) dengan kontras minimal <b>AA</b>.</li>
+                <li>Buat judul dengan <code>letter-spacing</code> lebar dan huruf tebal 800.</li>
+                <li>Buat tombol dengan latar gradasi dan sudut yang membulat penuh.</li>
+                <li>Coba warna teks abu muda di latar putih. Lihat rasio kontrasnya turun, lalu perbaiki.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const lum = hex => {
+            const c = [1, 3, 5].map(i => parseInt(hex.substr(i, 2), 16) / 255).map(x => x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4));
+            return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+        };
+        const kontras = (a, b) => { const l1 = lum(a), l2 = lum(b); return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05); };
+        const nilai = r => r >= 7 ? '✅ AAA (sangat baik)' : r >= 4.5 ? '✅ AA (lolos)' : r >= 3 ? '⚠ hanya cukup untuk teks besar' : '❌ gagal, sulit dibaca';
+
+        initLab({
+            height: 420,
+            base: `body { background: #e9edf5; }`,
+            html: `<div class="kartu">
+  <h2>Judul Kartu</h2>
+  <p>Ini paragraf contoh. Perhatikan bagaimana warna, ukuran huruf, dan jarak baris memengaruhi kenyamanan membaca.</p>
+  <a class="btn" href="#">Tombol aksi</a>
+</div>`,
+            controls: [
+                { id: 'bg', label: 'Warna latar', type: 'color', value: '#ffffff' },
+                { id: 'fg', label: 'Warna teks', type: 'color', value: '#374151' },
+                { id: 'hc', label: 'Warna judul', type: 'color', value: '#1d4ed8' },
+                { id: 'ff', label: 'font-family', type: 'select', options: ['sans-serif', 'serif', 'monospace', 'Georgia, serif', 'Verdana, sans-serif'], value: 'sans-serif' },
+                { id: 'fs', label: 'font-size teks', type: 'range', min: 12, max: 26, value: 16, unit: 'px' },
+                { id: 'fw', label: 'font-weight judul', type: 'range', min: 100, max: 900, step: 100, value: 700 },
+                { id: 'lh', label: 'line-height', type: 'range', min: 1, max: 2.4, step: 0.1, value: 1.6 },
+                { id: 'ls', label: 'letter-spacing judul', type: 'range', min: 0, max: 8, step: 0.5, value: 0, unit: 'px' },
+                { id: 'ta', label: 'text-align', type: 'select', options: ['left', 'center', 'right', 'justify'], value: 'left' },
+                { id: 'sh', label: 'text-shadow judul', type: 'check', value: false },
+                { id: 'gr', label: 'Latar tombol gradasi', type: 'check', value: false },
+                { id: 'g1', label: 'Warna tombol 1', type: 'color', value: '#2563eb' },
+                { id: 'g2', label: 'Warna tombol 2', type: 'color', value: '#9333ea' },
+                { id: 'ga', label: 'Sudut gradasi', type: 'range', min: 0, max: 360, step: 15, value: 90, unit: '°' },
+                { id: 'br', label: 'Lengkung kartu', type: 'range', min: 0, max: 40, value: 14, unit: 'px' }
+            ],
+            css: v => `.kartu {
+  background: ${v.bg};
+  color: ${v.fg};
+  font-family: ${v.ff};
+  font-size: ${v.fs}px;
+  line-height: ${v.lh};
+  text-align: ${v.ta};
+  padding: 24px;
+  border-radius: ${v.br}px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.kartu h2 {
+  color: ${v.hc};
+  font-weight: ${v.fw};
+  letter-spacing: ${v.ls}px;${v.sh ? '\n  text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.35);' : ''}
+  margin-top: 0;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 22px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 999px;
+  background: ${v.gr ? `linear-gradient(${v.ga}deg, ${v.g1}, ${v.g2})` : v.g1};
+}`,
+            info(d, v) {
+                const r = kontras(v.bg, v.fg), r2 = kontras(v.bg, v.hc);
+                return `🔍 Kontras <b>teks</b> vs latar: <b>${r.toFixed(2)} : 1</b> → ${nilai(r)}<br>🔍 Kontras <b>judul</b> vs latar: <b>${r2.toFixed(2)} : 1</b> → ${nilai(r2)}`;
+            }
+        });
+    </script>
+</body>
+</html>

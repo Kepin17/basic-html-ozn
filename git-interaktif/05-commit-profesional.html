@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 · Commit Profesional - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>5 · Commit yang Profesional</h1>
+        <p class="lead">Riwayat Git adalah <b>dokumentasi proyek</b>. Pesan seperti "update" atau "fix" tidak membantu siapa pun, termasuk dirimu enam bulan lagi.</p>
+        <div class="materi">
+            <h3>Anatomi pesan komit</h3>
+<pre><code>tipe(lingkup): ringkasan singkat dalam bentuk perintah      ← subjek (≤ 50 karakter)
+                                                              ← baris kosong
+Penjelasan lebih panjang (opsional): MENGAPA perubahan ini     ← isi/body (≤ 72 karakter per baris)
+diperlukan dan apa dampaknya, bukan sekadar apa yang diubah.
+
+Closes #12                                                     ← footer: tautan issue
+BREAKING CHANGE: ...                                           ← bila mengubah perilaku lama</code></pre>
+            <h3>Conventional Commits: tipe yang dipakai</h3>
+            <table>
+                <thead><tr><th>Tipe</th><th>Dipakai untuk</th><th>Contoh</th></tr></thead>
+                <tbody>
+                    <tr><td><code>feat</code></td><td>Fitur baru</td><td><code>feat(cart): tambah tombol hapus item</code></td></tr>
+                    <tr><td><code>fix</code></td><td>Perbaikan bug</td><td><code>fix(form): tolak email tanpa @</code></td></tr>
+                    <tr><td><code>docs</code></td><td>Dokumentasi saja</td><td><code>docs: tambah cara instalasi di README</code></td></tr>
+                    <tr><td><code>style</code></td><td>Format/spasi (bukan logika, bukan CSS tampilan)</td><td><code>style: rapikan indentasi</code></td></tr>
+                    <tr><td><code>refactor</code></td><td>Merapikan kode tanpa mengubah perilaku</td><td><code>refactor(auth): pisahkan fungsi validasi</code></td></tr>
+                    <tr><td><code>perf</code></td><td>Peningkatan kinerja</td><td><code>perf: lazy-load gambar galeri</code></td></tr>
+                    <tr><td><code>test</code>, <code>build</code>, <code>ci</code>, <code>chore</code></td><td>Tes, sistem build, otomasi, tugas lain</td><td><code>chore: perbarui dependensi</code></td></tr>
+                </tbody>
+            </table>
+            <p>Tanda <code>!</code> menandai perubahan yang memutus kompatibilitas: <code>feat(api)!: ganti format respons</code>.</p>
+        </div>
+
+        <h2>Penilai pesan komit</h2>
+        <p>Tulis atau tempel pesan komit. Skor dan daftar aturan berubah langsung. Contoh bagus sudah diisi; coba rusak formatnya.</p>
+        <div id="lint"></div>
+
+        <div class="materi">
+            <h3>Prinsip komit yang baik</h3>
+            <table>
+                <thead><tr><th>Prinsip</th><th>Penjelasan</th></tr></thead>
+                <tbody>
+                    <tr><td><b>Atomik</b></td><td>Satu komit = satu perubahan logis. Memperbaiki bug <i>dan</i> mengubah warna tombol → dua komit. Gunakan <code>git add -p</code> atau stage berkas terpisah.</td></tr>
+                    <tr><td><b>Dapat dibangun</b></td><td>Setiap komit membuat proyek tetap berjalan. Komit setengah jadi merusak <code>git bisect</code> dan review.</td></tr>
+                    <tr><td><b>Imperatif</b></td><td>Subjek melengkapi kalimat "Jika diterapkan, komit ini akan <i>…</i>": "tambah validasi", bukan "menambahkan"/"added".</td></tr>
+                    <tr><td><b>Jelaskan <i>mengapa</i></b></td><td>Diff sudah memperlihatkan <i>apa</i>. Pesan menjelaskan alasan dan konteks.</td></tr>
+                    <tr><td><b>Jangan commit sampah</b></td><td>Berkas hasil build, <code>node_modules</code>, rahasia, dan <code>console.log</code> debug.</td></tr>
+                </tbody>
+            </table>
+            <h3>Sebelum, sesudah</h3>
+            <table>
+                <thead><tr><th>❌ Buruk</th><th>✅ Profesional</th></tr></thead>
+                <tbody>
+                    <tr><td><code>update</code></td><td><code>feat(profil): tampilkan foto pengguna</code></td></tr>
+                    <tr><td><code>fix bug</code></td><td><code>fix(login): cegah submit ganda saat tombol diklik cepat</code></td></tr>
+                    <tr><td><code>perbaikan tampilan dan juga menambahkan fitur cari</code></td><td>dua komit: <code>style(header): rapikan jarak menu</code> + <code>feat(katalog): tambah pencarian live</code></td></tr>
+                    <tr><td><code>Added new function.</code></td><td><code>feat(utils): tambah fungsi format rupiah</code></td></tr>
+                </tbody>
+            </table>
+            <h3>Memperbaiki komit terakhir</h3>
+<pre><code>git commit --amend -m "fix(form): tolak email tanpa @"   # ganti pesan komit terakhir
+git add lupa.js &amp;&amp; git commit --amend --no-edit           # tambah berkas yang tertinggal
+# ⚠ amend menulis ulang riwayat: jangan lakukan pada komit yang sudah di-push ke branch bersama</code></pre>
+        </div>
+
+        <h2>Latihan: tulis ulang pesan buruk</h2>
+        <p>Tiap pesan buruk di bawah harus kamu tulis ulang dengan format Conventional Commits (skor ≥ 90) dan menyebut topik yang diminta.</p>
+        <div id="rewrite"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script src="assets/commit-lint.js"></script>
+    <script>
+        initLint({ start: 'feat(login): tambah validasi email\n\nEmail kosong sebelumnya lolos ke server dan menyebabkan\nerror 500. Validasi dipindah ke sisi klien.\n\nCloses #12' });
+        initRewrite({ items: [
+            { bad: 'update', hint: 'Kamu menambah tombol "Keluar" pada navbar.', kw: ['keluar'] },
+            { bad: 'fix', hint: 'Kamu memperbaiki bug: total keranjang salah saat qty lebih dari 1.', kw: ['total'] },
+            { bad: 'Menambahkan halaman kontak dan memperbaiki typo.', hint: 'Fokus pada satu hal saja: menambah halaman kontak.', kw: ['kontak'] },
+            { bad: 'Changed README.', hint: 'Kamu menambah cara instalasi pada README.', kw: ['readme'] }
+        ] });
+    </script>
+</body>
+</html>

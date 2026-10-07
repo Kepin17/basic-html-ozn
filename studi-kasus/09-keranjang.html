@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 9 · Logika Keranjang Belanja - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 9 · Logika Keranjang Belanja</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐⭐ Menantang · <b>Melatih:</b> Array of object, immutability, reduce, aturan bisnis</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Inti setiap toko online adalah logika keranjang. Kamu menulis fungsi-fungsinya <b>tanpa mengubah array asli</b> (<i>immutable</i>), kebiasaan yang membuat bug berkurang drastis.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li>Item keranjang berbentuk <code>{ id, nama, harga, qty }</code> (data dari array <code>produk</code>).</li><li><code>tambahKeranjang(keranjang, id)</code> mengembalikan array <b>baru</b>: qty +1 bila sudah ada, atau item baru ber-qty 1. ID tak dikenal → isi tidak berubah. <b>Array asli tidak boleh berubah.</b></li><li><code>hapusItem(keranjang, id)</code> mengurangi qty satu; bila jadi 0, item dibuang. Array baru.</li><li><code>totalKeranjang(keranjang)</code> = jumlah harga × qty.</li><li><code>hitungDiskon(total)</code>: total ≥ 500.000 → 10%; ≥ 200.000 → 5%; selain itu 0. Hasil berupa <b>jumlah diskon</b> (dibulatkan).</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Hindari <code>push</code>/<code>splice</code>. Pakai <code>map</code>, <code>filter</code>, dan spread <code>[...arr, item]</code> yang menghasilkan array baru.</li><li>Untuk "naik 1 qty" tanpa mengubah objek lama: <code>{ ...x, qty: x.qty + 1 }</code>.</li><li>Uji di console: <code>const a = tambahKeranjang([], 1)</code> lalu cek <code>a</code> dan <code>[]</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: false,
+            dom: false,
+            noConsole: false,
+            auto: false,
+            rows: 26,
+            code: "const produk = [\n  { id: 1, nama: \"Buku\", harga: 50000 },\n  { id: 2, nama: \"Pensil\", harga: 3000 },\n  { id: 3, nama: \"Tas\", harga: 250000 },\n];\n\nfunction tambahKeranjang(keranjang, id) {\n  // TODO\n}\n\nfunction hapusItem(keranjang, id) {\n  // TODO\n}\n\nfunction totalKeranjang(keranjang) {\n  // TODO\n}\n\nfunction hitungDiskon(total) {\n  // TODO\n}\n",
+            solution: {"js": "const produk = [\n  { id: 1, nama: \"Buku\", harga: 50000 },\n  { id: 2, nama: \"Pensil\", harga: 3000 },\n  { id: 3, nama: \"Tas\", harga: 250000 },\n];\n\nfunction tambahKeranjang(keranjang, id) {\n  const p = produk.find((x) => x.id === id);\n  if (!p) return keranjang.slice();\n  const ada = keranjang.find((x) => x.id === id);\n  if (ada) {\n    return keranjang.map((x) => (x.id === id ? { ...x, qty: x.qty + 1 } : x));\n  }\n  return [...keranjang, { ...p, qty: 1 }];\n}\n\nfunction hapusItem(keranjang, id) {\n  return keranjang\n    .map((x) => (x.id === id ? { ...x, qty: x.qty - 1 } : x))\n    .filter((x) => x.qty > 0);\n}\n\nfunction totalKeranjang(keranjang) {\n  return keranjang.reduce((jml, x) => jml + x.harga * x.qty, 0);\n}\n\nfunction hitungDiskon(total) {\n  if (total >= 500000) return Math.round(total * 0.1);\n  if (total >= 200000) return Math.round(total * 0.05);\n  return 0;\n}"},
+            checks: [
+                {"text": "Menambah item baru → qty 1; array asli tetap kosong", "test": "(function(){ var k=[]; var a=tambahKeranjang(k,1); return k.length===0 && a.length===1 && a[0].qty===1 && a[0].nama==='Buku'; })()"},
+                {"text": "Menambah item yang sama → qty naik, array lama tidak berubah", "test": "(function(){ var a=tambahKeranjang([],1), b=tambahKeranjang(a,1); return b.length===1 && b[0].qty===2 && a[0].qty===1; })()"},
+                {"text": "ID tak dikenal tidak menambah apa pun", "test": "tambahKeranjang([],99).length===0"},
+                {"text": "hapusItem mengurangi qty; qty 0 → item hilang", "test": "(function(){ var b=tambahKeranjang(tambahKeranjang([],1),1); return hapusItem(b,1)[0].qty===1 && hapusItem(hapusItem(b,1),1).length===0 && b[0].qty===2; })()"},
+                {"text": "totalKeranjang: 2 buku + 1 pensil = 103.000; kosong = 0", "test": "(function(){ var k=tambahKeranjang(tambahKeranjang(tambahKeranjang([],1),1),2); return totalKeranjang(k)===103000 && totalKeranjang([])===0; })()"},
+                {"text": "hitungDiskon: 100.000 → 0; 200.000 → 10.000; 499.999 → 25.000; 500.000 → 50.000", "test": "hitungDiskon(100000)===0 && hitungDiskon(200000)===10000 && hitungDiskon(499999)===25000 && hitungDiskon(500000)===50000"}
+            ]
+        });
+    </script>
+</body>
+</html>

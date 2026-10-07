@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 10 · Latihan Logika Algoritma - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 10 · Latihan Logika Algoritma</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐⭐⭐ Sulit · <b>Melatih:</b> Pemecahan masalah: string, array, rekursi, objek, perulangan bersarang</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Delapan soal klasik yang sering muncul di tes wawancara kerja. Tidak ada tampilan, hanya logika murni. Kerjakan satu per satu; setiap soal punya centang sendiri.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><code>palindrom(teks)</code>: true bila terbaca sama dari depan dan belakang, abaikan huruf besar/kecil, spasi, dan tanda baca. <code>"Kasur ini rusak"</code> → true.</li><li><code>anagram(a, b)</code>: true bila huruf-hurufnya sama (abaikan spasi dan huruf besar). <code>"Listen"</code>, <code>"Silent"</code> → true.</li><li><code>hitungKata(teks)</code>: objek frekuensi kata (huruf kecil, tanpa tanda baca). <code>"Aku suka kopi, aku suka teh."</code> → <code>{aku:2, suka:2, kopi:1, teh:1}</code>.</li><li><code>terbesarKedua(arr)</code>: angka terbesar kedua <b>yang berbeda</b>; <code>null</code> bila tak ada. <code>[3,9,9,5]</code> → 5.</li><li><code>ratakan(arr)</code>: meratakan array bersarang berapa pun dalamnya. <code>[1,[2,[3,[4]],5]]</code> → <code>[1,2,3,4,5]</code>.</li><li><code>kelompokkan(arr, fn)</code>: objek yang mengelompokkan elemen berdasarkan hasil <code>fn</code>.</li><li><code>bilanganRomawi(n)</code>: 1–3999. 1994 → <code>"MCMXCIV"</code>.</li><li><code>kompres(teks)</code>: <i>run-length</i>. <code>"aaabccdddd"</code> → <code>"a3b1c2d4"</code>.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li><b>Strategi umum:</b> (1) tulis 3 contoh dengan hasil yang kamu tahu, (2) pikirkan langkah manual, (3) terjemahkan jadi kode, (4) uji kasus tepi (kosong, satu elemen, duplikat).</li><li>Banyak soal string lebih mudah bila <b>dibersihkan dulu</b> (<code>toLowerCase</code>, <code>replace</code> dengan regex).</li><li>Soal rekursif (<code>ratakan</code>): fungsi memanggil dirinya sendiri untuk elemen yang berupa array.</li><li>Romawi: daftar pasangan nilai terbesar → terkecil, kurangi sambil menambah simbol.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: false,
+            dom: false,
+            noConsole: false,
+            auto: false,
+            rows: 30,
+            code: "function palindrom(teks) {\n  // TODO\n}\n\nfunction anagram(a, b) {\n  // TODO\n}\n\nfunction hitungKata(teks) {\n  // TODO\n}\n\nfunction terbesarKedua(arr) {\n  // TODO\n}\n\nfunction ratakan(arr) {\n  // TODO\n}\n\nfunction kelompokkan(arr, fn) {\n  // TODO\n}\n\nfunction bilanganRomawi(n) {\n  // TODO\n}\n\nfunction kompres(teks) {\n  // TODO\n}\n",
+            solution: {"js": "function palindrom(teks) {\n  const bersih = teks.toLowerCase().replace(/[^a-z0-9]/g, \"\");\n  return bersih === [...bersih].reverse().join(\"\");\n}\n\nfunction anagram(a, b) {\n  const urut = (s) => s.toLowerCase().replace(/\\s/g, \"\").split(\"\").sort().join(\"\");\n  return urut(a) === urut(b);\n}\n\nfunction hitungKata(teks) {\n  const hasil = {};\n  for (const k of teks.toLowerCase().match(/[a-z0-9]+/g) || []) {\n    hasil[k] = (hasil[k] || 0) + 1;\n  }\n  return hasil;\n}\n\nfunction terbesarKedua(arr) {\n  const unik = [...new Set(arr)].sort((a, b) => b - a);\n  return unik.length >= 2 ? unik[1] : null;\n}\n\nfunction ratakan(arr) {\n  const hasil = [];\n  for (const x of arr) {\n    if (Array.isArray(x)) hasil.push(...ratakan(x));\n    else hasil.push(x);\n  }\n  return hasil;\n}\n\nfunction kelompokkan(arr, fn) {\n  const hasil = {};\n  for (const x of arr) {\n    const k = fn(x);\n    (hasil[k] = hasil[k] || []).push(x);\n  }\n  return hasil;\n}\n\nfunction bilanganRomawi(n) {\n  const tabel = [[1000,\"M\"],[900,\"CM\"],[500,\"D\"],[400,\"CD\"],[100,\"C\"],[90,\"XC\"],[50,\"L\"],[40,\"XL\"],[10,\"X\"],[9,\"IX\"],[5,\"V\"],[4,\"IV\"],[1,\"I\"]];\n  let hasil = \"\";\n  for (const [nilai, simbol] of tabel) {\n    while (n >= nilai) { hasil += simbol; n -= nilai; }\n  }\n  return hasil;\n}\n\nfunction kompres(teks) {\n  let hasil = \"\";\n  for (let i = 0; i < teks.length; ) {\n    let j = i;\n    while (j < teks.length && teks[j] === teks[i]) j++;\n    hasil += teks[i] + (j - i);\n    i = j;\n  }\n  return hasil;\n}"},
+            checks: [
+                {"text": "1. palindrom: \"Kasur ini rusak\" ✅, \"A man, a plan, a canal: Panama\" ✅, \"halo\" ❌, \"\" ✅", "test": "palindrom('Kasur ini rusak')===true && palindrom('A man, a plan, a canal: Panama')===true && palindrom('halo')===false && palindrom('')===true"},
+                {"text": "2. anagram: Listen/Silent ✅, \"a b\"/\"ba\" ✅, abc/abd ❌", "test": "anagram('Listen','Silent')===true && anagram('a b','ba')===true && anagram('abc','abd')===false && anagram('aab','ab')===false"},
+                {"text": "3. hitungKata", "test": "(function(){ var r=hitungKata('Aku suka kopi, aku suka teh.'); return r.aku===2 && r.suka===2 && r.kopi===1 && r.teh===1 && Object.keys(r).length===4 && Object.keys(hitungKata('')).length===0; })()"},
+                {"text": "4. terbesarKedua: [3,9,9,5]→5, [1]→null, [4,4]→null", "test": "terbesarKedua([3,9,9,5])===5 && terbesarKedua([1])===null && terbesarKedua([4,4])===null && terbesarKedua([-1,-5,-3])===-3"},
+                {"text": "5. ratakan: bersarang dalam", "test": "JSON.stringify(ratakan([1,[2,[3,[4]],5]]))==='[1,2,3,4,5]' && JSON.stringify(ratakan([]))==='[]' && JSON.stringify(ratakan([[],[[]]]))==='[]'"},
+                {"text": "6. kelompokkan ganjil/genap dan panjang kata", "test": "(function(){ var a=kelompokkan([1,2,3,4,5],function(n){return n%2?'ganjil':'genap'}); var b=kelompokkan(['aa','b','cc','d'],function(s){return s.length}); return a.ganjil.join()==='1,3,5' && a.genap.join()==='2,4' && b[1].join()==='b,d' && b[2].join()==='aa,cc'; })()"},
+                {"text": "7. bilanganRomawi: 4→IV, 58→LVIII, 1994→MCMXCIV, 3999→MMMCMXCIX", "test": "bilanganRomawi(4)==='IV' && bilanganRomawi(58)==='LVIII' && bilanganRomawi(1994)==='MCMXCIV' && bilanganRomawi(3999)==='MMMCMXCIX'"},
+                {"text": "8. kompres: aaabccdddd→a3b1c2d4, \"\"→\"\"", "test": "kompres('aaabccdddd')==='a3b1c2d4' && kompres('')==='' && kompres('z')==='z1'"}
+            ]
+        });
+    </script>
+</body>
+</html>

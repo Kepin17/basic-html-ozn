@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 · Event - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>9 · Event</h1>
+        <p class="lead">Event adalah "kejadian" di halaman: klik, ketik, kirim form, gerakkan mouse. Dengan <b>event listener</b>, kodemu bereaksi saat kejadian itu terjadi. Inilah yang membuat halaman terasa hidup.</p>
+
+        <div class="materi">
+            <h3>Pola dasar</h3>
+<pre><code>elemen.addEventListener("jenis-event", function (event) {
+  // kode yang jalan saat event terjadi
+});</code></pre>
+            <table>
+                <thead><tr><th>Event</th><th>Terjadi saat</th></tr></thead>
+                <tbody>
+                    <tr><td><code>click</code></td><td>Elemen diklik</td></tr>
+                    <tr><td><code>input</code></td><td>Isi kolom isian berubah (tiap ketukan)</td></tr>
+                    <tr><td><code>change</code></td><td>Nilai select/checkbox berubah / input selesai diedit</td></tr>
+                    <tr><td><code>submit</code></td><td>Form dikirim</td></tr>
+                    <tr><td><code>keydown</code></td><td>Tombol keyboard ditekan</td></tr>
+                    <tr><td><code>mouseover</code> / <code>mouseout</code></td><td>Kursor masuk / keluar</td></tr>
+                </tbody>
+            </table>
+            <h3>Objek <code>event</code></h3>
+            <ul>
+                <li><code>event.target</code>: elemen yang memicu event.</li>
+                <li><code>event.preventDefault()</code>: batalkan perilaku bawaan (mis. form memuat ulang halaman, link berpindah).</li>
+                <li><code>event.key</code>: tombol yang ditekan (untuk <code>keydown</code>).</li>
+                <li><code>input.value</code>: isi saat ini dari kolom isian.</li>
+            </ul>
+        </div>
+
+        <h2>Lab A · Penghitung</h2>
+        <p>Klik tombol-tombol di <b>hasil</b>. Lihat angkanya berubah, dan variabel <code>hitungan</code> di inspektur. Tambahkan tombol "-1" sendiri.</p>
+        <div id="labA"></div>
+
+        <h2>Lab B · Input langsung &amp; keyboard</h2>
+        <p>Ketik di kolom: tulisan "Halo" ikut berubah <b>setiap ketukan</b>. Tekan Enter untuk memicu event lain.</p>
+        <div id="labB"></div>
+
+        <div class="materi">
+            <h3>Event delegation</h3>
+            <p>Memasang listener ke <b>setiap</b> item boros, dan item yang ditambahkan <i>nanti</i> tidak punya listener. Solusi: pasang <b>satu</b> listener di induknya, lalu periksa <code>event.target</code>. Event "menggelembung" (<i>bubbling</i>) dari anak ke induk.</p>
+<pre><code>daftar.addEventListener("click", (e) =&gt; {
+  if (e.target.matches("li")) {       // apakah yang diklik sebuah li?
+    e.target.classList.toggle("selesai");
+  }
+});</code></pre>
+        </div>
+
+        <h2>Lab C · Tantangan: delegation</h2>
+        <div class="materi">
+            <p>Buat <b>satu</b> listener pada <code>#daftar</code> sehingga mengklik <code>li</code> mana pun menambah/menghapus class <code>selesai</code> (toggle). Item yang ditambahkan belakangan juga harus bekerja tanpa listener tambahan.</p>
+        </div>
+        <div id="labC"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', preview: true, auto: false, vars: true, height: 130, rows: 17,
+            base: `button { font-size: 16px; padding: 6px 14px; margin-right: 6px; cursor: pointer; } b { font-size: 28px; }`,
+            html: `<p>Hitungan: <b id="angka">0</b></p>
+<button id="tambah">+1</button>
+<button id="reset">Reset</button>`,
+            code: `let hitungan = 0;
+const angka = document.querySelector("#angka");
+
+document.querySelector("#tambah").addEventListener("click", () => {
+  hitungan++;
+  angka.textContent = hitungan;
+  console.log("diklik, hitungan =", hitungan);
+});
+
+document.querySelector("#reset").addEventListener("click", () => {
+  hitungan = 0;
+  angka.textContent = hitungan;
+});`
+        });
+        initJS({
+            root: 'labB', preview: true, auto: false, height: 150, rows: 17,
+            base: `input { font-size: 16px; padding: 6px 10px; border: 2px solid #cbd5e1; border-radius: 6px; } #sapa { color: #2563eb; }`,
+            html: `<input id="nama" placeholder="Ketik namamu...">
+<h2>Halo, <span id="sapa">...</span>!</h2>`,
+            code: `const nama = document.querySelector("#nama");
+const sapa = document.querySelector("#sapa");
+
+nama.addEventListener("input", (e) => {
+  sapa.textContent = e.target.value || "...";
+});
+
+nama.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    console.log("Enter ditekan, isi:", nama.value);
+  }
+});`
+        });
+        initJS({
+            root: 'labC', preview: true, dom: true, auto: false, height: 150, rows: 12,
+            base: `li { cursor: pointer; padding: 3px 0; } .selesai { text-decoration: line-through; color: #94a3b8; }`,
+            html: `<ul id="daftar">
+  <li>Belajar HTML</li>
+  <li>Belajar CSS</li>
+  <li>Belajar JS</li>
+</ul>`,
+            code: `const daftar = document.querySelector("#daftar");
+
+// TODO: SATU listener click pada daftar.
+// Jika yang diklik adalah <li>, toggle class "selesai".
+`,
+            solution: `const daftar = document.querySelector("#daftar");
+
+daftar.addEventListener("click", (e) => {
+  if (e.target.matches("li")) {
+    e.target.classList.toggle("selesai");
+  }
+});`,
+            checks: [
+                { text: 'Klik li pertama → memiliki class "selesai"', test: "(document.querySelector('#daftar li').click(), document.querySelector('#daftar li').classList.contains('selesai'))" },
+                { text: 'Klik lagi → class "selesai" hilang (toggle)', test: "(function(){ var li = document.querySelectorAll('#daftar li')[1]; li.click(); var a = li.classList.contains('selesai'); li.click(); return a && !li.classList.contains('selesai'); })()" },
+                { text: 'Item baru yang ditambahkan nanti juga bekerja (delegation)', test: "(function(){ var u = document.querySelector('#daftar'), n = document.createElement('li'); n.textContent = 'Baru'; u.appendChild(n); n.click(); return n.classList.contains('selesai'); })()" }
+            ]
+        });
+    </script>
+</body>
+</html>

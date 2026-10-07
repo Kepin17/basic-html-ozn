@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 · Responsif - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>7 · Responsif</h1>
+        <p class="lead">Satu halaman, banyak ukuran layar. <b>Media query</b> menerapkan aturan CSS hanya ketika kondisi tertentu terpenuhi, misalnya lebar layar.</p>
+
+        <div class="materi">
+            <h3>Bentuk dasar</h3>
+<pre><code>@media (max-width: 600px) {
+  /* hanya berlaku bila lebar layar &le; 600px */
+  .grid { grid-template-columns: 1fr; }
+}</code></pre>
+            <ul>
+                <li><code>max-width</code>: berlaku saat layar <b>sekecil atau lebih kecil</b> dari nilai (desktop-first).</li>
+                <li><code>min-width</code>: berlaku saat layar <b>sebesar atau lebih besar</b> (mobile-first).</li>
+                <li>Wajib ada <code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code> di <code>head</code>, atau HP akan menampilkan versi "diperkecil" dari desktop.</li>
+            </ul>
+            <div class="tip"><b>Cara pakai lab:</b> geser <b>Lebar layar simulasi</b>. Kotak hasil mengecil seperti layar HP. Ketika melewati breakpoint, tata letak berganti.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Ukuran layar umum</h3>
+            <table>
+                <thead><tr><th>Perangkat</th><th>Lebar sekitar</th></tr></thead>
+                <tbody>
+                    <tr><td>HP</td><td>360–430px</td></tr>
+                    <tr><td>Tablet</td><td>768–1024px</td></tr>
+                    <tr><td>Laptop / desktop</td><td>1280px ke atas</td></tr>
+                </tbody>
+            </table>
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Atur breakpoint di <b>768px</b> dan geser lebar layar ke 767 lalu 769. Perhatikan perubahannya.</li>
+                <li>Buat layar HP menampilkan <b>2 kolom</b> (bukan 1), lalu navigasi menjadi tersusun ke bawah.</li>
+                <li>Ubah kode menjadi <b>mobile-first</b>: tulis aturan HP dulu, lalu tambah <code>@media (min-width: 700px)</code> untuk desktop.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        initLab({
+            height: 430,
+            base: `body { margin: 0; background: #f8fafc; }
+                   .topbar { display: flex; align-items: center; justify-content: space-between; background: #0f172a; color: #fff; padding: 10px 16px; gap: 10px; }
+                   .topbar b { font-size: 18px; } .menu { display: flex; gap: 14px; } .menu span { color: #cbd5e1; font-size: 14px; }
+                   .wrap { padding: 14px; } .card { background: #fff; border: 1px solid #dbe3ef; border-radius: 10px; padding: 14px; text-align: center; }
+                   .card i { display: block; height: 50px; border-radius: 8px; background: linear-gradient(135deg, #38bdf8, #6366f1); margin-bottom: 8px; }
+                   footer { text-align: center; color: #64748b; padding: 12px; font-size: 13px; }`,
+            html: `<header class="topbar"><b>LogoKu</b><nav class="menu"><span>Beranda</span><span>Produk</span><span>Kontak</span></nav></header>
+<div class="wrap">
+  <div class="grid">
+    <div class="card"><i></i>Kartu 1</div>
+    <div class="card"><i></i>Kartu 2</div>
+    <div class="card"><i></i>Kartu 3</div>
+    <div class="card"><i></i>Kartu 4</div>
+    <div class="card"><i></i>Kartu 5</div>
+    <div class="card"><i></i>Kartu 6</div>
+  </div>
+</div>
+<footer>© 2026 Contoh</footer>`,
+            controls: [
+                { id: 'pw', label: 'Lebar layar simulasi', type: 'range', min: 280, max: 900, step: 10, value: 900, unit: 'px', frame: true },
+                { id: 'bp', label: 'Breakpoint (max-width)', type: 'range', min: 400, max: 800, step: 20, value: 600, unit: 'px' },
+                { id: 'dc', label: 'Kolom desktop', type: 'range', min: 2, max: 4, value: 3 },
+                { id: 'mc', label: 'Kolom HP', type: 'range', min: 1, max: 2, value: 1 },
+                { id: 'gap', label: 'gap', type: 'range', min: 4, max: 30, value: 14, unit: 'px' },
+                { id: 'stk', label: 'Menu menumpuk di HP', type: 'check', value: true }
+            ],
+            css: v => `.grid {
+  display: grid;
+  grid-template-columns: repeat(${v.dc}, 1fr);
+  gap: ${v.gap}px;
+}
+
+@media (max-width: ${v.bp}px) {
+  .grid {
+    grid-template-columns: repeat(${v.mc}, 1fr);
+  }${v.stk ? `
+  .topbar {
+    flex-direction: column;
+  }` : ''}
+}`,
+            info: (d, v) => {
+                const aktif = v.pw <= v.bp;
+                return `📱 Lebar layar: <b>${v.pw}px</b> · breakpoint: <b>${v.bp}px</b><br>` +
+                    (aktif ? '✅ Media query <b>AKTIF</b> → tata letak HP' : '⏸ Media query <b>tidak aktif</b> → tata letak desktop');
+            }
+        });
+    </script>
+</body>
+</html>

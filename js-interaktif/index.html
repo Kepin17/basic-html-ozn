@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>JavaScript Interaktif</h1>
+        <p class="lead">Dari nol sampai bisa membuat halaman web yang hidup: variabel, logika, fungsi, array, dan <b>DOM</b>. Semua kode bisa kamu ketik dan jalankan langsung di halaman.</p>
+
+        <div class="hero-js">
+            <b>Prasyarat:</b> paham HTML dasar dan sedikit CSS. Kalau belum, mulai dari <a style="color:#fcd34d" href="../html-interaktif/index.html">HTML Interaktif</a> dan <a style="color:#fcd34d" href="../css-interaktif/index.html">CSS Interaktif</a>.
+        </div>
+
+        <div class="materi">
+            <h3>Cara memakai</h3>
+            <ol>
+                <li><b>Baca</b> penjelasan singkat, lalu lihat kode contoh di editor.</li>
+                <li>Tekan <b>▶ Jalankan</b> (atau <kbd>Ctrl</kbd>+<kbd>Enter</kbd>). Output tampil di <b>Console</b>.</li>
+                <li><b>Ubah kodenya</b> dan jalankan lagi. Salah itu wajar: pesan error muncul lengkap dengan nomor baris.</li>
+                <li><b>Inspektur variabel</b> menunjukkan isi dan tipe tiap variabel. <b>Pohon DOM</b> menunjukkan struktur halaman yang berubah secara live.</li>
+                <li>Lab bertanda <b>tantangan</b> punya pemeriksa otomatis. Centangnya hijau bila kodemu benar. Tombol <b>💡 Lihat solusi</b> tersedia bila macet.</li>
+            </ol>
+            <div class="tip">Kodemu berjalan di <b>iframe terisolasi</b>. Aman dicoba: perulangan tak berujung dihentikan otomatis, dan tidak ada yang merusak halaman ini.</div>
+        </div>
+
+        <div class="cards" id="cards"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        const info = {
+            '01-pengenalan.html': 'Apa itu JavaScript, console.log, komentar, dan menyentuh halaman untuk pertama kali.',
+            '02-variabel-tipe.html': 'let, const, string, number, boolean, null, undefined, dan konversi tipe.',
+            '03-operator-kondisi.html': 'Operator, == vs ===, if/else, switch, dan ternary.',
+            '04-perulangan.html': 'for, while, for...of, break, continue.',
+            '05-fungsi.html': 'Deklarasi, arrow function, parameter, return, dan scope.',
+            '06-array-object.html': 'Array, map/filter/reduce, object, dan destructuring.',
+            '07-dom-pilih.html': 'querySelector, textContent, style, classList, dan atribut.',
+            '08-dom-buat.html': 'createElement, append, remove, dan render dari data.',
+            '09-event.html': 'click, input, submit, event object, dan event delegation.',
+            '10-proyek.html': 'Membangun aplikasi To-do lengkap dari semua yang sudah dipelajari.'
+        };
+        document.getElementById('cards').innerHTML = LESSONS.slice(1).map(([h, t], i) =>
+            `<a class="card" href="${h}"><span class="no">${i + 1}</span><h3>${t.replace(/^\d+ · /, '')}</h3><p>${info[h]}</p></a>`).join('');
+    </script>
+</body>
+</html>

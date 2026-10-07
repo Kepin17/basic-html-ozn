@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda - Git Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+    <link rel="stylesheet" href="assets/git.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Git &amp; GitHub Interaktif</h1>
+        <p class="lead">Git adalah mesin waktu untuk kodemu; GitHub adalah tempat berkolaborasi. Di sini kamu berlatih di <b>simulator Git</b> yang berjalan langsung di browser: ketik perintah asli, lihat tiga area Git dan grafik komit berubah, dan selesaikan misi tanpa takut merusak apa pun.</p>
+        <div class="materi">
+            <h3>Yang akan kamu kuasai</h3>
+            <ul>
+                <li>Alur kerja harian: <code>add</code> → <code>commit</code> → <code>push</code>.</li>
+                <li><b>Branch &amp; merge</b>, termasuk menyelesaikan <b>konflik</b>.</li>
+                <li>GitHub: repositori, <i>pull request</i>, review, dan kolaborasi tim.</li>
+                <li><b>Pesan komit profesional</b> (Conventional Commits) dengan penilai otomatis.</li>
+                <li>Membatalkan kesalahan dengan aman: <code>restore</code>, <code>reset</code>, <code>revert</code>, <code>stash</code>.</li>
+            </ul>
+            <div class="tip">Simulator mendukung perintah inti Git. Di komputermu perintahnya identik. Setelah latihan di sini, praktikkan dengan folder proyek sungguhan.</div>
+        </div>
+        <div class="cards" id="cards"></div>
+
+        <div class="materi" style="margin-top:28px">
+            <h3>Alur kerja harian (GitHub Flow)</h3>
+            <div class="flow"><span class="st">1. git switch -c fitur/x</span><span class="ar">→</span><span class="st">2. edit kode</span><span class="ar">→</span><span class="st">3. git add + commit</span><span class="ar">→</span><span class="st">4. git push</span><span class="ar">→</span><span class="st">5. Pull Request</span><span class="ar">→</span><span class="st">6. review &amp; merge</span><span class="ar">→</span><span class="st">7. git pull di main</span></div>
+            <h3>Contekan perintah</h3>
+            <table>
+                <thead><tr><th>Tujuan</th><th>Perintah</th></tr></thead>
+                <tbody>
+                    <tr><td>Mulai repositori / unduh dari GitHub</td><td><code>git init</code> · <code>git clone &lt;url&gt;</code></td></tr>
+                    <tr><td>Lihat keadaan</td><td><code>git status</code> · <code>git diff</code> · <code>git log --oneline --graph</code></td></tr>
+                    <tr><td>Simpan perubahan</td><td><code>git add .</code> → <code>git commit -m "feat: ..."</code></td></tr>
+                    <tr><td>Cabang</td><td><code>git switch -c nama</code> · <code>git switch main</code> · <code>git merge nama</code></td></tr>
+                    <tr><td>Sinkron dengan GitHub</td><td><code>git push -u origin nama</code> · <code>git pull</code></td></tr>
+                    <tr><td>Batalkan</td><td><code>git restore f</code> · <code>git reset --soft HEAD~1</code> · <code>git revert HEAD</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="assets/git-sim.js"></script>
+    <script>
+        const info = {
+            '01-konsep.html': 'Apa itu Git dan GitHub, istilah penting, instalasi, dan tiga area Git.',
+            '02-perintah-dasar.html': 'init, add, commit, status, diff, log di simulator interaktif.',
+            '03-branch-merge.html': 'Membuat cabang, berpindah, fast-forward dan merge commit.',
+            '04-github.html': 'Remote, push, pull, clone, fork, Pull Request, dan review.',
+            '05-commit-profesional.html': 'Conventional Commits, penilai pesan otomatis, dan latihan menulis ulang.',
+            '06-undo-konflik.html': 'Membatalkan kesalahan dan menyelesaikan konflik merge.'
+        };
+        document.getElementById('cards').innerHTML = LESSONS.slice(1).map(([h, t], i) =>
+            `<a class="card" href="${h}"><span class="no">${i + 1}</span><h3>${t.replace(/^\d+ · /, '')}</h3><p>${info[h]}</p></a>`).join('');
+    </script>
+</body>
+</html>

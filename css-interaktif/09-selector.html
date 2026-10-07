@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>9 · Selector &amp; Spesifisitas - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>9 · Selector &amp; Spesifisitas</h1>
+        <p class="lead">Dua pertanyaan utama CSS: <b>elemen mana</b> yang kena aturan ini, dan <b>aturan mana yang menang</b> bila ada yang bertabrakan.</p>
+
+        <div class="materi">
+            <h3>Jenis selector</h3>
+            <table>
+                <thead><tr><th>Selector</th><th>Memilih</th><th>Contoh</th></tr></thead>
+                <tbody>
+                    <tr><td>Elemen</td><td>Semua tag itu</td><td><code>p</code></td></tr>
+                    <tr><td>Class</td><td>Elemen dengan <code>class="..."</code></td><td><code>.penting</code></td></tr>
+                    <tr><td>ID</td><td>Satu elemen dengan <code>id</code></td><td><code>#utama</code></td></tr>
+                    <tr><td>Turunan (spasi)</td><td>Di dalam elemen lain, sedalam apa pun</td><td><code>ul li</code></td></tr>
+                    <tr><td>Anak langsung <code>&gt;</code></td><td>Hanya satu tingkat di bawah</td><td><code>.wrap &gt; p</code></td></tr>
+                    <tr><td>Saudara berikutnya <code>+</code></td><td>Elemen tepat setelahnya</td><td><code>h2 + p</code></td></tr>
+                    <tr><td>Atribut</td><td>Berdasarkan atribut</td><td><code>[href]</code>, <code>a[href^="#"]</code></td></tr>
+                    <tr><td>Pseudo-class</td><td>Berdasarkan keadaan/posisi</td><td><code>li:first-child</code>, <code>li:not(.aktif)</code></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Lab A · Penguji selector</h2>
+        <p>Pilih selector dan lihat elemen mana yang ikut tersorot (garis oranye).</p>
+        <div id="labA"></div>
+
+        <h2>Spesifisitas: siapa yang menang?</h2>
+        <div class="materi">
+            <p>Bila dua aturan mengenai elemen yang sama pada properti yang sama, browser memutuskan pemenang dengan urutan ini:</p>
+            <ol>
+                <li><code>!important</code> mengalahkan semuanya (hindari kecuali terpaksa).</li>
+                <li><b>Spesifisitas</b>: dihitung sebagai tiga angka <code>(ID, class/atribut/pseudo-class, elemen)</code>. Dibandingkan dari kiri ke kanan.</li>
+                <li>Bila seri: aturan yang <b>ditulis paling akhir</b> menang.</li>
+            </ol>
+            <table>
+                <thead><tr><th>Selector</th><th>Spesifisitas (a, b, c)</th></tr></thead>
+                <tbody>
+                    <tr><td><code>p</code></td><td>(0, 0, 1)</td></tr>
+                    <tr><td><code>.kata</code></td><td>(0, 1, 0)</td></tr>
+                    <tr><td><code>p.kata</code></td><td>(0, 1, 1)</td></tr>
+                    <tr><td><code>#t</code></td><td>(1, 0, 0)</td></tr>
+                    <tr><td><code>#t.kata</code></td><td>(1, 1, 0)</td></tr>
+                </tbody>
+            </table>
+            <div class="warn">Satu ID <b>mengalahkan</b> seribu class. Angkanya tidak "menjumlah" lintas kolom: (1,0,0) selalu lebih kuat dari (0,99,99).</div>
+        </div>
+
+        <h2>Lab B · Perang spesifisitas</h2>
+        <p>Dua aturan menarget paragraf yang sama (<code>&lt;p id="t" class="kata"&gt;</code>). Pilih selector masing-masing dan lihat siapa pemenangnya.</p>
+        <div id="labB"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Di Lab A, pilih <code>.wrap &gt; p</code> lalu <code>.wrap p</code>. Hasilnya sama di contoh ini; kapan keduanya akan berbeda? (Petunjuk: tambahkan <code>&lt;div&gt;&lt;p&gt;</code> di tab HTML.)</li>
+                <li>Di Lab B, pilih A = <code>p</code> dan B = <code>.kata</code>. Siapa menang, dan apakah urutan penulisan berpengaruh?</li>
+                <li>Pilih A = <code>#t</code>, B = <code>.wrap .kata</code>. Aktifkan <code>!important</code> pada B. Apa yang berubah?</li>
+                <li>Cari selector paling pendek yang tetap mengalahkan <code>.wrap .kata</code>.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        function spek(sel) {
+            let a = 0, b = 0, c = 0, s = sel;
+            s = s.replace(/:not\(([^)]*)\)/g, ' $1 ');
+            s = s.replace(/\[[^\]]*\]/g, () => { b++; return ' '; });
+            s = s.replace(/#[\w-]+/g, () => { a++; return ' '; });
+            s = s.replace(/\.[\w-]+/g, () => { b++; return ' '; });
+            s = s.replace(/::[\w-]+/g, () => { c++; return ' '; });
+            s = s.replace(/:[\w-]+(\([^)]*\))?/g, () => { b++; return ' '; });
+            s.split(/[\s>+~]+/).filter(Boolean).forEach(t => { if (/^[a-z][\w-]*$/i.test(t)) c++; });
+            return [a, b, c];
+        }
+        const cmp = (x, y) => { for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] > y[i] ? 1 : -1; return 0; };
+
+        // ----- Lab A
+        const ARTI = {
+            'p': 'semua paragraf', '.penting': 'elemen ber-class "penting"', '#utama': 'elemen ber-id "utama"', 'ul li': 'li di dalam ul',
+            '.wrap > p': 'paragraf anak langsung .wrap', 'h2 + p': 'paragraf tepat setelah h2', 'p span': 'span di dalam paragraf',
+            'li:first-child': 'li pertama dalam induknya', 'li:last-child': 'li terakhir', 'li:nth-child(2n)': 'li urutan genap',
+            'li:not(.aktif)': 'li yang tidak ber-class aktif', '[href]': 'elemen yang punya atribut href', 'a[href^="#"]': 'tautan yang href-nya diawali #',
+            'p ~ ul': 'ul yang didahului paragraf (saudara)', '.aktif + li': 'li tepat setelah .aktif', '*': 'semua elemen'
+        };
+        initLab({
+            root: 'labA', height: 380,
+            base: `.wrap { background: #f8fafc; padding: 12px; border-radius: 8px; } ul { margin: 6px 0; }`,
+            html: `<div class="wrap" id="utama">
+  <h2 class="judul">Judul</h2>
+  <p>Paragraf biasa dengan <span class="penting">kata penting</span> di dalamnya.</p>
+  <p class="catatan">Paragraf catatan.</p>
+  <ul>
+    <li>Satu</li>
+    <li class="aktif">Dua (aktif)</li>
+    <li>Tiga</li>
+    <li>Empat</li>
+  </ul>
+  <a href="#" class="tombol">Tautan</a>
+</div>`,
+            controls: [{ id: 'sel', label: 'Selector', type: 'select', options: Object.keys(ARTI), value: 'li:not(.aktif)' }],
+            css: v => `${v.sel} {\n  outline: 3px solid #f59e0b;\n  background: #fef3c7;\n}`,
+            info(d, v) {
+                let n = 0; try { n = d.querySelectorAll(v.sel).length; } catch (e) { }
+                const s = spek(v.sel);
+                return `🎯 Memilih <b>${n}</b> elemen · artinya: <b>${ARTI[v.sel]}</b><br>⚖ Spesifisitas: <b>(${s.join(', ')})</b>`;
+            }
+        });
+
+        // ----- Lab B
+        const OPT = ['p', '.kata', 'p.kata', '#t', '#t.kata', '.wrap p', '.wrap .kata', 'body .wrap p.kata'];
+        initLab({
+            root: 'labB', height: 190,
+            base: `.wrap { padding: 12px; } #t { font-size: 28px; font-weight: 800; margin: 0; }`,
+            html: `<div class="wrap">
+  <p id="t" class="kata">Teks target: warna apa aku?</p>
+</div>`,
+            controls: [
+                { id: 'a', label: 'Aturan A: selector', type: 'select', options: OPT, value: '.kata' },
+                { id: 'ca', label: 'Aturan A: warna', type: 'color', value: '#dc2626' },
+                { id: 'ia', label: 'Aturan A: !important', type: 'check', value: false },
+                { id: 'b', label: 'Aturan B: selector', type: 'select', options: OPT, value: 'p' },
+                { id: 'cb', label: 'Aturan B: warna', type: 'color', value: '#2563eb' },
+                { id: 'ib', label: 'Aturan B: !important', type: 'check', value: false },
+                { id: 'od', label: 'Urutan penulisan', type: 'select', options: ['A dulu, lalu B', 'B dulu, lalu A'], value: 'A dulu, lalu B' }
+            ],
+            css: v => {
+                const A = `${v.a} {\n  color: ${v.ca}${v.ia ? ' !important' : ''};\n}`, B = `${v.b} {\n  color: ${v.cb}${v.ib ? ' !important' : ''};\n}`;
+                return v.od === 'A dulu, lalu B' ? A + '\n\n' + B : B + '\n\n' + A;
+            },
+            info(d, v) {
+                const sa = spek(v.a), sb = spek(v.b), later = v.od === 'A dulu, lalu B' ? 'B' : 'A';
+                let w, why;
+                if (v.ia !== v.ib) { w = v.ia ? 'A' : 'B'; why = '!important mengalahkan aturan biasa'; }
+                else { const c = cmp(sa, sb); if (c) { w = c > 0 ? 'A' : 'B'; why = 'spesifisitas lebih tinggi'; } else { w = later; why = 'spesifisitas seri, menang yang ditulis paling akhir'; } }
+                const real = d.defaultView.getComputedStyle(d.getElementById('t')).color;
+                return `A <code>${v.a}</code> = (${sa.join(', ')}) · B <code>${v.b}</code> = (${sb.join(', ')})<br>🏆 Pemenang: <b>${w}</b> karena ${why}<br>🎨 Warna asli dari browser: <b>${real}</b>`;
+            }
+        });
+    </script>
+</body>
+</html>

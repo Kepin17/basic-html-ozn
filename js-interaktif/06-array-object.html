@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 · Array &amp; Object - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>6 · Array &amp; Object</h1>
+        <p class="lead"><b>Array</b> = daftar berurutan. <b>Object</b> = kumpulan data berlabel (pasangan kunci–nilai). Hampir semua data nyata adalah gabungan keduanya.</p>
+
+        <div class="materi">
+            <h3>Array</h3>
+            <table>
+                <thead><tr><th>Method</th><th>Fungsi</th><th>Mengubah array asli?</th></tr></thead>
+                <tbody>
+                    <tr><td><code>push(x)</code> / <code>pop()</code></td><td>Tambah / ambil di akhir</td><td>✅ ya</td></tr>
+                    <tr><td><code>unshift(x)</code> / <code>shift()</code></td><td>Tambah / ambil di awal</td><td>✅ ya</td></tr>
+                    <tr><td><code>map(fn)</code></td><td>Ubah tiap elemen → array baru</td><td>❌ tidak</td></tr>
+                    <tr><td><code>filter(fn)</code></td><td>Ambil yang lolos syarat</td><td>❌ tidak</td></tr>
+                    <tr><td><code>find(fn)</code></td><td>Elemen pertama yang cocok</td><td>❌ tidak</td></tr>
+                    <tr><td><code>reduce(fn, awal)</code></td><td>Menggabungkan jadi satu nilai (total)</td><td>❌ tidak</td></tr>
+                    <tr><td><code>includes(x)</code>, <code>indexOf(x)</code></td><td>Cari elemen</td><td>❌ tidak</td></tr>
+                    <tr><td><code>sort()</code>, <code>reverse()</code></td><td>Urutkan / balik</td><td>✅ ya</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Indeks dimulai dari <b>0</b>. <code>arr[0]</code> elemen pertama, <code>arr[arr.length - 1]</code> terakhir.</div>
+        </div>
+
+        <h2>Lab A · Array</h2>
+        <p>Perhatikan di inspektur: <code>harga</code> tidak berubah oleh <code>map</code>, tapi berubah oleh <code>push</code>.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Object</h3>
+<pre><code>const siswa = { nama: "Ani", umur: 16, hobi: ["baca", "renang"] };
+siswa.nama           // "Ani"       (notasi titik)
+siswa["umur"]        // 16          (notasi kurung, boleh pakai variabel)
+siswa.kelas = "XI";  // menambah properti
+const { nama, umur } = siswa;   // destructuring: ambil beberapa properti sekaligus
+const salinan = { ...siswa, umur: 17 };   // spread: salin lalu timpa</code></pre>
+        </div>
+
+        <h2>Lab B · Object &amp; data campuran</h2>
+        <div id="labB"></div>
+
+        <h2>Lab C · Tantangan</h2>
+        <div class="materi">
+            <ol>
+                <li><code>rataRata(arr)</code>: rata-rata angka. <code>rataRata([2, 4, 6])</code> = 4.</li>
+                <li><code>genapSaja(arr)</code>: array baru berisi angka genap saja (pakai <code>filter</code>).</li>
+                <li><code>totalHarga(keranjang)</code>: jumlah <code>harga × jumlah</code> dari array object (pakai <code>reduce</code>).</li>
+                <li><code>namaTermurah(produk)</code>: nama produk dengan harga terendah.</li>
+            </ol>
+        </div>
+        <div id="labC"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', vars: true, rows: 23,
+            code: `const harga = [30000, 12000, 45000, 8000];
+
+harga.push(20000);                         // tambah di akhir
+console.log("panjang:", harga.length, "| pertama:", harga[0]);
+
+const diskon = harga.map((h) => h * 0.9);       // array BARU
+const murah  = harga.filter((h) => h < 25000);  // yang lolos syarat
+const total  = harga.reduce((jml, h) => jml + h, 0);
+
+console.log("diskon:", diskon);
+console.log("murah:", murah);
+console.log("total:", total);
+console.log("ada 8000?", harga.includes(8000));
+console.log("pertama > 40rb:", harga.find((h) => h > 40000));
+console.log("terurut:", [...harga].sort((a, b) => a - b));`
+        });
+        initJS({
+            root: 'labB', vars: true, rows: 24,
+            code: `const siswa = { nama: "Ani", umur: 16, hobi: ["baca", "renang"] };
+
+console.log(siswa.nama, siswa["umur"]);
+siswa.kelas = "XI";
+const { nama, umur } = siswa;               // destructuring
+const dewasa = { ...siswa, umur: 18 };      // spread (salinan + timpa)
+console.log(nama, umur, dewasa.umur, siswa.umur);
+
+console.log(Object.keys(siswa));
+console.log(JSON.stringify(siswa));
+
+// array berisi object: bentuk data paling umum
+const produk = [
+  { nama: "Kopi", harga: 15000 },
+  { nama: "Teh", harga: 8000 },
+  { nama: "Roti", harga: 12000 },
+];
+for (const p of produk) {
+  console.log(\`\${p.nama}: Rp \${p.harga}\`);
+}
+console.log(produk.map((p) => p.nama));`
+        });
+        initJS({
+            root: 'labC', rows: 24,
+            code: `function rataRata(arr) {
+  // TODO
+}
+
+function genapSaja(arr) {
+  // TODO
+}
+
+function totalHarga(keranjang) {
+  // TODO: keranjang = [{ harga: 1000, jumlah: 2 }, ...]
+}
+
+function namaTermurah(produk) {
+  // TODO: produk = [{ nama: "A", harga: 5 }, ...]
+}`,
+            solution: `function rataRata(arr) {
+  const total = arr.reduce((a, b) => a + b, 0);
+  return total / arr.length;
+}
+
+function genapSaja(arr) {
+  return arr.filter((n) => n % 2 === 0);
+}
+
+function totalHarga(keranjang) {
+  return keranjang.reduce((jml, item) => jml + item.harga * item.jumlah, 0);
+}
+
+function namaTermurah(produk) {
+  let termurah = produk[0];
+  for (const p of produk) {
+    if (p.harga < termurah.harga) termurah = p;
+  }
+  return termurah.nama;
+}`,
+            checks: [
+                { text: 'rataRata([2, 4, 6]) = 4 dan rataRata([10]) = 10', test: "rataRata([2, 4, 6]) === 4 && rataRata([10]) === 10" },
+                { text: 'genapSaja([1,2,3,4,5,6]) = [2,4,6] (array baru)', test: "genapSaja([1,2,3,4,5,6]).join() === '2,4,6' && genapSaja([1,3]).length === 0" },
+                { text: 'totalHarga menghitung harga × jumlah', test: "totalHarga([{harga:1000,jumlah:2},{harga:500,jumlah:1}]) === 2500 && totalHarga([]) === 0" },
+                { text: 'namaTermurah memilih harga terendah', test: "namaTermurah([{nama:'A',harga:5},{nama:'B',harga:2},{nama:'C',harga:9}]) === 'B'" }
+            ]
+        });
+    </script>
+</body>
+</html>

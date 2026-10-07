@@ -1,0 +1,39 @@
+/* Tambahan gaya untuk simulator Git (dipakai bersama css-interaktif/lab.css dan js-interaktif/js.css) */
+.term { background: #0b1220; color: #d1fae5; border-radius: 8px 8px 0 0; padding: 10px 12px; font: 13px/1.5 ui-monospace, monospace; height: 270px; overflow: auto; }
+.term .to { white-space: pre-wrap; word-break: break-word; padding: 1px 0; }
+.term .cm { color: #fde68a; margin-top: 6px; }
+.term .er { color: #fca5a5; } .term .ok { color: #86efac; } .term .dm { color: #94a3b8; } .term .lg { color: #bfdbfe; }
+.prompt { display: flex; gap: 8px; align-items: center; background: #111c30; color: #86efac; padding: 8px 12px; border-radius: 0 0 8px 8px; font: 13px ui-monospace, monospace; }
+.prompt span { white-space: nowrap; }
+.prompt input { flex: 1; background: transparent; border: 0; color: #fff; font: inherit; outline: none; min-width: 0; }
+.quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.quick .mini { font-family: ui-monospace, monospace; }
+.frow { margin-bottom: 8px; } .fh { display: flex; gap: 8px; align-items: center; font-size: 14px; margin-bottom: 2px; }
+.frow textarea { min-height: 0 !important; width: 100%; background: #1e293b; color: #e2e8f0; font-size: 13px; border-radius: 6px; padding: 6px 8px; }
+.nf { padding: 3px 6px; border: 1px solid var(--line); border-radius: 6px; width: 120px; font-size: 12px; }
+.bd { font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 10px; }
+.bd.untracked { background: #fee2e2; color: #991b1b; } .bd.mod { background: #fef3c7; color: #92400e; } .bd.staged { background: #dcfce7; color: #166534; } .bd.clean { background: #e5e7eb; color: #4b5563; }
+.areas { display: flex; gap: 6px; align-items: stretch; flex-wrap: wrap; }
+.area { flex: 1; min-width: 120px; border: 2px dashed var(--line); border-radius: 8px; padding: 6px 8px; } .area h4 { margin: 0 0 6px; font-size: 12px; color: var(--muted); }
+.arrow { align-self: center; font-size: 11px; color: var(--brand2); font-weight: 700; text-align: center; max-width: 54px; }
+.chip { display: inline-block; font: 12px ui-monospace, monospace; padding: 2px 8px; border-radius: 6px; margin: 2px; }
+.chip.untracked { background: #fee2e2; color: #991b1b; } .chip.mod { background: #fef3c7; color: #92400e; } .chip.staged { background: #dcfce7; color: #166534; } .chip.clean { background: #e0e7ff; color: #3730a3; }
+.empty { color: #94a3b8; font-style: italic; font-size: 13px; }
+.graph { overflow-x: auto; background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; min-height: 80px; }
+.graph .gid { font: 11px ui-monospace, monospace; fill: #64748b; } .graph .rt { font: 600 10.5px ui-monospace, monospace; fill: #fff; }
+.graph .rf.br { fill: #2563eb; } .graph .rf.head { fill: #dc2626; } .graph .rf.rem { fill: #64748b; }
+.quiz { margin: 10px 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; } .quiz p { margin: 0 0 6px; }
+.opt { display: block; width: 100%; text-align: left; margin: 4px 0; padding: 7px 12px; border: 1px solid var(--line); border-radius: 8px; background: #f8fafc; }
+.opt:hover { border-color: var(--brand); } .opt.benar { background: #dcfce7; border-color: #16a34a; } .opt.salah { background: #fee2e2; border-color: #dc2626; }
+.fb { font-size: 14px; margin-top: 4px; font-weight: 600; }
+/* linter pesan komit */
+.lint { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; } @media (max-width: 800px) { .lint { grid-template-columns: 1fr; } }
+.lint textarea { min-height: 150px; color: #bbf7d0; }
+.score { font-size: 38px; font-weight: 800; line-height: 1; } .score small { font-size: 14px; color: var(--muted); font-weight: 400; }
+.rules { list-style: none; padding: 0; margin: 10px 0 0; font-size: 14px; } .rules li { padding: 3px 0; } .rules li::before { content: "✗ "; color: #dc2626; font-weight: 700; }
+.rules li.ok::before { content: "✓ "; color: #16a34a; } .rules li.ok { color: #166534; } .rules li.warn::before { content: "! "; color: #d97706; font-weight: 700; } .rules li.warn { color: #92400e; }
+.rewrite { border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; margin: 10px 0; background: #fff; }
+.rewrite input { width: 100%; padding: 8px; font: 14px ui-monospace, monospace; border: 1px solid var(--line); border-radius: 6px; margin-top: 6px; }
+.rewrite .bad { background: #fee2e2; padding: 2px 8px; border-radius: 6px; font: 14px ui-monospace, monospace; }
+.rewrite .res { font-size: 14px; margin-top: 4px; font-weight: 600; }
+.flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; } .flow .st { background: #eef2ff; border: 2px solid #c7d2fe; border-radius: 10px; padding: 8px 14px; font-weight: 600; font-size: 14px; } .flow .ar { color: var(--brand2); font-weight: 800; }

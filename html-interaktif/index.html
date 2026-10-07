@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>HTML Interaktif</h1>
+        <p class="lead">Belajar HTML dengan menulis langsung. Setiap lab punya <b>pratinjau live</b>, <b>pohon DOM</b>, dan <b>pemeriksa otomatis</b> yang memberi tahu bagian mana yang sudah benar.</p>
+        <div class="materi">
+            <h3>Cara memakai</h3>
+            <ol>
+                <li>Baca penjelasan singkat dan lihat tabel tag-nya.</li>
+                <li>Ubah kode di editor. Hasilnya langsung tampil di kanan, dan <b>Pohon DOM</b> menunjukkan bagaimana browser membaca HTML-mu.</li>
+                <li>Kerjakan tantangan. Centang hijau berarti syarat terpenuhi. Macet? Buka <b>💡 Lihat solusi</b>.</li>
+            </ol>
+            <div class="tip">Browser itu <b>pemaaf</b>: tag yang salah tetap ditampilkan seolah benar. Itu sebabnya pohon DOM dan pemeriksa berguna: kamu melihat apa yang <i>sebenarnya</i> dipahami browser.</div>
+        </div>
+        <div class="cards" id="cards"></div>
+        <div class="materi" style="margin-top:28px"><h3>Setelah ini</h3>
+            <p>Lanjut ke <a href="../css-interaktif/index.html">CSS Interaktif</a>, <a href="../js-interaktif/index.html">JavaScript Interaktif</a>, lalu uji logikamu di <a href="../studi-kasus/index.html">Studi Kasus</a>. Lihat urutan lengkapnya di <a href="../index.html">menu utama</a>.</p></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        const info = {
+            '01-dokumen.html': 'doctype, html, head, body, meta charset/viewport, title.',
+            '02-teks.html': 'Heading, paragraf, strong/em, blockquote, code, br, hr.',
+            '03-link-media.html': 'Tautan, gambar, figure, video, audio, dan jalur file.',
+            '04-list-tabel.html': 'ul, ol, dl, list bersarang, tabel lengkap dengan colspan.',
+            '05-form.html': 'input, label, select, radio, checkbox, validasi bawaan.',
+            '06-semantik.html': 'header/nav/main/article/aside/footer dan aksesibilitas dasar.',
+            '07-elemen-modern.html': 'details, dialog, progress, meter, datalist, time.',
+            '08-temukan-bug.html': 'Debug HTML yang rusak: kamu jadi detektif.'
+        };
+        document.getElementById('cards').innerHTML = LESSONS.slice(1).map(([h, t], i) =>
+            `<a class="card" href="${h}"><span class="no">${i + 1}</span><h3>${t.replace(/^\d+ · /, '')}</h3><p>${info[h]}</p></a>`).join('');
+    </script>
+</body>
+</html>

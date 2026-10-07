@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 · DOM: Membuat &amp; Menghapus - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>8 · DOM: Membuat &amp; Menghapus Elemen</h1>
+        <p class="lead">Halaman nyata jarang statis: daftar produk, komentar, dan notifikasi dibuat oleh JavaScript <b>dari data</b>. Inilah teknik dasarnya.</p>
+
+        <div class="materi">
+            <h3>Tiga langkah membuat elemen</h3>
+<pre><code>const li = document.createElement("li");   // 1. buat (belum tampil)
+li.textContent = "Item baru";               // 2. isi / atur
+daftar.appendChild(li);                      // 3. pasang ke halaman (baru tampil)</code></pre>
+            <table>
+                <thead><tr><th>Method</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>createElement("tag")</code></td><td>Membuat elemen baru di memori</td></tr>
+                    <tr><td><code>parent.append(a, b)</code> / <code>appendChild(a)</code></td><td>Menambah di <b>akhir</b> (append bisa banyak sekaligus)</td></tr>
+                    <tr><td><code>parent.prepend(a)</code></td><td>Menambah di <b>awal</b></td></tr>
+                    <tr><td><code>el.remove()</code></td><td>Menghapus elemen itu</td></tr>
+                    <tr><td><code>parent.replaceChildren()</code></td><td>Mengosongkan semua isi (atau menggantinya)</td></tr>
+                    <tr><td><code>el.closest("selector")</code></td><td>Naik ke leluhur terdekat yang cocok (berguna saat menghapus kartu dari tombolnya)</td></tr>
+                    <tr><td><code>el.insertAdjacentHTML("beforeend", "&lt;li&gt;..&lt;/li&gt;")</code></td><td>Menyisipkan HTML string (cepat, tapi hati-hati dengan data pengguna)</td></tr>
+                </tbody>
+            </table>
+            <div class="warn">Elemen yang sudah dibuat tapi <b>belum di-append</b> tidak muncul. Lupa langkah 3 adalah kesalahan paling sering.</div>
+        </div>
+
+        <h2>Lab A · Membangun daftar dari array</h2>
+        <p>Lihat pohon DOM di kanan berubah. Tambahkan satu nama ke array <code>nama</code> dan jalankan lagi.</p>
+        <div id="labA"></div>
+
+        <h2>Lab B · Tantangan: kartu produk dengan tombol hapus</h2>
+        <div class="materi">
+            <p>Dari array <code>produk</code>, buat satu kartu per produk di dalam <code>#produk</code> dengan struktur:</p>
+<pre><code>&lt;div class="kartu"&gt;
+  &lt;h3&gt;Kopi&lt;/h3&gt;
+  &lt;p&gt;Rp 15000&lt;/p&gt;
+  &lt;button class="hapus"&gt;Hapus&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+            <p>Tombol <b>Hapus</b> harus menghapus kartunya sendiri (<code>closest(".kartu").remove()</code>).</p>
+        </div>
+        <div id="labB"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', preview: true, dom: true, auto: true, height: 170, rows: 15,
+            base: `li { padding: 2px 0; }`,
+            html: `<h3>Daftar teman</h3>
+<ul id="daftar"></ul>`,
+            code: `const nama = ["Ani", "Budi", "Citra"];
+const daftar = document.querySelector("#daftar");
+
+for (const n of nama) {
+  const li = document.createElement("li");
+  li.textContent = n;
+  daftar.appendChild(li);
+}
+
+console.log("jumlah item:", daftar.children.length);`
+        });
+        initJS({
+            root: 'labB', preview: true, dom: true, auto: true, height: 260, rows: 18,
+            base: `.kartu { display: flex; align-items: center; gap: 12px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; margin-bottom: 8px; }
+                   .kartu h3 { margin: 0; flex: 1; font-size: 16px; } .kartu p { margin: 0; color: #475569; } .hapus { background: #fee2e2; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; }`,
+            html: `<div id="produk"></div>`,
+            code: `const produk = [
+  { nama: "Kopi", harga: 15000 },
+  { nama: "Teh", harga: 8000 },
+  { nama: "Roti", harga: 12000 },
+];
+const wadah = document.querySelector("#produk");
+
+// TODO: untuk tiap produk buat .kartu (h3, p, button.hapus)
+`,
+            solution: `const produk = [
+  { nama: "Kopi", harga: 15000 },
+  { nama: "Teh", harga: 8000 },
+  { nama: "Roti", harga: 12000 },
+];
+const wadah = document.querySelector("#produk");
+
+for (const p of produk) {
+  const kartu = document.createElement("div");
+  kartu.className = "kartu";
+
+  const judul = document.createElement("h3");
+  judul.textContent = p.nama;
+
+  const harga = document.createElement("p");
+  harga.textContent = "Rp " + p.harga;
+
+  const hapus = document.createElement("button");
+  hapus.className = "hapus";
+  hapus.textContent = "Hapus";
+  hapus.addEventListener("click", () => kartu.remove());
+
+  kartu.append(judul, harga, hapus);
+  wadah.appendChild(kartu);
+}`,
+            checks: [
+                { text: 'Ada 3 elemen <code>.kartu</code> di dalam #produk', test: "document.querySelectorAll('#produk .kartu').length === 3" },
+                { text: 'Judul kartu pertama = "Kopi"', test: "document.querySelector('#produk .kartu h3').textContent === 'Kopi'" },
+                { text: 'Harga tampil dengan awalan "Rp"', test: "document.querySelector('#produk .kartu p').textContent.indexOf('Rp') === 0" },
+                { text: 'Tiap kartu punya tombol .hapus', test: "document.querySelectorAll('#produk .hapus').length === 3" },
+                { text: 'Klik Hapus menghilangkan kartu (3 → 2)', test: "(document.querySelector('#produk .hapus').click(), document.querySelectorAll('#produk .kartu').length === 2)" }
+            ]
+        });
+    </script>
+</body>
+</html>

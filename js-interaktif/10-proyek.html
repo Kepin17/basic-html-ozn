@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 · Proyek To-do - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>10 · Proyek: Aplikasi To-do</h1>
+        <p class="lead">Saatnya menggabungkan semuanya: variabel, fungsi, kondisi, array, DOM, dan event menjadi satu aplikasi kecil yang benar-benar bisa dipakai.</p>
+
+        <div class="materi">
+            <h3>Spesifikasi</h3>
+            <ol>
+                <li>Mengirim form (<code>submit</code>) menambah tugas ke <code>#daftar</code>. Gunakan <code>preventDefault()</code>.</li>
+                <li>Teks kosong atau hanya spasi <b>tidak boleh</b> ditambahkan.</li>
+                <li>Setelah menambah, kolom isian dikosongkan.</li>
+                <li>Tiap tugas berbentuk <code>&lt;li&gt;&lt;span class="teks"&gt;…&lt;/span&gt;&lt;button class="hapus"&gt;✕&lt;/button&gt;&lt;/li&gt;</code>.</li>
+                <li>Mengklik <code>.teks</code> menandai selesai (toggle class <code>selesai</code> pada <code>li</code>-nya).</li>
+                <li>Mengklik <code>.hapus</code> menghapus tugas.</li>
+                <li><code>#sisa</code> selalu menampilkan <b>jumlah tugas yang belum selesai</b>.</li>
+            </ol>
+            <div class="tip"><b>Strategi:</b> kerjakan satu per satu dan perhatikan centang di bawah. Pakai <b>satu</b> listener pada <code>#daftar</code> untuk klik (delegation), dan satu fungsi <code>hitungSisa()</code> yang dipanggil setiap ada perubahan.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Pengembangan lanjutan (di luar lab)</h3>
+            <ul>
+                <li>Simpan tugas ke <code>localStorage</code> agar tidak hilang saat halaman dimuat ulang. (Tidak bisa di lab ini karena berjalan di iframe terisolasi, tapi bisa di file HTML-mu sendiri.)</li>
+                <li>Tambah tombol filter: Semua / Aktif / Selesai.</li>
+                <li>Edit teks tugas dengan klik dua kali (<code>dblclick</code>).</li>
+                <li>Simpan data sebagai array object <code>[{ teks, selesai }]</code>, lalu <i>render</i> ulang daftar dari array setiap ada perubahan.</li>
+            </ul>
+            <h3>Yang sudah kamu kuasai</h3>
+            <table>
+                <thead><tr><th>Materi</th><th>Dipakai di proyek ini</th></tr></thead>
+                <tbody>
+                    <tr><td>Variabel &amp; tipe</td><td><code>const form = ...</code>, string dari input</td></tr>
+                    <tr><td>Kondisi</td><td>Menolak teks kosong</td></tr>
+                    <tr><td>Fungsi</td><td><code>tambahTugas()</code>, <code>hitungSisa()</code></td></tr>
+                    <tr><td>DOM</td><td><code>createElement</code>, <code>classList</code>, <code>remove()</code></td></tr>
+                    <tr><td>Event</td><td><code>submit</code>, <code>click</code>, delegation</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        const sub = (v) => `(function(){var f=document.querySelector('#form'),i=document.querySelector('#isi');i.value=${JSON.stringify(v)};f.dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));})()`;
+        initJS({
+            preview: true, dom: true, auto: false, height: 300, rows: 24,
+            base: `body { max-width: 420px; } form { display: flex; gap: 6px; } #isi { flex: 1; padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; font-size: 15px; }
+                   form button { padding: 8px 14px; background: #2563eb; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+                   ul { list-style: none; padding: 0; } li { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 6px; }
+                   .teks { flex: 1; cursor: pointer; } .selesai .teks { text-decoration: line-through; color: #94a3b8; }
+                   .hapus { border: 0; background: #fee2e2; color: #b91c1c; border-radius: 4px; cursor: pointer; }`,
+            html: `<h2>To-do</h2>
+<form id="form">
+  <input id="isi" placeholder="Tulis tugas..." autocomplete="off">
+  <button>Tambah</button>
+</form>
+<ul id="daftar"></ul>
+<p><b id="sisa">0</b> tugas belum selesai</p>`,
+            code: `const form = document.querySelector("#form");
+const isi = document.querySelector("#isi");
+const daftar = document.querySelector("#daftar");
+const sisa = document.querySelector("#sisa");
+
+function hitungSisa() {
+  // TODO: tampilkan jumlah li yang BELUM punya class "selesai"
+}
+
+function tambahTugas(teks) {
+  // TODO: buat li > span.teks + button.hapus, lalu masukkan ke daftar
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  // TODO: ambil isi.value, tolak jika kosong, tambah, kosongkan input
+});
+
+daftar.addEventListener("click", (e) => {
+  // TODO: delegation untuk .teks (toggle selesai) dan .hapus (remove)
+});
+`,
+            solution: `const form = document.querySelector("#form");
+const isi = document.querySelector("#isi");
+const daftar = document.querySelector("#daftar");
+const sisa = document.querySelector("#sisa");
+
+function hitungSisa() {
+  sisa.textContent = daftar.querySelectorAll("li:not(.selesai)").length;
+}
+
+function tambahTugas(teks) {
+  const li = document.createElement("li");
+
+  const span = document.createElement("span");
+  span.className = "teks";
+  span.textContent = teks;
+
+  const hapus = document.createElement("button");
+  hapus.className = "hapus";
+  hapus.textContent = "✕";
+
+  li.append(span, hapus);
+  daftar.appendChild(li);
+  hitungSisa();
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const teks = isi.value.trim();
+  if (!teks) return;
+  tambahTugas(teks);
+  isi.value = "";
+  isi.focus();
+});
+
+daftar.addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  if (e.target.classList.contains("hapus")) {
+    li.remove();
+  } else if (e.target.classList.contains("teks")) {
+    li.classList.toggle("selesai");
+  }
+  hitungSisa();
+});`,
+            checks: [
+                { text: 'Submit menambah 1 tugas bertuliskan isian', test: "(" + sub('Belajar JS') + ", document.querySelectorAll('#daftar li').length === 1 && document.querySelector('#daftar li .teks').textContent === 'Belajar JS')" },
+                { text: 'Kolom isian dikosongkan setelah menambah', test: "document.querySelector('#isi').value === ''" },
+                { text: '#sisa menampilkan 1', test: "document.querySelector('#sisa').textContent.trim() === '1'" },
+                { text: 'Teks kosong / spasi saja ditolak', test: "(" + sub('   ') + ", document.querySelectorAll('#daftar li').length === 1)" },
+                { text: 'Klik .teks menandai selesai dan #sisa menjadi 0', test: "(document.querySelector('#daftar .teks').click(), document.querySelector('#daftar li').classList.contains('selesai') && document.querySelector('#sisa').textContent.trim() === '0')" },
+                { text: 'Klik .hapus menghapus tugas dan sisa tetap benar', test: "(" + sub('Tugas 2') + ", document.querySelector('#daftar .hapus').click(), document.querySelectorAll('#daftar li').length === 1 && document.querySelector('#daftar .teks').textContent === 'Tugas 2' && document.querySelector('#sisa').textContent.trim() === '1')" }
+            ]
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11 · Satuan &amp; Variabel - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>11 · Satuan &amp; Variabel</h1>
+        <p class="lead">Memilih satuan yang tepat membuat halaman lentur. Variabel CSS membuat satu perubahan bisa mengubah seluruh tema.</p>
+
+        <div class="materi">
+            <h3>Satuan panjang</h3>
+            <table>
+                <thead><tr><th>Satuan</th><th>Relatif terhadap</th><th>Cocok untuk</th></tr></thead>
+                <tbody>
+                    <tr><td><code>px</code></td><td>Piksel layar (tetap)</td><td>Garis tipis, bayangan, ukuran kecil</td></tr>
+                    <tr><td><code>%</code></td><td>Ukuran <b>induk</b></td><td>Lebar kolom, gambar fleksibel</td></tr>
+                    <tr><td><code>em</code></td><td>font-size <b>elemen itu</b> (atau induknya)</td><td>Padding yang ikut ukuran huruf</td></tr>
+                    <tr><td><code>rem</code></td><td>font-size elemen <code>html</code> (akar)</td><td>Ukuran huruf dan jarak yang konsisten</td></tr>
+                    <tr><td><code>vw</code> / <code>vh</code></td><td>1% lebar / tinggi layar</td><td>Hero setinggi layar, huruf judul besar</td></tr>
+                    <tr><td><code>ch</code></td><td>Lebar karakter "0"</td><td>Lebar teks nyaman dibaca (<code>max-width: 65ch</code>)</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Cara cepat: <b>rem</b> untuk huruf &amp; jarak, <b>%</b> atau <b>fr</b> untuk lebar tata letak, <b>px</b> untuk detail halus.</div>
+        </div>
+
+        <h2>Lab A · Satuan</h2>
+        <p>Ubah ukuran huruf akar, ukuran huruf kontainer, dan lebar layar. Perhatikan satuan mana yang ikut berubah dan mana yang tidak.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Variabel CSS (custom properties)</h3>
+<pre><code>:root { --utama: #2563eb; --radius: 12px; }   /* didefinisikan */
+.btn { background: var(--utama);                /* dipakai */
+       border-radius: var(--radius); }
+.btn { padding: calc(var(--jarak) / 2); }       /* boleh dihitung */</code></pre>
+            <ul>
+                <li>Nama diawali <code>--</code>. Dibaca dengan <code>var(--nama)</code>. Cadangan: <code>var(--x, merah)</code>.</li>
+                <li>Berlaku di <b>elemen tempat didefinisikan dan semua anaknya</b>. Mendefinisikan ulang di elemen tertentu mengubah tema bagian itu saja, dasar mode gelap.</li>
+            </ul>
+        </div>
+
+        <h2>Lab B · Tema dengan variabel</h2>
+        <div id="labB"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Di Lab A, ubah <code>html { font-size }</code> dari 16 ke 24px. Hanya satuan <b>rem</b> (dan em yang bergantung padanya) yang berubah.</li>
+                <li>Perkecil lebar layar. Elemen <code>vw</code> ikut menyempit, <code>px</code> tidak.</li>
+                <li>Di Lab B, ubah <b>warna utama</b> saja. Perhatikan tombol, garis atas kartu, dan lencana ikut berganti.</li>
+                <li>Aktifkan <b>mode gelap</b> lalu buka CSS: hanya variabel yang ditimpa, aturan lain tidak disentuh.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        initLab({
+            root: 'labA', height: 360,
+            base: `body { margin: 0; } .kontainer { background: #eef2ff; padding: 8px; }
+                   .b { background: #6366f1; color: #fff; padding: 6px 8px; margin-bottom: 6px; font-weight: 700; white-space: nowrap; overflow: hidden; border-radius: 4px; font-size: 14px; }
+                   .b.em, .b.rem { background: #0ea5e9; } .b.vw { background: #f97316; } .b.ch { background: #10b981; } .b.pct { background: #8b5cf6; }`,
+            html: `<div class="kontainer">
+  <div class="b px">width: 200px</div>
+  <div class="b pct">width: 50%</div>
+  <div class="b em">width: 12em</div>
+  <div class="b rem">width: 12rem</div>
+  <div class="b vw">width: 30vw</div>
+  <div class="b ch">width: 30ch</div>
+</div>`,
+            controls: [
+                { id: 'rt', label: 'html font-size (rem)', type: 'range', min: 10, max: 28, value: 16, unit: 'px' },
+                { id: 'kf', label: '.kontainer font-size (em)', type: 'range', min: 10, max: 28, value: 16, unit: 'px' },
+                { id: 'kw', label: '.kontainer width', type: 'range', min: 200, max: 800, step: 10, value: 500, unit: 'px' },
+                { id: 'pw', label: 'Lebar layar simulasi (vw)', type: 'range', min: 320, max: 900, step: 10, value: 700, unit: 'px', frame: true }
+            ],
+            css: v => `html { font-size: ${v.rt}px; }
+
+.kontainer {
+  font-size: ${v.kf}px;
+  width: ${v.kw}px;
+}
+
+.px  { width: 200px; }
+.pct { width: 50%; }
+.em  { width: 12em; }
+.rem { width: 12rem; }
+.vw  { width: 30vw; }
+.ch  { width: 30ch; }`,
+            info(d) {
+                const out = ['px', 'pct', 'em', 'rem', 'vw', 'ch'].map(k => { const e = d.querySelector('.b.' + k); return `${k}: <b>${Math.round(e.getBoundingClientRect().width)}px</b>`; });
+                return '📏 Lebar sebenarnya hasil hitungan browser:<br>' + out.join(' · ');
+            }
+        });
+
+        initLab({
+            root: 'labB', height: 360,
+            base: `body { margin: 0; padding: 12px; background: #cbd5e1; }`,
+            html: v => `<div class="kartu${v.dk ? ' gelap' : ''}">
+  <span class="lencana">Baru</span>
+  <h3>Kartu bertema</h3>
+  <p>Seluruh warna dan jarak di sini dibaca dari variabel CSS.</p>
+  <a class="btn" href="#">Beli sekarang</a>
+</div>`,
+            controls: [
+                { id: 'ut', label: '--utama', type: 'color', value: '#2563eb' },
+                { id: 'rd', label: '--radius', type: 'range', min: 0, max: 40, value: 12, unit: 'px' },
+                { id: 'jr', label: '--jarak', type: 'range', min: 8, max: 40, value: 20, unit: 'px' },
+                { id: 'dk', label: 'Mode gelap (timpa variabel)', type: 'check', value: false }
+            ],
+            css: v => `:root {
+  --utama: ${v.ut};
+  --latar: #ffffff;
+  --teks: #1f2937;
+  --radius: ${v.rd}px;
+  --jarak: ${v.jr}px;
+}${v.dk ? `
+
+.gelap {
+  --latar: #111827;
+  --teks: #f3f4f6;
+}` : ''}
+
+.kartu {
+  background: var(--latar);
+  color: var(--teks);
+  padding: var(--jarak);
+  border-radius: var(--radius);
+  border-top: 6px solid var(--utama);
+  max-width: 340px;
+}
+
+.btn {
+  display: inline-block;
+  background: var(--utama);
+  color: #fff;
+  text-decoration: none;
+  padding: calc(var(--jarak) / 2) var(--jarak);
+  border-radius: var(--radius);
+}
+
+.lencana {
+  background: var(--utama);
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: var(--radius);
+  font-size: 12px;
+}`,
+            info: v => `🎛 Mengganti <b>satu variabel</b> mengubah semua tempat yang memakainya.${v.dk ? ' Mode gelap hanya menimpa <code>--latar</code> dan <code>--teks</code>.' : ''}`
+        });
+    </script>
+</body>
+</html>

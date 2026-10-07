@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6 · Posisi &amp; Z-index - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>6 · Posisi &amp; Z-index</h1>
+        <p class="lead">Secara bawaan elemen mengalir dari atas ke bawah. Properti <code>position</code> memungkinkan kamu menggesernya, menumpuknya, atau menempelkannya.</p>
+
+        <div class="materi">
+            <table>
+                <thead><tr><th>Nilai</th><th>Perilaku</th></tr></thead>
+                <tbody>
+                    <tr><td><code>static</code></td><td>Bawaan. <code>top/left</code> diabaikan</td></tr>
+                    <tr><td><code>relative</code></td><td>Bergeser dari posisi aslinya; tempat aslinya tetap tersisa</td></tr>
+                    <tr><td><code>absolute</code></td><td>Keluar dari alur; posisi dihitung dari <b>induk terdekat yang bukan static</b></td></tr>
+                    <tr><td><code>fixed</code></td><td>Menempel ke layar (viewport), tidak ikut scroll</td></tr>
+                    <tr><td><code>sticky</code></td><td>Normal dulu, lalu menempel saat scroll mencapai batas <code>top</code></td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Rumus ingatan: untuk menempatkan anak dengan <code>absolute</code>, beri induknya <code>position: relative</code>. Ubah "Posisi induk" di lab untuk melihat bedanya.</div>
+            <div class="warn"><code>z-index</code> hanya bekerja pada elemen yang <code>position</code>-nya bukan <code>static</code>. Kotak hijau C punya z-index 1 dan sengaja menimpa B.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Pilih <code>absolute</code> dengan induk <code>static</code>, lalu ubah induk ke <code>relative</code>. Kotak B pindah titik acuannya.</li>
+                <li>Buat kotak biru B <b>di atas</b> hijau C: naikkan <code>z-index</code> hingga 2.</li>
+                <li>Pilih <code>sticky</code> dengan <code>top: 0</code>, lalu scroll di dalam kotak hasil.</li>
+                <li>Pilih <code>fixed</code> dan scroll. Bandingkan dengan <code>absolute</code>.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const NOTE = {
+            static: 'Elemen mengikuti alur normal. <code>top</code> dan <code>left</code> <b>tidak berpengaruh</b>.',
+            relative: 'Bergeser dari tempat aslinya. Ruang aslinya tetap kosong, jadi elemen lain tidak naik.',
+            absolute: 'Keluar dari alur (A dan C merapat). Posisi dihitung dari induk ber-position, atau halaman bila tidak ada.',
+            fixed: 'Menempel pada layar. Scroll di dalam hasil: kotak B tidak ikut bergerak.',
+            sticky: 'Berperilaku normal sampai scroll mencapai <code>top</code>, lalu menempel. Scroll di dalam hasil untuk mencobanya.'
+        };
+        initLab({
+            height: 400,
+            base: `.parent { border: 2px dashed #888; padding: 10px; margin: 10px; height: 700px; background: #fafafa; }
+                   .box { width: 130px; height: 70px; margin-bottom: 10px; color: #fff; font-weight: 700; display: grid; place-items: center; border-radius: 8px; text-align: center; font-size: 13px; }
+                   .a { background: #ef4444; } .b { background: #3b82f6; }
+                   .c { background: #22c55e; position: relative; z-index: 1; margin-top: -30px; margin-left: 50px; }`,
+            html: `<div class="parent">
+  <div class="box a">A (static)</div>
+  <div class="box b">B (diatur)</div>
+  <div class="box c">C (z-index: 1)</div>
+  <p>Scroll di dalam kotak hasil. ↓</p>
+</div>`,
+            controls: [
+                { id: 'pos', label: 'position (kotak B)', type: 'select', options: ['static', 'relative', 'absolute', 'fixed', 'sticky'], value: 'relative' },
+                { id: 'top', label: 'top', type: 'range', min: -40, max: 200, value: 20, unit: 'px' },
+                { id: 'left', label: 'left', type: 'range', min: -40, max: 300, value: 60, unit: 'px' },
+                { id: 'z', label: 'z-index (kotak B)', type: 'range', min: -1, max: 5, value: 0 },
+                { id: 'pp', label: 'Posisi induk (.parent)', type: 'select', options: ['static', 'relative'], value: 'static' }
+            ],
+            css: v => `.parent {
+  position: ${v.pp};
+}
+
+.b {
+  position: ${v.pos};
+  top: ${v.top}px;
+  left: ${v.left}px;
+  z-index: ${v.z};
+}`,
+            info: (d, v) => '💡 ' + NOTE[v.pos] + (v.pos === 'absolute' ? ` Induk: <b>${v.pp}</b> ${v.pp === 'relative' ? '→ acuan = kotak putus-putus' : '→ acuan = halaman'}.` : '')
+        });
+    </script>
+</body>
+</html>

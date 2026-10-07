@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus: Melatih Logika</h1>
+        <p class="lead">Belajar sintaks saja tidak cukup. Kemampuan utama programmer adalah <b>memecah masalah</b>. Di sini kamu diberi cerita, syarat, dan <b>pemeriksa otomatis</b>: tugasmu menulis kode HTML, CSS, dan JavaScript sampai semua centang hijau.</p>
+
+        <div class="materi">
+            <h3>🧠 Cara berpikir memecahkan masalah</h3>
+            <ol>
+                <li><b>Pahami.</b> Baca syarat dua kali. Tulis ulang dengan kata-katamu sendiri. Apa input? Apa output?</li>
+                <li><b>Contohkan.</b> Hitung/gambar 2–3 contoh di kertas, termasuk <b>kasus tepi</b> (kosong, nol, satu elemen, duplikat, batas nilai).</li>
+                <li><b>Pecah.</b> Bagi masalah besar menjadi langkah-langkah kecil yang bisa kamu kerjakan satu per satu.</li>
+                <li><b>Kerjakan versi paling sederhana dulu.</b> Buat satu centang hijau, baru lanjut ke berikutnya.</li>
+                <li><b>Uji &amp; perbaiki.</b> Baca pesan error dan baris yang disebut. Gunakan <code>console.log</code> untuk melihat isi variabel.</li>
+                <li><b>Rapikan.</b> Setelah jalan, beri nama yang jelas dan hapus pengulangan.</li>
+            </ol>
+            <div class="tip">Buntu lebih dari 15 menit? Buka <b>Petunjuk bertahap</b> satu per satu. <b>💡 Lihat solusi</b> sebaiknya terakhir; setelah melihat, tutup lalu tulis ulang sendiri tanpa menyalin.</div>
+        </div>
+
+        <div class="cards" id="cards"></div>
+        <div class="materi" style="margin-top:28px">
+            <h3>Tingkat kesulitan</h3>
+            <table>
+                <thead><tr><th>Level</th><th>Artinya</th></tr></thead>
+                <tbody>
+                    <tr><td>⭐ Mudah</td><td>Satu keterampilan, langkah jelas</td></tr>
+                    <tr><td>⭐⭐ Sedang</td><td>Menggabungkan 2–3 konsep</td></tr>
+                    <tr><td>⭐⭐⭐ Menantang</td><td>Perlu merancang logika dan kasus tepi</td></tr>
+                    <tr><td>⭐⭐⭐⭐ Sulit</td><td>Banyak aturan atau banyak lapisan (HTML + CSS + JS)</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        const info = {
+            '01-cv.html': ['⭐', 'HTML semantik: CV online dengan navigasi dan tautan aman.'],
+            '02-menu-restoran.html': ['⭐', 'CSS: tabel menu zebra, hover, dan rata kanan.'],
+            '03-navbar-responsif.html': ['⭐⭐', 'Flexbox + media query: navbar laptop dan HP.'],
+            '04-kartu-harga.html': ['⭐⭐', 'Grid 3 kolom → 1 kolom, paket unggulan.'],
+            '05-kalkulator-tip.html': ['⭐⭐', 'JS: fungsi murni, validasi, sambung ke DOM.'],
+            '06-validator-password.html': ['⭐⭐', 'JS: aturan sebagai data, regex, render live.'],
+            '07-tebak-angka.html': ['⭐⭐⭐', 'JS: state, closure, kasus tepi.'],
+            '08-filter-pencarian.html': ['⭐⭐⭐', 'JS: pencarian live + kategori (logika AND).'],
+            '09-keranjang.html': ['⭐⭐⭐', 'JS: array of object, immutability, diskon.'],
+            '10-logika-algoritma.html': ['⭐⭐⭐⭐', '8 soal algoritma klasik wawancara kerja.'],
+            '11-landing-page.html': ['⭐⭐⭐⭐', 'Proyek akhir: HTML + CSS + JS bersama.']
+        };
+        document.getElementById('cards').innerHTML = LESSONS.slice(1).map(([h, t], i) =>
+            `<a class="card" href="${h}"><span class="no">${i + 1}</span><h3>${t.replace(/^\d+ · /, '')}</h3><p><b>${info[h][0]}</b> ${info[h][1]}</p></a>`).join('');
+    </script>
+</body>
+</html>

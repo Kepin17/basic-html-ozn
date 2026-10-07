@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 · Elemen Modern - HTML Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>7 · Elemen Modern</h1>
+        <p class="lead">HTML5 punya banyak elemen interaktif bawaan yang bekerja <b>tanpa JavaScript</b>. Pakai ini sebelum membuat sendiri.</p>
+        <div class="materi">
+            <table>
+                <thead><tr><th>Elemen</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>details</code> + <code>summary</code></td><td>Konten yang bisa dibuka-tutup (FAQ/akordeon)</td></tr>
+                    <tr><td><code>dialog</code></td><td>Kotak dialog (atribut <code>open</code> menampilkannya)</td></tr>
+                    <tr><td><code>progress value max</code></td><td>Kemajuan tugas</td></tr>
+                    <tr><td><code>meter value min max low high</code></td><td>Ukuran dalam rentang (kapasitas, skor)</td></tr>
+                    <tr><td><code>datalist</code> + <code>input list</code></td><td>Saran isian (autocomplete)</td></tr>
+                    <tr><td><code>time datetime</code></td><td>Tanggal/waktu yang bisa dibaca mesin</td></tr>
+                    <tr><td><code>abbr title</code>, <code>mark</code></td><td>Singkatan berpenjelasan, teks tersorot</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <h2>Tantangan</h2>
+        <div class="materi"><ol>
+            <li><code>details</code> dengan <code>summary</code> (FAQ).</li>
+            <li><code>progress</code> berisi <code>value</code> dan <code>max</code>, <code>meter</code> dengan <code>min</code>, <code>max</code>, <code>value</code>.</li>
+            <li><code>input</code> ber-atribut <code>list</code> yang menunjuk ke <code>datalist</code> (≥ 3 option) dengan id yang cocok.</li>
+            <li><code>time</code> dengan <code>datetime</code>, <code>abbr</code> dengan <code>title</code>, dan <code>mark</code>.</li>
+            <li>Sebuah <code>dialog open</code> berisi teks dan tombol.</li>
+        </ol></div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true, dom: true, noConsole: true, auto: true, height: 300, rows: 22,
+            html: "<h2>Coba elemen modern</h2>\n",
+            solution: { html: "<details>\n  <summary>Apakah HTML bahasa pemrograman?</summary>\n  <p>Bukan, HTML adalah bahasa markup.</p>\n</details>\n\n<p>Unduhan: <progress value=\"60\" max=\"100\">60%</progress>\n   Baterai: <meter min=\"0\" max=\"100\" value=\"75\">75</meter></p>\n\n<label>Kota: <input list=\"kota\" placeholder=\"ketik...\"></label>\n<datalist id=\"kota\">\n  <option value=\"Jakarta\">\n  <option value=\"Bandung\">\n  <option value=\"Surabaya\">\n</datalist>\n\n<p>Rilis <time datetime=\"2026-10-17\">17 Oktober 2026</time>.\n   <abbr title=\"HyperText Markup Language\">HTML</abbr> itu <mark>mudah</mark>.</p>\n\n<dialog open>\n  <p>Simpan perubahan?</p>\n  <button>OK</button>\n</dialog>\n" },
+            checks: [
+                { text: '<code>details</code> berisi <code>summary</code>', test: "!!document.querySelector('details > summary')" },
+                { text: '<code>progress</code> ber-<code>value</code> dan <code>max</code>', test: "!!document.querySelector('progress[value][max]')" },
+                { text: '<code>meter</code> ber-<code>min</code>, <code>max</code>, <code>value</code>', test: "!!document.querySelector('meter[min][max][value]')" },
+                { text: '<code>input[list]</code> terhubung ke <code>datalist</code> (≥ 3 option)', test: "(function(){ var i = document.querySelector('input[list]'); if (!i) return false; var d = document.getElementById(i.getAttribute('list')); return !!d && d.tagName === 'DATALIST' && d.querySelectorAll('option').length >= 3; })()" },
+                { text: '<code>time[datetime]</code>, <code>abbr[title]</code>, dan <code>mark</code>', test: "!!document.querySelector('time[datetime]') && !!document.querySelector('abbr[title]') && !!document.querySelector('mark')" },
+                { text: '<code>dialog[open]</code> memuat teks dan <code>button</code>', test: "(function(){ var d = document.querySelector('dialog[open]'); return !!d && d.textContent.trim().length > 3 && !!d.querySelector('button'); })()" }
+            ]
+        });
+    </script>
+</body>
+</html>

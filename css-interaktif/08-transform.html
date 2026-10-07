@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 · Transform - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>8 · Transform</h1>
+        <p class="lead"><code>transform</code> menggeser, memutar, membesarkan, dan memiringkan elemen <b>tanpa mengubah tata letak</b> elemen lain di sekitarnya.</p>
+
+        <div class="materi">
+            <h3>Fungsi-fungsi transform</h3>
+            <table>
+                <thead><tr><th>Fungsi</th><th>Efek</th><th>Contoh</th></tr></thead>
+                <tbody>
+                    <tr><td><code>translate(x, y)</code></td><td>Menggeser</td><td><code>translate(40px, -20px)</code></td></tr>
+                    <tr><td><code>rotate(a)</code></td><td>Memutar searah jarum jam</td><td><code>rotate(30deg)</code></td></tr>
+                    <tr><td><code>scale(s)</code></td><td>Memperbesar / memperkecil (1 = asli)</td><td><code>scale(1.5)</code></td></tr>
+                    <tr><td><code>skew(x, y)</code></td><td>Memiringkan</td><td><code>skewX(20deg)</code></td></tr>
+                    <tr><td><code>rotateX/Y(a)</code></td><td>Memutar dalam 3D</td><td><code>rotateY(45deg)</code></td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Kotak putus-putus di hasil adalah <b>posisi asli</b> elemen. Titik merah adalah <b>transform-origin</b>, yaitu titik poros rotasi dan scale.</div>
+            <div class="warn"><b>Urutan penting!</b> Fungsi dijalankan dari <em>kanan ke kiri</em> pada sumbu elemen. Coba ganti pilihan "Urutan" di lab dan lihat posisi akhir berubah padahal angkanya sama.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Matriks</h3>
+            <p>Di bawah hasil, browser menampilkan <code>matrix(...)</code>: semua transform digabung menjadi satu matriks. Itulah yang sebenarnya dihitung GPU.</p>
+            <h3>3D dan perspective</h3>
+            <ul>
+                <li><code>perspective</code> diberi pada <b>induk</b>. Nilai kecil (300px) = efek dramatis, besar (1200px) = halus. <code>0</code> = tanpa perspektif.</li>
+                <li>Tanpa <code>perspective</code>, <code>rotateY</code> hanya terlihat seperti menyempit.</li>
+            </ul>
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Putar kotak <b>45°</b> dengan origin <code>top left</code>, lalu <code>center</code>. Bandingkan porosnya.</li>
+                <li>Buat efek <b>kartu terbalik</b>: <code>perspective 600px</code> dan <code>rotateY(180deg)</code>.</li>
+                <li>Buat tombol <b>"hover naik"</b>: <code>translateY(-6px)</code> dan <code>scale(1.05)</code>. Gabungkan dengan <code>transition</code> dari <a href="05-animasi.html">materi 5</a>.</li>
+                <li>Tukar urutan translate dan rotate lalu jelaskan kenapa hasilnya berbeda.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        const ORDER = {
+            'translate → rotate → scale': ['t', 'r', 's'],
+            'rotate → translate → scale': ['r', 't', 's'],
+            'scale → rotate → translate': ['s', 'r', 't']
+        };
+        const ORIGIN = ['center', 'top left', 'top right', 'bottom left', 'bottom right', '50% 100%', '0 50%'];
+        const ORIGIN_XY = { center: [50, 50], 'top left': [0, 0], 'top right': [100, 0], 'bottom left': [0, 100], 'bottom right': [100, 100], '50% 100%': [50, 100], '0 50%': [0, 50] };
+
+        initLab({
+            height: 400,
+            base: `.stage { height: 330px; display: grid; place-items: center; }
+                   .holder { position: relative; width: 120px; height: 120px; }
+                   .ghost { position: absolute; inset: 0; border: 2px dashed #94a3b8; border-radius: 10px; }
+                   .dot { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: #ef4444; border: 2px solid #fff; z-index: 5; }
+                   .box { position: absolute; inset: 0; background: linear-gradient(135deg, #6366f1, #06b6d4); color: #fff; border-radius: 10px;
+                          display: grid; place-items: center; font-size: 64px; font-weight: 900; font-family: Georgia, serif; opacity: 0.88; backface-visibility: visible; }`,
+            html: `<div class="stage">
+  <div class="holder">
+    <div class="ghost"><i class="dot"></i></div>
+    <div class="box">F</div>
+  </div>
+</div>`,
+            controls: [
+                { id: 'tx', label: 'translateX', type: 'range', min: -150, max: 150, value: 0, unit: 'px' },
+                { id: 'ty', label: 'translateY', type: 'range', min: -100, max: 100, value: 0, unit: 'px' },
+                { id: 'ro', label: 'rotate', type: 'range', min: -180, max: 180, step: 5, value: 0, unit: '°' },
+                { id: 'sc', label: 'scale', type: 'range', min: 0.2, max: 2.5, step: 0.05, value: 1 },
+                { id: 'sx', label: 'skewX', type: 'range', min: -60, max: 60, value: 0, unit: '°' },
+                { id: 'sy', label: 'skewY', type: 'range', min: -60, max: 60, value: 0, unit: '°' },
+                { id: 'or', label: 'transform-origin', type: 'select', options: ORIGIN, value: 'center' },
+                { id: 'od', label: 'Urutan fungsi', type: 'select', options: Object.keys(ORDER), value: 'translate → rotate → scale' },
+                { id: 'rx', label: 'rotateX (3D)', type: 'range', min: -90, max: 90, step: 5, value: 0, unit: '°' },
+                { id: 'ry', label: 'rotateY (3D)', type: 'range', min: -180, max: 180, step: 5, value: 0, unit: '°' },
+                { id: 'pe', label: 'perspective (induk)', type: 'range', min: 0, max: 1200, step: 50, value: 0, unit: 'px' },
+                { id: 'tr', label: 'Animasi halus (transition)', type: 'check', value: false }
+            ],
+            css: v => {
+                const parts = { t: `translate(${v.tx}px, ${v.ty}px)`, r: `rotate(${v.ro}deg)`, s: `scale(${v.sc})` };
+                const identity = { t: !v.tx && !v.ty, r: !v.ro, s: v.sc == 1 };
+                const list = ORDER[v.od].filter(k => !identity[k]).map(k => parts[k]);
+                if (v.sx || v.sy) list.push(`skew(${v.sx}deg, ${v.sy}deg)`);
+                if (v.rx) list.push(`rotateX(${v.rx}deg)`);
+                if (v.ry) list.push(`rotateY(${v.ry}deg)`);
+                return (v.pe > 0 ? `.stage {\n  perspective: ${v.pe}px;\n}\n\n` : '') + `.box {
+  transform-origin: ${v.or};
+  transform: ${list.length ? list.join('\n             ') : 'none'};${v.tr ? '\n  transition: transform 0.5s ease;' : ''}
+}`;
+            },
+            info(d, v) {
+                const xy = ORIGIN_XY[v.or], dot = d.querySelector('.dot');
+                if (dot) { dot.style.left = xy[0] + '%'; dot.style.top = xy[1] + '%'; }
+                const m = d.defaultView.getComputedStyle(d.querySelector('.box')).transform;
+                return `🧮 Matriks akhir: <code>${m}</code><br>📍 Titik poros (origin): <b>${v.or}</b> (titik merah)`;
+            }
+        });
+    </script>
+</body>
+</html>

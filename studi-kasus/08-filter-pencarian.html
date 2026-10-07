@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 8 · Filter Pencarian Live - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 8 · Filter Pencarian Live</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐⭐ Menantang · <b>Melatih:</b> Manipulasi DOM, menggabungkan dua filter, kasus kosong</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Katalog kursus perlu pencarian langsung (tanpa tombol) yang juga bisa digabung dengan kategori. Dua kondisi harus <b>dua-duanya terpenuhi</b> (logika AND).</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li>Mengetik di <code>#cari</code> langsung menyaring item <code>li</code> (tak peduli huruf besar/kecil). Yang tak cocok disembunyikan (<code>hidden</code> atau <code>display: none</code>).</li><li>Memilih <code>#kategori</code> menyaring berdasarkan <code>data-kategori</code>; <code>semua</code> berarti tanpa saringan.</li><li>Pencarian dan kategori bekerja <b>bersamaan</b>.</li><li><code>#jumlah</code> menampilkan "<i>n</i> hasil".</li><li>Bila tak ada hasil, <code>#kosong</code> ditampilkan; bila ada, disembunyikan.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Tulis <b>satu</b> fungsi <code>saring()</code> yang membaca kedua kontrol, lalu panggil dari kedua event. Jangan buat dua fungsi terpisah.</li><li>Untuk tiap <code>li</code> hitung <code>cocokTeks &amp;&amp; cocokKategori</code>.</li><li><code>li.dataset.kategori</code> membaca atribut <code>data-kategori</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true,
+            dom: true,
+            noConsole: true,
+            auto: true,
+            height: 330,
+            rows: 22,
+            base: "li[hidden]{display:none}",
+            html: "<h2>Katalog Kursus</h2>\n<input id=\"cari\" placeholder=\"Cari kursus...\">\n<select id=\"kategori\">\n  <option value=\"semua\">Semua</option><option value=\"web\">Web</option><option value=\"data\">Data</option><option value=\"desain\">Desain</option>\n</select>\n<p><b id=\"jumlah\">8 hasil</b></p>\n<ul id=\"daftar\">\n  <li data-kategori=\"web\">Belajar HTML</li>\n  <li data-kategori=\"web\">Belajar CSS</li>\n  <li data-kategori=\"web\">Belajar JavaScript</li>\n  <li data-kategori=\"data\">Dasar Python</li>\n  <li data-kategori=\"data\">Statistika Dasar</li>\n  <li data-kategori=\"data\">SQL untuk Pemula</li>\n  <li data-kategori=\"desain\">Desain UI</li>\n  <li data-kategori=\"desain\">Desain Logo</li>\n</ul>\n<p id=\"kosong\" hidden>Tidak ada kursus yang cocok.</p>\n",
+            code: "const cari = document.querySelector(\"#cari\");\n// TODO: ambil elemen lain, tulis saring(), sambungkan event\n",
+            solution: {"js": "const cari = document.querySelector(\"#cari\");\nconst kategori = document.querySelector(\"#kategori\");\nconst daftar = document.querySelector(\"#daftar\");\nconst kosong = document.querySelector(\"#kosong\");\nconst jumlah = document.querySelector(\"#jumlah\");\n\nfunction saring() {\n  const kata = cari.value.trim().toLowerCase();\n  const kat = kategori.value;\n  let tampil = 0;\n  daftar.querySelectorAll(\"li\").forEach((li) => {\n    const cocok =\n      li.textContent.toLowerCase().includes(kata) &&\n      (kat === \"semua\" || li.dataset.kategori === kat);\n    li.hidden = !cocok;\n    if (cocok) tampil++;\n  });\n  jumlah.textContent = tampil + \" hasil\";\n  kosong.hidden = tampil !== 0;\n}\n\ncari.addEventListener(\"input\", saring);\nkategori.addEventListener(\"change\", saring);\nsaring();"},
+            checks: [
+                {"text": "Cari \"belajar\" → 3 item tampil", "test": "(function(){ function go(q,k){ var c=document.querySelector('#cari'),s=document.querySelector('#kategori'); c.value=q; c.dispatchEvent(new Event('input',{bubbles:true})); s.value=k; s.dispatchEvent(new Event('change',{bubbles:true})); }function vis(){ return Array.prototype.filter.call(document.querySelectorAll('#daftar li'),function(l){ return !l.hidden && l.style.display!=='none'; }).length; } go('belajar','semua'); return vis()===3; })()"},
+                {"text": "Tak peduli huruf besar: \"DESAIN\" → 2", "test": "(function(){ function go(q,k){ var c=document.querySelector('#cari'),s=document.querySelector('#kategori'); c.value=q; c.dispatchEvent(new Event('input',{bubbles:true})); s.value=k; s.dispatchEvent(new Event('change',{bubbles:true})); }function vis(){ return Array.prototype.filter.call(document.querySelectorAll('#daftar li'),function(l){ return !l.hidden && l.style.display!=='none'; }).length; } go('DESAIN','semua'); return vis()===2; })()"},
+                {"text": "Kategori \"data\" → 3", "test": "(function(){ function go(q,k){ var c=document.querySelector('#cari'),s=document.querySelector('#kategori'); c.value=q; c.dispatchEvent(new Event('input',{bubbles:true})); s.value=k; s.dispatchEvent(new Event('change',{bubbles:true})); }function vis(){ return Array.prototype.filter.call(document.querySelectorAll('#daftar li'),function(l){ return !l.hidden && l.style.display!=='none'; }).length; } go('','data'); return vis()===3; })()"},
+                {"text": "Gabungan: \"dasar\" + kategori data → 2", "test": "(function(){ function go(q,k){ var c=document.querySelector('#cari'),s=document.querySelector('#kategori'); c.value=q; c.dispatchEvent(new Event('input',{bubbles:true})); s.value=k; s.dispatchEvent(new Event('change',{bubbles:true})); }function vis(){ return Array.prototype.filter.call(document.querySelectorAll('#daftar li'),function(l){ return !l.hidden && l.style.display!=='none'; }).length; } go('dasar','data'); return vis()===2; })()"},
+                {"text": "#jumlah memuat angka hasil terakhir (2)", "test": "document.querySelector('#jumlah').textContent.replace(/\\D/g,'')==='2'"},
+                {"text": "Tanpa hasil (\"zzz\"): 0 item dan #kosong tampil", "test": "(function(){ function go(q,k){ var c=document.querySelector('#cari'),s=document.querySelector('#kategori'); c.value=q; c.dispatchEvent(new Event('input',{bubbles:true})); s.value=k; s.dispatchEvent(new Event('change',{bubbles:true})); }function vis(){ return Array.prototype.filter.call(document.querySelectorAll('#daftar li'),function(l){ return !l.hidden && l.style.display!=='none'; }).length; } go('zzz','semua'); var k=document.querySelector('#kosong'); return vis()===0 && !k.hidden && k.style.display!=='none'; })()"},
+                {"text": "Dikosongkan lagi: 8 item tampil dan #kosong sembunyi", "test": "(function(){ function go(q,k){ var c=document.querySelector('#cari'),s=document.querySelector('#kategori'); c.value=q; c.dispatchEvent(new Event('input',{bubbles:true})); s.value=k; s.dispatchEvent(new Event('change',{bubbles:true})); }function vis(){ return Array.prototype.filter.call(document.querySelectorAll('#daftar li'),function(l){ return !l.hidden && l.style.display!=='none'; }).length; } go('','semua'); var k=document.querySelector('#kosong'); return vis()===8 && (k.hidden || k.style.display==='none'); })()"}
+            ]
+        });
+    </script>
+</body>
+</html>

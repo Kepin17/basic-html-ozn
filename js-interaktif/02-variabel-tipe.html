@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 · Variabel &amp; Tipe Data - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>2 · Variabel &amp; Tipe Data</h1>
+        <p class="lead">Variabel adalah "kotak bernama" untuk menyimpan nilai. Tipe data menentukan jenis nilai di dalamnya.</p>
+
+        <div class="materi">
+            <h3>Membuat variabel</h3>
+            <table>
+                <thead><tr><th>Kata kunci</th><th>Boleh diubah?</th><th>Kapan dipakai</th></tr></thead>
+                <tbody>
+                    <tr><td><code>const</code></td><td>❌ Tidak (tidak bisa di-assign ulang)</td><td><b>Pilihan utama</b></td></tr>
+                    <tr><td><code>let</code></td><td>✅ Ya</td><td>Nilainya memang berubah (penghitung, total)</td></tr>
+                    <tr><td><code>var</code></td><td>✅ Ya</td><td>Gaya lama, hindari</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Mulai dengan <code>const</code>. Ganti ke <code>let</code> hanya bila kamu perlu mengubah nilainya.</div>
+            <h3>Tipe data dasar</h3>
+            <table>
+                <thead><tr><th>Tipe</th><th>Contoh</th><th>Keterangan</th></tr></thead>
+                <tbody>
+                    <tr><td><code>string</code></td><td><code>"halo"</code>, <code>'halo'</code>, <code>`halo ${x}`</code></td><td>Teks. Backtick mendukung <b>template literal</b></td></tr>
+                    <tr><td><code>number</code></td><td><code>42</code>, <code>3.14</code>, <code>NaN</code></td><td>Bilangan bulat dan desimal</td></tr>
+                    <tr><td><code>boolean</code></td><td><code>true</code>, <code>false</code></td><td>Benar / salah</td></tr>
+                    <tr><td><code>undefined</code></td><td>belum diberi nilai</td><td>Variabel dibuat tanpa isi</td></tr>
+                    <tr><td><code>null</code></td><td>sengaja kosong</td><td>"Tidak ada nilai" yang disengaja</td></tr>
+                    <tr><td><code>array</code>, <code>object</code></td><td><code>[1,2]</code>, <code>{a:1}</code></td><td>Dibahas di materi 6</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Lab A · Variabel dan inspektur</h2>
+        <p>Lihat <b>Inspektur variabel</b> di sebelah kanan: tipe dan isinya muncul otomatis. Coba ubah <code>const</code> jadi <code>let</code> lalu tambahkan <code>umur = 18;</code> di bawah.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Konversi tipe (sumber bug favorit pemula)</h3>
+            <table>
+                <thead><tr><th>Ekspresi</th><th>Hasil</th><th>Kenapa</th></tr></thead>
+                <tbody>
+                    <tr><td><code>"5" + 3</code></td><td><code>"53"</code></td><td><code>+</code> dengan string = menyambung teks</td></tr>
+                    <tr><td><code>"5" - 3</code></td><td><code>2</code></td><td><code>-</code> memaksa angka</td></tr>
+                    <tr><td><code>Number("12")</code></td><td><code>12</code></td><td>Mengubah teks menjadi angka</td></tr>
+                    <tr><td><code>Number("abc")</code></td><td><code>NaN</code></td><td>Bukan angka valid</td></tr>
+                    <tr><td><code>String(99)</code></td><td><code>"99"</code></td><td>Mengubah ke teks</td></tr>
+                </tbody>
+            </table>
+            <p><b>Falsy</b> (dianggap salah dalam kondisi): <code>false</code>, <code>0</code>, <code>""</code>, <code>null</code>, <code>undefined</code>, <code>NaN</code>. Selain itu <b>truthy</b>.</p>
+        </div>
+
+        <h2>Lab B · Jebakan konversi</h2>
+        <p>Tebak dulu hasil tiap baris sebelum menjalankannya.</p>
+        <div id="labB"></div>
+
+        <h2>Lab C · Tantangan</h2>
+        <div class="materi">
+            <p>Buat tiga variabel: <code>nama</code> (string), <code>umur</code> (number), dan <code>mahasiswa</code> (boolean). Lalu cetak satu kalimat memakai <b>template literal</b> yang memuat nama dan umur, misalnya <code>Saya Budi, umur 17 tahun</code>.</p>
+        </div>
+        <div id="labC"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', vars: true, rows: 13, auto: true,
+            code: `const nama = "Budi";
+let umur = 17;
+const lulus = true;
+let alamat;                 // tanpa nilai -> undefined
+const kosong = null;
+const hobi = ["baca", "coding"];
+const profil = { kota: "Bandung", aktif: true };
+
+console.log(typeof nama, typeof umur, typeof lulus);
+console.log(\`\${nama} berumur \${umur} tahun\`);   // template literal`
+        });
+        initJS({
+            root: 'labB', vars: true, rows: 12,
+            code: `console.log("5" + 3);          // ?
+console.log("5" - 3);          // ?
+console.log(Number("12") + 1); // ?
+console.log(Number("abc"));    // ?
+console.log(0.1 + 0.2);        // ?
+console.log(Boolean(""), Boolean("0"), Boolean(0));
+console.log(typeof null);      // tebak: "null"?`
+        });
+        initJS({
+            root: 'labC', vars: true, rows: 8,
+            code: `// Tulis kodemu di sini
+let nama;
+`,
+            solution: `const nama = "Budi";
+const umur = 17;
+const mahasiswa = false;
+console.log(\`Saya \${nama}, umur \${umur} tahun\`);`,
+            checks: [
+                { text: '<code>nama</code> bertipe string dan tidak kosong', test: "typeof nama === 'string' && nama.length > 0" },
+                { text: '<code>umur</code> bertipe number', test: "typeof umur === 'number' && !isNaN(umur)" },
+                { text: '<code>mahasiswa</code> bertipe boolean', test: "typeof mahasiswa === 'boolean'" },
+                { text: 'Ada kalimat yang memuat nama dan umur di console', test: "__logs.some(function(l){ return l.indexOf(nama) > -1 && l.indexOf(String(umur)) > -1 })" }
+            ]
+        });
+    </script>
+</body>
+</html>

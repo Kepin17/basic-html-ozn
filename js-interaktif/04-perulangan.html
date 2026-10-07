@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 · Perulangan - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>4 · Perulangan</h1>
+        <p class="lead">Komputer hebat dalam mengulang. Perulangan menjalankan blok kode berkali-kali tanpa kamu menulisnya berkali-kali.</p>
+
+        <div class="materi">
+            <h3>Jenis perulangan</h3>
+            <table>
+                <thead><tr><th>Bentuk</th><th>Dipakai ketika</th></tr></thead>
+                <tbody>
+                    <tr><td><code>for (mulai; syarat; langkah)</code></td><td>Jumlah pengulangan <b>diketahui</b></td></tr>
+                    <tr><td><code>while (syarat)</code></td><td>Ulangi <b>selama</b> syarat benar, jumlahnya tak pasti</td></tr>
+                    <tr><td><code>for (const x of daftar)</code></td><td>Menelusuri isi array / string</td></tr>
+                    <tr><td><code>break</code> / <code>continue</code></td><td>Berhenti total / lompat ke putaran berikutnya</td></tr>
+                </tbody>
+            </table>
+<pre><code>for (let i = 0; i &lt; 3; i++) {
+//    ① mulai  ② syarat  ③ langkah (jalan setelah tiap putaran)
+  console.log(i);          // 0, 1, 2
+}</code></pre>
+            <div class="warn"><b>Perulangan tak berujung:</b> lupa mengubah variabel syarat membuat <code>while</code> berjalan selamanya. Di lab ini pengaman akan menghentikannya, tapi di browser nyata tab bisa macet.</div>
+        </div>
+
+        <h2>Lab A · Tur perulangan</h2>
+        <div id="labA"></div>
+
+        <h2>Lab B · Pola dengan perulangan</h2>
+        <p>Ubah angka <code>5</code> menjadi <code>8</code>. Lalu ubah jadi piramida (spasi di kiri: <code>" ".repeat(...)</code>).</p>
+        <div id="labB"></div>
+
+        <h2>Lab C · Tantangan</h2>
+        <div class="materi">
+            <ol>
+                <li><code>jumlah(n)</code>: jumlah 1 + 2 + … + n. <code>jumlah(10)</code> = 55.</li>
+                <li><code>faktorial(n)</code>: n × (n-1) × … × 1. <code>faktorial(5)</code> = 120.</li>
+                <li><code>fizzBuzz(n)</code>: kembalikan <b>"FizzBuzz"</b> bila habis dibagi 3 dan 5, <b>"Fizz"</b> bila habis dibagi 3, <b>"Buzz"</b> bila habis dibagi 5, selain itu angkanya sendiri.</li>
+                <li><code>hitungVokal(teks)</code>: banyak huruf a, i, u, e, o (tak peduli besar/kecil). "Belajar JavaScript" → 6.</li>
+            </ol>
+        </div>
+        <div id="labC"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        initJS({
+            root: 'labA', vars: true, rows: 28,
+            code: `// 1. for: jumlah putaran diketahui
+for (let i = 1; i <= 3; i++) {
+  console.log("for putaran", i);
+}
+
+// 2. while: ulangi selama syarat benar
+let hitung = 3;
+while (hitung > 0) {
+  console.log("hitung mundur", hitung);
+  hitung--;
+}
+
+// 3. for...of: telusuri array
+const buah = ["apel", "jeruk", "mangga"];
+for (const b of buah) {
+  console.log("buah:", b);
+}
+
+// 4. break & continue
+for (let i = 1; i <= 10; i++) {
+  if (i % 2 === 0) continue;   // lewati genap
+  if (i > 7) break;            // berhenti
+  console.log("ganjil:", i);
+}`
+        });
+        initJS({
+            root: 'labB', rows: 8,
+            code: `for (let i = 1; i <= 5; i++) {
+  console.log("*".repeat(i));
+}`
+        });
+        initJS({
+            root: 'labC', rows: 26,
+            code: `function jumlah(n) {
+  // TODO
+}
+
+function faktorial(n) {
+  // TODO
+}
+
+function fizzBuzz(n) {
+  // TODO
+}
+
+function hitungVokal(teks) {
+  // TODO
+}`,
+            solution: `function jumlah(n) {
+  let total = 0;
+  for (let i = 1; i <= n; i++) total += i;
+  return total;
+}
+
+function faktorial(n) {
+  let hasil = 1;
+  for (let i = 2; i <= n; i++) hasil *= i;
+  return hasil;
+}
+
+function fizzBuzz(n) {
+  if (n % 15 === 0) return "FizzBuzz";
+  if (n % 3 === 0) return "Fizz";
+  if (n % 5 === 0) return "Buzz";
+  return n;
+}
+
+function hitungVokal(teks) {
+  let jml = 0;
+  for (const huruf of teks.toLowerCase()) {
+    if ("aiueo".includes(huruf)) jml++;
+  }
+  return jml;
+}`,
+            checks: [
+                { text: 'jumlah(10) = 55 dan jumlah(1) = 1', test: "jumlah(10) === 55 && jumlah(1) === 1" },
+                { text: 'faktorial(5) = 120 dan faktorial(0) = 1', test: "faktorial(5) === 120 && faktorial(0) === 1" },
+                { text: 'fizzBuzz: 15 → FizzBuzz, 9 → Fizz, 10 → Buzz, 7 → 7', test: "fizzBuzz(15) === 'FizzBuzz' && fizzBuzz(9) === 'Fizz' && fizzBuzz(10) === 'Buzz' && fizzBuzz(7) === 7" },
+                { text: 'hitungVokal("Belajar JavaScript") = 6', test: "hitungVokal('Belajar JavaScript') === 6 && hitungVokal('xyz') === 0" }
+            ]
+        });
+    </script>
+</body>
+</html>

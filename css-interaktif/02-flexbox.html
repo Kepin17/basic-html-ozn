@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 · Flexbox - CSS Interaktif</title>
+    <link rel="stylesheet" href="assets/lab.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>2 · Flexbox</h1>
+        <p class="lead">Cara paling mudah menata elemen dalam satu arah: berjajar menyamping atau menumpuk ke bawah.</p>
+
+        <div class="materi">
+            <h3>Dua sumbu</h3>
+            <p>Flexbox bekerja pada <b>sumbu utama</b> (arah <code>flex-direction</code>) dan <b>sumbu silang</b> (tegak lurus dengannya).</p>
+            <table>
+                <thead><tr><th>Properti (pada induk)</th><th>Mengatur</th></tr></thead>
+                <tbody>
+                    <tr><td><code>flex-direction</code></td><td>Arah sumbu utama: <code>row</code> / <code>column</code> (+ <code>-reverse</code>)</td></tr>
+                    <tr><td><code>justify-content</code></td><td>Posisi anak di <b>sumbu utama</b></td></tr>
+                    <tr><td><code>align-items</code></td><td>Posisi anak di <b>sumbu silang</b></td></tr>
+                    <tr><td><code>flex-wrap</code></td><td>Boleh turun baris atau tidak</td></tr>
+                    <tr><td><code>gap</code></td><td>Jarak antar anak</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Coba ganti <code>flex-direction</code> ke <b>column</b>. Lihat bagaimana <code>justify-content</code> dan <code>align-items</code> <em>bertukar peran</em>.</div>
+        </div>
+
+        <div id="lab"></div>
+
+        <div class="materi">
+            <h3>Properti pada anak (item #2)</h3>
+            <ul>
+                <li><code>flex-grow</code>: seberapa besar item boleh membesar mengisi sisa ruang (0 = tidak).</li>
+                <li><code>align-self</code>: menimpa <code>align-items</code> hanya untuk item itu.</li>
+            </ul>
+            <h3>Tantangan</h3>
+            <ol>
+                <li>Buat <b>navbar</b>: <code>row</code>, <code>space-between</code>, <code>center</code>.</li>
+                <li>Buat item di <b>tengah persis</b> (horizontal dan vertikal): <code>justify-content: center</code> + <code>align-items: center</code> dengan 1 item.</li>
+                <li>Tambah 8 item dengan <code>wrap</code> aktif dan lihat item turun ke baris baru saat kontainer penuh. Lalu coba <code>nowrap</code>.</li>
+                <li>Beri item #2 <code>flex-grow: 1</code> dan lihat ia menelan semua sisa ruang.</li>
+            </ol>
+        </div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/lab.js"></script>
+    <script>
+        initLab({
+            height: 330,
+            base: `.item { background: #3b82f6; color: #fff; padding: 14px 20px; border-radius: 8px; font-weight: 700; }
+                   .item:nth-child(even) { background: #1d4ed8; } .item:nth-child(3) { padding: 34px 20px; }`,
+            html: v => '<div class="container">\n' + Array.from({ length: v.n }, (_, i) => `  <div class="item">${i + 1}</div>`).join('\n') + '\n</div>',
+            controls: [
+                { id: 'n', label: 'Jumlah item', type: 'range', min: 1, max: 10, value: 4 },
+                { id: 'dir', label: 'flex-direction', type: 'select', options: ['row', 'row-reverse', 'column', 'column-reverse'], value: 'row' },
+                { id: 'jc', label: 'justify-content', type: 'select', options: ['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly'], value: 'flex-start' },
+                { id: 'ai', label: 'align-items', type: 'select', options: ['stretch', 'flex-start', 'center', 'flex-end', 'baseline'], value: 'stretch' },
+                { id: 'wr', label: 'flex-wrap', type: 'select', options: ['nowrap', 'wrap', 'wrap-reverse'], value: 'nowrap' },
+                { id: 'gap', label: 'gap', type: 'range', min: 0, max: 50, value: 10, unit: 'px' },
+                { id: 'g2', label: 'Item #2: flex-grow', type: 'range', min: 0, max: 4, value: 0 },
+                { id: 's2', label: 'Item #2: align-self', type: 'select', options: ['auto', 'flex-start', 'center', 'flex-end', 'stretch'], value: 'auto' }
+            ],
+            css: v => `.container {
+  display: flex;
+  flex-direction: ${v.dir};
+  justify-content: ${v.jc};
+  align-items: ${v.ai};
+  flex-wrap: ${v.wr};
+  gap: ${v.gap}px;
+  height: 230px;
+  background: #eef3ff;
+  border: 2px dashed #93a8ff;
+}` + (v.g2 > 0 || v.s2 !== 'auto' ? `
+
+.item:nth-child(2) {${v.g2 > 0 ? `\n  flex-grow: ${v.g2};` : ''}${v.s2 !== 'auto' ? `\n  align-self: ${v.s2};` : ''}
+}` : ''),
+            info(d, v) {
+                const horiz = v.dir.startsWith('row');
+                return `➡ Sumbu utama: <b>${horiz ? 'horizontal' : 'vertikal'}</b> (justify-content bekerja di sini) · Sumbu silang: <b>${horiz ? 'vertikal' : 'horizontal'}</b> (align-items bekerja di sini)`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus 11 · Proyek Akhir: Landing Page Webinar - Studi Kasus</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="../js-interaktif/assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>Studi Kasus 11 · Proyek Akhir: Landing Page Webinar</h1>
+        <p class="lead"><b>Level:</b> ⭐⭐⭐⭐ Sulit · <b>Melatih:</b> HTML + CSS + JavaScript sekaligus</p>
+        <div class="materi">
+            <h3>📖 Cerita</h3>
+            <p>Proyek penutup yang menggabungkan semuanya. HTML sudah disediakan (semantik, lengkap dengan id). Kamu menulis <b>CSS</b> (tata letak responsif) dan <b>JavaScript</b> (validasi form) sampai semua centang hijau. Pindah antar tab <b>CSS</b> dan <b>JavaScript</b> di editor.</p>
+            <h3>✅ Syarat (diperiksa otomatis)</h3>
+            <ol><li><b>CSS:</b> <code>.manfaat</code> berupa grid <b>3 kolom</b> (layar 800px) dan <b>1 kolom</b> (layar 400px, media query).</li><li><b>CSS:</b> <code>.kartu</code> ber-<code>padding</code> ≥ 16px dan <code>border-radius</code> ≥ 8px. Pesan <code>.galat</code> berwarna merah.</li><li><b>JS:</b> saat form dikirim, <code>preventDefault()</code>; nama minimal 2 karakter (setelah <code>trim</code>) dan email berformat valid. Kesalahan ditulis di <code>#err-nama</code> / <code>#err-email</code>; kolom yang benar → pesan kosong.</li><li><b>JS:</b> bila semua valid → sembunyikan form, tampilkan <code>#sukses</code> berisi <b>nama</b> pendaftar.</li><li><b>JS:</b> bila ada yang salah → <code>#sukses</code> tetap tersembunyi dan form tetap tampil.</li></ol>
+            <details><summary><b>🧭 Petunjuk bertahap</b> (buka satu per satu, coba dulu sendiri)</summary>
+                <ol><li>Kerjakan per lapisan: CSS dulu (hasilnya langsung terlihat), lalu JavaScript.</li><li>Untuk menyembunyikan elemen, atribut <code>hidden</code> cukup: <code>el.hidden = true</code>.</li><li>Regex email sederhana: <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code>.</li></ol>
+            </details>
+        </div>
+        <div id="lab"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/nav.js"></script>
+    <script src="../js-interaktif/assets/js-lab.js"></script>
+    <script>
+        initJS({
+            preview: true,
+            dom: true,
+            noConsole: true,
+            auto: true,
+            htmlFirst: true,
+            height: 420,
+            rows: 24,
+            html: "<header>\n  <h1>Webinar Belajar Web</h1>\n  <p>Sabtu, 17 Oktober 2026 · Gratis</p>\n</header>\n<main>\n  <section id=\"manfaat\">\n    <h2>Yang akan kamu pelajari</h2>\n    <div class=\"manfaat\">\n      <article class=\"kartu\"><h3>HTML</h3><p>Struktur halaman.</p></article>\n      <article class=\"kartu\"><h3>CSS</h3><p>Tampilan menarik.</p></article>\n      <article class=\"kartu\"><h3>JavaScript</h3><p>Halaman interaktif.</p></article>\n    </div>\n  </section>\n  <section id=\"daftar-sec\">\n    <h2>Daftar sekarang</h2>\n    <form id=\"daftar\" novalidate>\n      <div><label for=\"nama\">Nama</label> <input id=\"nama\" name=\"nama\"><p class=\"galat\" id=\"err-nama\"></p></div>\n      <div><label for=\"email\">Email</label> <input id=\"email\" name=\"email\" type=\"email\"><p class=\"galat\" id=\"err-email\"></p></div>\n      <button type=\"submit\">Daftar</button>\n    </form>\n    <p id=\"sukses\" hidden></p>\n  </section>\n</main>\n<footer><small>&copy; 2026 Komunitas Web</small></footer>\n",
+            css: "/* Tulis CSS di sini */\n.manfaat {\n\n}\n",
+            code: "// Tulis validasi form di sini\nconst form = document.querySelector(\"#daftar\");\n",
+            solution: {"css": "body { font-family: system-ui, sans-serif; margin: 0; }\nheader { background: linear-gradient(135deg, #2563eb, #7c3aed); color: #fff; text-align: center; padding: 32px 16px; }\nmain { max-width: 760px; margin: 0 auto; padding: 16px; }\n.manfaat {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}\n.kartu {\n  padding: 18px;\n  border-radius: 12px;\n  background: #fff;\n  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n}\n.kartu h3 { margin-top: 0; }\nform div { margin-bottom: 10px; }\ninput { padding: 8px; border: 2px solid #cbd5e1; border-radius: 6px; }\nbutton { padding: 10px 22px; background: #2563eb; color: #fff; border: 0; border-radius: 8px; cursor: pointer; }\n.galat { color: #dc2626; font-size: 14px; margin: 4px 0 0; min-height: 1em; }\n#sukses { background: #dcfce7; color: #166534; padding: 14px; border-radius: 8px; }\nfooter { text-align: center; padding: 16px; color: #64748b; }\n@media (max-width: 600px) {\n  .manfaat { grid-template-columns: 1fr; }\n}\n", "js": "const form = document.querySelector(\"#daftar\");\nconst sukses = document.querySelector(\"#sukses\");\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const nama = document.querySelector(\"#nama\").value.trim();\n  const email = document.querySelector(\"#email\").value.trim();\n  const errNama = document.querySelector(\"#err-nama\");\n  const errEmail = document.querySelector(\"#err-email\");\n\n  errNama.textContent = nama.length >= 2 ? \"\" : \"Nama minimal 2 karakter\";\n  errEmail.textContent = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ? \"\" : \"Email tidak valid\";\n\n  if (errNama.textContent || errEmail.textContent) return;\n  form.hidden = true;\n  sukses.hidden = false;\n  sukses.textContent = \"Terima kasih, \" + nama + \"! Tautan webinar dikirim ke \" + email + \".\";\n});"},
+            checks: [
+                {"text": "Struktur semantik utuh: <code>header</code>, tepat satu <code>main</code>, <code>footer</code>", "test": "!!document.querySelector('header') && document.querySelectorAll('main').length===1 && !!document.querySelector('footer')"},
+                {"text": "CSS 800px: <code>.manfaat</code> grid 3 kolom", "test": "getComputedStyle(document.querySelector('.manfaat')).gridTemplateColumns.split(' ').length===3"},
+                {"text": "CSS 400px: <code>.manfaat</code> menjadi 1 kolom", "test": "getComputedStyle(document.querySelector('.manfaat')).gridTemplateColumns.split(' ').length===1", "width": 400},
+                {"text": "CSS: <code>.kartu</code> padding ≥ 16px, radius ≥ 8px", "test": "(function(){ var s=getComputedStyle(document.querySelector('.kartu')); return parseFloat(s.paddingTop)>=16 && parseFloat(s.borderTopLeftRadius)>=8; })()"},
+                {"text": "CSS: <code>.galat</code> berwarna merah", "test": "(function(){ var c=getComputedStyle(document.querySelector('.galat')).color.match(/\\d+/g).map(Number); return c[0]>150 && c[1]<110 && c[2]<110; })()"},
+                {"text": "JS: form kosong → kedua pesan galat terisi, form tetap tampil, #sukses sembunyi", "test": "(function(){ function kirim(n,e){ var a=document.querySelector('#nama'),b=document.querySelector('#email'); a.value=n; b.value=e; document.querySelector('#daftar').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true})); } kirim('',''); return document.querySelector('#err-nama').textContent.trim().length>0 && document.querySelector('#err-email').textContent.trim().length>0 && document.querySelector('#sukses').hidden && !document.querySelector('#daftar').hidden; })()"},
+                {"text": "JS: hanya email salah → galat nama kosong, galat email terisi", "test": "(function(){ function kirim(n,e){ var a=document.querySelector('#nama'),b=document.querySelector('#email'); a.value=n; b.value=e; document.querySelector('#daftar').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true})); } kirim('Ani','abc'); return document.querySelector('#err-nama').textContent.trim()==='' && document.querySelector('#err-email').textContent.trim().length>0 && document.querySelector('#sukses').hidden; })()"},
+                {"text": "JS: data valid → form tersembunyi, #sukses memuat nama, galat kosong", "test": "(function(){ function kirim(n,e){ var a=document.querySelector('#nama'),b=document.querySelector('#email'); a.value=n; b.value=e; document.querySelector('#daftar').dispatchEvent(new Event('submit',{cancelable:true,bubbles:true})); } kirim('Ani','ani@contoh.com'); return document.querySelector('#daftar').hidden && !document.querySelector('#sukses').hidden && document.querySelector('#sukses').textContent.indexOf('Ani')>-1 && document.querySelector('#err-nama').textContent.trim()==='' && document.querySelector('#err-email').textContent.trim()===''; })()"}
+            ]
+        });
+    </script>
+</body>
+</html>

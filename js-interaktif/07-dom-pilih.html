@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 · DOM: Memilih &amp; Mengubah - JavaScript Interaktif</title>
+    <link rel="stylesheet" href="../css-interaktif/assets/lab.css">
+    <link rel="stylesheet" href="assets/js.css">
+</head>
+<body>
+    <nav id="nav"></nav>
+    <main>
+        <h1>7 · DOM: Memilih &amp; Mengubah</h1>
+        <p class="lead"><b>DOM</b> (<i>Document Object Model</i>) adalah cara browser menyajikan halaman HTML sebagai <b>pohon objek</b> yang bisa dibaca dan diubah oleh JavaScript.</p>
+
+        <div class="materi">
+            <h3>Dari HTML ke pohon DOM</h3>
+<pre><code>&lt;body&gt;                         document
+  &lt;h1 id="judul"&gt;Halo&lt;/h1&gt;     └─ body
+  &lt;ul&gt;                               ├─ h1#judul  → "Halo"
+    &lt;li&gt;Apel&lt;/li&gt;                   └─ ul
+  &lt;/ul&gt;                                   └─ li → "Apel"
+&lt;/body&gt;</code></pre>
+            <p>Setiap tag menjadi <b>node/elemen</b>. JavaScript <b>memilih</b> elemen, lalu <b>mengubah</b> isi, gaya, atau atributnya. Kotak "Pohon DOM" di lab menampilkan pohon ini secara live.</p>
+            <h3>Memilih elemen</h3>
+            <table>
+                <thead><tr><th>Cara</th><th>Mengembalikan</th></tr></thead>
+                <tbody>
+                    <tr><td><code>document.querySelector("css-selector")</code></td><td>Elemen <b>pertama</b> yang cocok (atau <code>null</code>)</td></tr>
+                    <tr><td><code>document.querySelectorAll("css-selector")</code></td><td><b>Semua</b> yang cocok (NodeList, bisa <code>forEach</code>)</td></tr>
+                    <tr><td><code>document.getElementById("id")</code></td><td>Elemen ber-id itu</td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Selector-nya <b>sama persis dengan CSS</b>: <code>#id</code>, <code>.kelas</code>, <code>ul li</code>, <code>p:first-child</code>. Coba di lab di bawah.</div>
+        </div>
+
+        <h2>Lab A · Penjelajah selector</h2>
+        <p>Ketik selector di kotak "Coba selector". Elemen yang cocok langsung tersorot oranye.</p>
+        <div id="labA"></div>
+
+        <div class="materi">
+            <h3>Mengubah elemen</h3>
+            <table>
+                <thead><tr><th>Properti / method</th><th>Fungsi</th></tr></thead>
+                <tbody>
+                    <tr><td><code>el.textContent = "..."</code></td><td>Ganti teks (aman, tidak menafsirkan HTML)</td></tr>
+                    <tr><td><code>el.innerHTML = "&lt;b&gt;...&lt;/b&gt;"</code></td><td>Ganti isi sebagai HTML. ⚠ jangan pakai data dari pengguna</td></tr>
+                    <tr><td><code>el.style.color = "red"</code></td><td>Gaya inline (properti CSS ditulis camelCase: <code>fontSize</code>, <code>backgroundColor</code>)</td></tr>
+                    <tr><td><code>el.classList.add / remove / toggle / contains</code></td><td>Mengatur class (cara <b>terbaik</b> mengubah tampilan)</td></tr>
+                    <tr><td><code>el.setAttribute("href", "...")</code>, <code>el.getAttribute()</code></td><td>Atribut HTML</td></tr>
+                    <tr><td><code>el.dataset.nama</code></td><td>Membaca atribut <code>data-nama</code></td></tr>
+                </tbody>
+            </table>
+            <div class="tip">Lebih baik <b>mengganti class</b> (<code>classList</code>) daripada menulis banyak <code>style</code> langsung: CSS tetap di file CSS, JS hanya mengatur keadaan.</div>
+        </div>
+
+        <h2>Lab B · Tantangan: ubah halamannya</h2>
+        <div class="materi">
+            <ol>
+                <li>Ubah teks <code>#judul</code> menjadi apa saja selain "Judul Awal".</li>
+                <li>Ubah teks <b>semua</b> <code>.teks</code> (pakai <code>querySelectorAll</code> + <code>forEach</code>).</li>
+                <li>Tambahkan class <code>aktif</code> ke <code>#kartu</code>.</li>
+                <li>Ubah <code>href</code> pada <code>#tautan</code> menjadi <code>https://example.com</code>.</li>
+                <li>Ubah item <b>kedua</b> daftar menjadi huruf kapital: <code>JERUK</code>.</li>
+            </ol>
+        </div>
+        <div id="labB"></div>
+        <div id="pager"></div>
+    </main>
+    <script src="assets/js-lab.js"></script>
+    <script>
+        const HTML = `<h1 id="judul">Judul Awal</h1>
+<p class="teks">Paragraf pertama</p>
+<p class="teks">Paragraf kedua</p>
+<ul id="daftar">
+  <li>Apel</li>
+  <li>Jeruk</li>
+  <li>Mangga</li>
+</ul>
+<div id="kartu" class="kartu">Ini kartu</div>
+<a id="tautan" href="#">Tautan</a>`;
+        const BASE = `.kartu { padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; margin: 8px 0; transition: all .3s; }
+                      .aktif { background: #bbf7d0; border-color: #16a34a; } .besar { font-size: 26px; } h1 { margin: 0 0 6px; font-size: 24px; }`;
+
+        initJS({
+            root: 'labA', preview: true, dom: true, explorer: true, auto: false, height: 340, rows: 4, base: BASE, html: HTML,
+            code: `// Kode JS tidak diperlukan di lab ini.
+// Gunakan kotak "Coba selector" di atas hasil.
+// Contoh: #judul   .teks   ul li   li:nth-child(2)   a[href]   #kartu.kartu`
+        });
+        initJS({
+            root: 'labB', preview: true, dom: true, auto: true, height: 330, rows: 14, base: BASE, html: HTML,
+            code: `const judul = document.querySelector("#judul");
+judul.textContent = "Judul sudah diubah";
+
+// TODO 2: semua .teks
+// TODO 3: kartu jadi aktif
+// TODO 4: ubah href tautan
+// TODO 5: item kedua jadi kapital
+`,
+            solution: `const judul = document.querySelector("#judul");
+judul.textContent = "Judul sudah diubah";
+
+document.querySelectorAll(".teks").forEach((el, i) => {
+  el.textContent = "Paragraf ke-" + (i + 1);
+});
+
+document.querySelector("#kartu").classList.add("aktif");
+document.querySelector("#tautan").setAttribute("href", "https://example.com");
+document.querySelectorAll("#daftar li")[1].textContent = "JERUK";`,
+            checks: [
+                { text: 'Judul diubah', test: "document.querySelector('#judul').textContent !== 'Judul Awal'" },
+                { text: 'Semua paragraf .teks diubah', test: "Array.prototype.every.call(document.querySelectorAll('.teks'), function(e){ return e.textContent !== 'Paragraf pertama' && e.textContent !== 'Paragraf kedua' })" },
+                { text: '#kartu punya class "aktif"', test: "document.querySelector('#kartu').classList.contains('aktif')" },
+                { text: 'href tautan = https://example.com', test: "document.querySelector('#tautan').getAttribute('href') === 'https://example.com'" },
+                { text: 'Item kedua = "JERUK"', test: "document.querySelectorAll('#daftar li')[1].textContent === 'JERUK'" }
+            ]
+        });
+    </script>
+</body>
+</html>
