@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Kode · Game Latihan JavaScript</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+    <header class="top">
+        <a class="back" href="../index.html">← Semua materi</a>
+        <h1>🎮 Arena Kode</h1>
+        <div class="stat" aria-live="polite">
+            <span class="lv" id="lv">Lv 1</span>
+            <div class="bar" role="progressbar" aria-label="XP menuju level berikutnya"><i id="xpbar"></i></div>
+            <span id="xptxt">0 XP</span>
+            <button class="ghost" id="reset" title="Hapus semua progres">Reset</button>
+        </div>
+    </header>
+
+    <div class="layout">
+        <aside id="peta" aria-label="Daftar tantangan"></aside>
+
+        <main id="arena">
+            <div class="meta"><span id="dunia"></span><span id="nyawa" aria-label="Nyawa"></span></div>
+            <h2 id="judul"></h2>
+            <p id="cerita" class="cerita"></p>
+            <div class="sig">Tulis fungsi: <code id="sig"></code></div>
+
+            <textarea id="kode" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Editor kode"></textarea>
+
+            <div class="aksi">
+                <button class="go" id="jalankan">▶ Jalankan <small>Ctrl+Enter</small></button>
+                <button class="ghost" id="petunjuk">💡 Petunjuk (−5 XP)</button>
+                <button class="ghost" id="solusi" disabled>🔓 Solusi</button>
+                <button class="ghost" id="ulang">↺ Ulangi</button>
+            </div>
+
+            <div id="hint" class="hint" hidden></div>
+            <ul id="hasil" class="hasil" aria-live="polite"></ul>
+            <div id="pesan" class="pesan" hidden></div>
+            <div class="nav"><button class="go" id="lanjut" hidden>Tantangan berikutnya →</button></div>
+        </main>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
